@@ -12,8 +12,6 @@
 ![Cost](https://img.shields.io/badge/cost-%240-success)
 ![License](https://img.shields.io/badge/license-MIT-lightgrey)
 
-**[🔗 Live Site](#)** · **[📘 Interactive Docs](./README.html)** · **[🐛 Report an Issue](../../issues)**
-
 </div>
 
 <br>
