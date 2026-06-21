@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Portfolio</title>
 <meta name="description" content="Portfolio website">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="alternate icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 90 90'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%2300D4FF'/%3E%3Cstop offset='100%25' stop-color='%237B4FFF'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='90' height='90' rx='20' fill='%23050D1A'/%3E%3Cpath d='M45 14 L70 28 L70 62 L45 76 L20 62 L20 28 Z' fill='rgba(0,212,255,0.12)' stroke='url(%23g)' stroke-width='3'/%3E%3Ctext x='50%25' y='54%25' dominant-baseline='central' text-anchor='middle' fill='url(%23g)' font-family='Arial,sans-serif' font-weight='700' font-size='26'%3EPR%3C/text%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="favicon.svg">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Caveat:wght@600;700&display=swap');
 
@@ -502,21 +505,6 @@ footer{padding:40px 48px;border-top:1px solid var(--border);display:flex;align-i
   body,a,button{cursor:auto}
 }
 
-/* ===== LOADING STATE ===== */
-#contentLoader{
-  position:fixed;inset:0;background:var(--bg-void);z-index:9998;
-  display:flex;align-items:center;justify-content:center;
-  flex-direction:column;gap:16px;
-}
-#contentLoader.hidden{display:none}
-.loader-spinner{
-  width:40px;height:40px;border-radius:50%;
-  border:3px solid var(--border);border-top-color:var(--cyan);
-  animation:spin 0.8s linear infinite;
-}
-@keyframes spin{to{transform:rotate(360deg)}}
-.loader-text{font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:.1em}
-
 /* ===== HIDDEN ADMIN ACCESS ===== */
 .admin-access{
   position:fixed;bottom:0;right:0;width:36px;height:36px;
@@ -526,8 +514,6 @@ footer{padding:40px 48px;border-top:1px solid var(--border);display:flex;align-i
 </style>
 </head>
 <body>
-
-<div id="contentLoader"><div class="loader-spinner"></div><div class="loader-text">LOADING PORTFOLIO</div></div>
 
 <div id="aurora" aria-hidden="true">
   <div class="aurora-blob"></div><div class="aurora-blob"></div>
@@ -762,14 +748,24 @@ function esc(str){
 }
 
 // ===== FETCH + RENDER =====
+let contentLoaded=false;
 fetch(CONTENT_URL,{cache:'no-store'})
   .then(r=>{ if(!r.ok) throw new Error('content.json not found'); return r.json(); })
-  .then(data=>{ SITE=data; renderAll(data); })
+  .then(data=>{ contentLoaded=true; SITE=data; renderAll(data); })
   .catch(err=>{
     console.error('Failed to load content.json',err);
-    document.getElementById('contentLoader').innerHTML =
-      '<div class="loader-text">Could not load content.json — check that the file exists in this folder.</div>';
+    const p=document.getElementById('preloader');
+    if(p){
+      p.innerHTML='<div class="preloader-label" style="max-width:280px;text-align:center;line-height:1.6">Could not load content.json — check that the file exists in this folder.</div>';
+    }
   });
+// Safety: if loading takes unusually long, reassure the visitor instead of a silent stall
+setTimeout(()=>{
+  if(!contentLoaded){
+    const label=document.querySelector('#preloader .preloader-label');
+    if(label) label.textContent='STILL LOADING…';
+  }
+},6000);
 
 function renderAll(d){
   document.title=d.site.title;
@@ -785,8 +781,7 @@ function renderAll(d){
   renderContact(d.contact);
   renderFooter(d.footer);
 
-  // hide loader, init animations after DOM is populated
-  document.getElementById('contentLoader').classList.add('hidden');
+  // init animations + hide preloader now that content is actually rendered
   requestAnimationFrame(initAnimations);
 }
 
@@ -1101,7 +1096,7 @@ function handleSubmit(e){
 function initAnimations(){
 
 // ===== PRELOADER =====
-setTimeout(()=>{const p=document.getElementById('preloader');if(p)p.classList.add('hidden')},900);
+setTimeout(()=>{const p=document.getElementById('preloader');if(p)p.classList.add('hidden')},400);
 
 // ===== SCROLL PROGRESS =====
 const progressBar=document.getElementById('scroll-progress');

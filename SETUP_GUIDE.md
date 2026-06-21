@@ -1,17 +1,18 @@
 # Portfolio + Back Office — Setup Guide
 
-This package has three files that must live **in the same folder** of your GitHub repository (the repo you publish with GitHub Pages):
+This package has four files that must live **in the same folder** of your GitHub repository (the repo you publish with GitHub Pages):
 
 ```
 your-repo/
 ├── index.html       ← the public portfolio
 ├── admin.html        ← the back office (hidden, login-protected)
-└── content.json      ← all editable content (text, links, projects, etc.)
+├── content.json      ← all editable content (text, links, projects, etc.)
+└── favicon.svg        ← the browser-tab icon
 ```
 
 ## 1. Upload the files
 
-Upload `index.html`, `admin.html`, and `content.json` to the root of your GitHub Pages repository (e.g. `RDrahul123/Portfolio-v2`), replacing the old `index.html`. Commit and push.
+Upload `index.html`, `admin.html`, `content.json`, and `favicon.svg` to the root of your GitHub Pages repository (e.g. `RDrahul123/Portfolio-v2`), replacing the old `index.html`. Commit and push.
 
 ## 2. Enable GitHub Pages (if not already)
 
