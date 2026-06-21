@@ -15,15 +15,39 @@
     ],
     "eyebrow": "Available for opportunities",
     "photoUrl": "https://raw.githubusercontent.com/RDrahul123/RDrahul123/main/20251206_111856-IMG_STYLE~2.jpg",
-    "badge1": { "num": "100K+", "label": "Records / Week" },
-    "badge2": { "num": "3+", "label": "Years Experience" },
+    "badge1": {
+      "num": "100K+",
+      "label": "Records / Week"
+    },
+    "badge2": {
+      "num": "3+",
+      "label": "Years Experience"
+    },
     "socials": [
-      { "label": "⌨️ GitHub", "url": "https://github.com/RDrahul123" },
-      { "label": "💼 LinkedIn", "url": "https://www.linkedin.com/in/rahul-dodke" },
-      { "label": "🧩 LeetCode", "url": "https://leetcode.com/u/rahul0566" },
-      { "label": "📊 Kaggle", "url": "https://www.kaggle.com/prakrit0566" },
-      { "label": "🏆 HackerRank", "url": "https://www.hackerrank.com/profile/heyrahul_0566" },
-      { "label": "🛠️ Google Dev", "url": "https://g.dev/rahulprakrit" }
+      {
+        "label": "⌨️ GitHub",
+        "url": "https://github.com/RDrahul123"
+      },
+      {
+        "label": "💼 LinkedIn",
+        "url": "https://www.linkedin.com/in/rahul-dodke"
+      },
+      {
+        "label": "🧩 LeetCode",
+        "url": "https://leetcode.com/u/rahul0566"
+      },
+      {
+        "label": "📊 Kaggle",
+        "url": "https://www.kaggle.com/prakrit0566"
+      },
+      {
+        "label": "🏆 HackerRank",
+        "url": "https://www.hackerrank.com/profile/heyrahul_0566"
+      },
+      {
+        "label": "🛠️ Google Dev",
+        "url": "https://g.dev/rahulprakrit"
+      }
     ]
   },
   "about": {
@@ -31,9 +55,18 @@
     "titleNormal": "Data-Driven ",
     "titleHighlight": "Problem Solver",
     "stats": [
-      { "num": "3+", "label": "Years Experience" },
-      { "num": "100K+", "label": "Records / Week" },
-      { "num": "99.9%", "label": "Pipeline Accuracy" }
+      {
+        "num": "3+",
+        "label": "Years Experience"
+      },
+      {
+        "num": "100K+",
+        "label": "Records / Week"
+      },
+      {
+        "num": "99.9%",
+        "label": "Pipeline Accuracy"
+      }
     ],
     "paragraphs": [
       "I'm a <strong>results-oriented Data Science Analyst</strong> with hands-on experience across Python, SQL, and Machine Learning — turning raw, messy datasets into pipelines and insights that teams actually rely on for decisions.",
@@ -41,9 +74,21 @@
       "I enjoy the full lifecycle — from writing the SQL that pulls clean data, to building the ML model, to shipping the dashboard that a non-technical stakeholder can actually use."
     ],
     "pillars": [
-      { "icon": "🧹", "title": "Clean Data, Clean Decisions", "text": "Rigorous preprocessing and validation pipelines so models and dashboards are built on data people can trust." },
-      { "icon": "📈", "title": "Insight Into Action", "text": "Analysis isn't the finish line — I focus on translating findings into decisions stakeholders can act on immediately." },
-      { "icon": "⚙️", "title": "Engineering Mindset", "text": "I bring software engineering discipline — version control, testing, automation — into every data science workflow." }
+      {
+        "icon": "🧹",
+        "title": "Clean Data, Clean Decisions",
+        "text": "Rigorous preprocessing and validation pipelines so models and dashboards are built on data people can trust."
+      },
+      {
+        "icon": "📈",
+        "title": "Insight Into Action",
+        "text": "Analysis isn't the finish line — I focus on translating findings into decisions stakeholders can act on immediately."
+      },
+      {
+        "icon": "⚙️",
+        "title": "Engineering Mindset",
+        "text": "I bring software engineering discipline — version control, testing, automation — into every data science workflow."
+      }
     ]
   },
   "experience": {
@@ -95,10 +140,22 @@
     "titleHighlight": "Projects",
     "description": "Real-world applications of data science, ML, and engineering.",
     "filters": [
-      { "key": "all", "label": "All" },
-      { "key": "ml", "label": "Machine Learning" },
-      { "key": "data", "label": "Data Analysis" },
-      { "key": "web", "label": "Web / Full-Stack" }
+      {
+        "key": "all",
+        "label": "All"
+      },
+      {
+        "key": "ml",
+        "label": "Machine Learning"
+      },
+      {
+        "key": "data",
+        "label": "Data Analysis"
+      },
+      {
+        "key": "web",
+        "label": "Web / Full-Stack"
+      }
     ],
     "items": [
       {
@@ -107,10 +164,21 @@
         "categoryLabel": "Data Analysis",
         "title": "Sales Analysis Dashboard",
         "description": "Interactive Power BI dashboard analysing 12 months of sales data, with 5+ reports mapping regional profits across 50 zones and segmenting 15+ product subcategories.",
-        "tags": ["Power BI", "Excel", "JSON"],
-        "metrics": ["12 months of data", "50 zones mapped", "15+ subcategories"],
+        "tags": [
+          "Power BI",
+          "Excel",
+          "JSON"
+        ],
+        "metrics": [
+          "12 months of data",
+          "50 zones mapped",
+          "15+ subcategories"
+        ],
         "links": [
-          { "label": "GitHub →", "url": "https://github.com/RDrahul123/Sales-Dashboard.git" }
+          {
+            "label": "GitHub →",
+            "url": "https://github.com/RDrahul123/Sales-Dashboard.git"
+          }
         ]
       },
       {
@@ -119,10 +187,22 @@
         "categoryLabel": "Machine Learning",
         "title": "Financial Market Trend Predictor",
         "description": "Python-based analytics engine evaluating stock and cryptocurrency trends with ML models, achieving a 15% increase in predictive accuracy. Refactored pipelines to cut processing latency by 30%.",
-        "tags": ["Python", "Pandas", "NumPy", "Matplotlib", "ML"],
-        "metrics": ["+15% predictive accuracy", "-30% latency"],
+        "tags": [
+          "Python",
+          "Pandas",
+          "NumPy",
+          "Matplotlib",
+          "ML"
+        ],
+        "metrics": [
+          "+15% predictive accuracy",
+          "-30% latency"
+        ],
         "links": [
-          { "label": "GitHub →", "url": "https://github.com/RDrahul123/The-Stock.git" }
+          {
+            "label": "GitHub →",
+            "url": "https://github.com/RDrahul123/The-Stock.git"
+          }
         ]
       },
       {
@@ -131,11 +211,25 @@
         "categoryLabel": "Web / Full-Stack",
         "title": "Personal Portfolio (GitHub Pages)",
         "description": "This site — a GitHub API-driven portfolio with a custom admin back office for content publishing, fully responsive layouts, and mobile-first styling.",
-        "tags": ["HTML", "CSS", "Vanilla JS", "GitHub API"],
-        "metrics": ["Admin back office", "GitHub Pages"],
+        "tags": [
+          "HTML",
+          "CSS",
+          "Vanilla JS",
+          "GitHub API"
+        ],
+        "metrics": [
+          "Admin back office",
+          "GitHub Pages"
+        ],
         "links": [
-          { "label": "Live Site →", "url": "https://rdrahul123.github.io/Portfolio-v2/" },
-          { "label": "GitHub →", "url": "https://github.com/RDrahul123" }
+          {
+            "label": "Live Site →",
+            "url": "https://rdrahul123.github.io/Portfolio-v2/"
+          },
+          {
+            "label": "GitHub →",
+            "url": "https://github.com/RDrahul123"
+          }
         ]
       },
       {
@@ -144,11 +238,23 @@
         "categoryLabel": "Machine Learning",
         "title": "Competitive ML & DSA Practice",
         "description": "Ongoing problem-solving across LeetCode and HackerRank — algorithms, data structures, and applied ML challenges on Kaggle to sharpen core engineering fundamentals.",
-        "tags": ["Python", "DSA", "Kaggle"],
-        "metrics": ["LeetCode + HackerRank"],
+        "tags": [
+          "Python",
+          "DSA",
+          "Kaggle"
+        ],
+        "metrics": [
+          "LeetCode + HackerRank"
+        ],
         "links": [
-          { "label": "LeetCode →", "url": "https://leetcode.com/u/rahul0566" },
-          { "label": "Kaggle →", "url": "https://www.kaggle.com/prakrit0566" }
+          {
+            "label": "LeetCode →",
+            "url": "https://leetcode.com/u/rahul0566"
+          },
+          {
+            "label": "Kaggle →",
+            "url": "https://www.kaggle.com/prakrit0566"
+          }
         ]
       }
     ]
@@ -159,18 +265,77 @@
     "titleHighlight": "Arsenal",
     "description": "From raw SQL queries to ML models deployed on cloud infrastructure.",
     "groups": [
-      { "icon": "🐍", "title": "Languages & Core", "tags": ["Python", "SQL", "C++", "Java", "R"] },
-      { "icon": "🤖", "title": "Machine Learning", "tags": ["Scikit-learn", "Pandas", "NumPy", "TensorFlow (Basics)", "Feature Engineering"] },
-      { "icon": "📊", "title": "Visualization & BI", "tags": ["Power BI", "Tableau", "Matplotlib", "Seaborn", "Excel"] },
-      { "icon": "☁️", "title": "Tools & Platforms", "tags": ["Git / GitHub", "Docker", "AWS (EC2, S3)", "Azure", "Linux", "Jupyter"] }
+      {
+        "icon": "🐍",
+        "title": "Languages & Core",
+        "tags": [
+          "Python",
+          "SQL",
+          "C++",
+          "Java",
+          "R"
+        ]
+      },
+      {
+        "icon": "🤖",
+        "title": "Machine Learning",
+        "tags": [
+          "Scikit-learn",
+          "Pandas",
+          "NumPy",
+          "TensorFlow (Basics)",
+          "Feature Engineering"
+        ]
+      },
+      {
+        "icon": "📊",
+        "title": "Visualization & BI",
+        "tags": [
+          "Power BI",
+          "Tableau",
+          "Matplotlib",
+          "Seaborn",
+          "Excel"
+        ]
+      },
+      {
+        "icon": "☁️",
+        "title": "Tools & Platforms",
+        "tags": [
+          "Git / GitHub",
+          "Docker",
+          "AWS (EC2, S3)",
+          "Azure",
+          "Linux",
+          "Jupyter"
+        ]
+      }
     ],
     "radar": [
-      { "label": "Python", "value": 90 },
-      { "label": "SQL", "value": 88 },
-      { "label": "Machine Learning", "value": 82 },
-      { "label": "Data Viz", "value": 78 },
-      { "label": "Cloud / Tools", "value": 70 },
-      { "label": "Statistics", "value": 80 }
+      {
+        "label": "Python",
+        "value": 90
+      },
+      {
+        "label": "SQL",
+        "value": 88
+      },
+      {
+        "label": "Machine Learning",
+        "value": 82
+      },
+      {
+        "label": "Data Viz",
+        "value": 78
+      },
+      {
+        "label": "Cloud / Tools",
+        "value": 70
+      },
+      {
+        "label": "Statistics",
+        "value": 80
+      }
     ]
   },
   "resume": {
@@ -188,10 +353,30 @@
     "titleHighlight": "Connect",
     "note": "Interested in collaborating or have an opportunity? I'm always open to new ideas and conversations — let's talk.",
     "methods": [
-      { "icon": "📞", "label": "Phone", "value": "+91-9993308372", "url": "tel:+919993308372" },
-      { "icon": "📍", "label": "Location", "value": "Indore, Madhya Pradesh", "url": "https://www.google.com/maps/search/Indore,+Madhya+Pradesh" },
-      { "icon": "💼", "label": "LinkedIn", "value": "linkedin.com/in/rahul-dodke", "url": "https://www.linkedin.com/in/rahul-dodke" },
-      { "icon": "⌨️", "label": "GitHub", "value": "github.com/RDrahul123", "url": "https://github.com/RDrahul123" }
+      {
+        "icon": "📞",
+        "label": "Phone",
+        "value": "+91-9993308372",
+        "url": "tel:+919993308372"
+      },
+      {
+        "icon": "📍",
+        "label": "Location",
+        "value": "Indore, Madhya Pradesh",
+        "url": "https://www.google.com/maps/search/Indore,+Madhya+Pradesh"
+      },
+      {
+        "icon": "💼",
+        "label": "LinkedIn",
+        "value": "linkedin.com/in/rahul-dodke",
+        "url": "https://www.linkedin.com/in/rahul-dodke"
+      },
+      {
+        "icon": "⌨️",
+        "label": "GitHub",
+        "value": "github.com/RDrahul123",
+        "url": "https://github.com/RDrahul123"
+      }
     ],
     "badge": "Open to freelance & full-time roles"
   },
@@ -200,9 +385,21 @@
     "stack": "HTML · CSS · Vanilla JS",
     "tagline": "Built with Python intuition and CSS stubbornness.",
     "socials": [
-      { "icon": "⌨️", "label": "GitHub", "url": "https://github.com/RDrahul123" },
-      { "icon": "💼", "label": "LinkedIn", "url": "https://www.linkedin.com/in/rahul-dodke" },
-      { "icon": "🧩", "label": "LeetCode", "url": "https://leetcode.com/u/rahul0566" }
+      {
+        "icon": "⌨️",
+        "label": "GitHub",
+        "url": "https://github.com/RDrahul123"
+      },
+      {
+        "icon": "💼",
+        "label": "LinkedIn",
+        "url": "https://www.linkedin.com/in/rahul-dodke"
+      },
+      {
+        "icon": "🧩",
+        "label": "LeetCode",
+        "url": "https://leetcode.com/u/rahul0566"
+      }
     ]
   }
 }
