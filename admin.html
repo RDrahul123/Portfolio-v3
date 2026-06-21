@@ -1,0 +1,1294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin · Portfolio Back Office</title>
+<meta name="robots" content="noindex, nofollow">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root{
+  --bg-void:#050D1A;--bg-card:#0B1628;--bg-card2:#0F1E36;--border:#1A2F4A;
+  --cyan:#00D4FF;--purple:#7B4FFF;--ember:#FF6B35;--green:#00FF88;--red:#FF5C5C;
+  --text:#E8F4FD;--muted:#6B8FA8;
+  --space:'Space Grotesk',sans-serif;--inter:'Inter',sans-serif;--mono:'JetBrains Mono',monospace;
+  --radius:12px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{overflow-x:hidden}
+body{
+  background:var(--bg-void);color:var(--text);font-family:var(--inter);
+  font-size:15px;line-height:1.6;min-height:100vh;
+  background-image:radial-gradient(circle at 20% 20%,rgba(0,212,255,.05),transparent 50%),radial-gradient(circle at 80% 80%,rgba(123,79,255,.05),transparent 50%);
+}
+a{color:var(--cyan)}
+
+/* ===== LOGIN ===== */
+#loginScreen{
+  min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;
+}
+.login-card{
+  background:var(--bg-card);border:1px solid var(--border);border-radius:20px;
+  padding:48px 40px;max-width:380px;width:100%;
+  box-shadow:0 30px 80px rgba(0,0,0,.5);
+  text-align:center;
+}
+.login-hex{width:64px;height:64px;margin:0 auto 20px}
+.login-title{font-family:var(--space);font-size:24px;font-weight:700;margin-bottom:6px}
+.login-sub{font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:.1em;margin-bottom:32px;text-transform:uppercase}
+.login-form{display:flex;flex-direction:column;gap:16px}
+.login-form input{
+  width:100%;background:var(--bg-card2);border:1px solid var(--border);border-radius:10px;
+  padding:14px 16px;color:var(--text);font-family:var(--inter);font-size:15px;outline:none;
+  transition:border-color .3s,box-shadow .3s;
+}
+.login-form input:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(0,212,255,.1)}
+.login-error{
+  color:var(--red);font-size:13px;font-family:var(--mono);
+  min-height:18px;
+}
+.login-btn{
+  background:linear-gradient(135deg,var(--cyan),var(--purple));color:#fff;
+  border:none;border-radius:100px;padding:14px;font-family:var(--space);
+  font-weight:700;font-size:15px;cursor:pointer;transition:transform .2s,box-shadow .2s;
+  margin-top:4px;
+}
+.login-btn:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(0,212,255,.3)}
+.login-back{display:inline-block;margin-top:24px;font-family:var(--mono);font-size:12px;color:var(--muted);text-decoration:none}
+.login-back:hover{color:var(--cyan)}
+
+/* ===== ADMIN SHELL ===== */
+#adminShell{display:none}
+#adminShell.visible{display:block}
+
+.admin-topbar{
+  position:sticky;top:0;z-index:100;
+  background:rgba(5,13,26,.92);backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border);
+  padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;
+}
+.admin-topbar-left{display:flex;align-items:center;gap:12px}
+.admin-topbar-left h1{font-family:var(--space);font-size:18px;font-weight:700}
+.admin-badge{
+  font-family:var(--mono);font-size:11px;padding:3px 10px;border-radius:100px;
+  background:rgba(0,255,136,.08);color:var(--green);border:1px solid rgba(0,255,136,.25);
+}
+.admin-topbar-right{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+
+.btn{
+  font-family:var(--space);font-weight:700;font-size:13px;border-radius:100px;
+  padding:10px 20px;border:1px solid var(--border);background:transparent;color:var(--text);
+  cursor:pointer;transition:all .2s;text-decoration:none;display:inline-flex;align-items:center;gap:8px;
+}
+.btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.btn-primary{background:linear-gradient(135deg,var(--cyan),var(--purple));color:#fff;border:none}
+.btn-primary:hover{color:#fff;opacity:.9;transform:translateY(-1px);box-shadow:0 8px 24px rgba(0,212,255,.3)}
+.btn-danger{border-color:rgba(255,92,92,.3);color:var(--red)}
+.btn-danger:hover{border-color:var(--red);color:var(--red);background:rgba(255,92,92,.06)}
+.btn-sm{padding:6px 14px;font-size:12px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+
+/* ===== LAYOUT ===== */
+.admin-layout{display:flex;min-height:calc(100vh - 65px)}
+.admin-sidebar{
+  width:220px;flex-shrink:0;border-right:1px solid var(--border);
+  padding:20px 12px;position:sticky;top:65px;height:calc(100vh - 65px);overflow-y:auto;
+}
+.sidebar-link{
+  display:flex;align-items:center;gap:10px;padding:11px 14px;border-radius:10px;
+  color:var(--muted);text-decoration:none;font-size:14px;font-weight:500;margin-bottom:4px;
+  transition:all .2s;cursor:pointer;border:none;background:none;width:100%;text-align:left;font-family:var(--inter);
+}
+.sidebar-link:hover{background:rgba(0,212,255,.06);color:var(--text)}
+.sidebar-link.active{background:rgba(0,212,255,.1);color:var(--cyan)}
+.sidebar-icon{font-size:18px}
+
+.admin-main{flex:1;padding:28px 32px;max-width:920px}
+.admin-panel{display:none}
+.admin-panel.active{display:block}
+.panel-header{margin-bottom:24px}
+.panel-header h2{font-family:var(--space);font-size:24px;font-weight:700;margin-bottom:4px}
+.panel-header p{color:var(--muted);font-size:14px}
+
+/* ===== FORM ELEMENTS ===== */
+.field-group{margin-bottom:18px}
+.field-label{
+  display:block;font-family:var(--space);font-size:13px;font-weight:600;
+  margin-bottom:6px;color:var(--text);
+}
+.field-hint{font-size:12px;color:var(--muted);margin-top:4px}
+.field-input,.field-textarea,.field-select{
+  width:100%;background:var(--bg-card);border:1px solid var(--border);border-radius:10px;
+  padding:12px 14px;color:var(--text);font-family:var(--inter);font-size:14px;outline:none;
+  transition:border-color .2s,box-shadow .2s;
+}
+.field-input:focus,.field-textarea:focus,.field-select:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(0,212,255,.08)}
+.field-textarea{resize:vertical;min-height:80px;font-family:var(--inter)}
+.field-row{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.field-row-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+
+/* ===== CARDS / REPEATERS ===== */
+.repeater-item{
+  background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:18px;margin-bottom:14px;position:relative;
+}
+.repeater-item-header{
+  display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;
+  font-family:var(--space);font-weight:700;font-size:14px;color:var(--cyan);
+}
+.repeater-controls{display:flex;gap:6px}
+.icon-btn{
+  width:30px;height:30px;border-radius:8px;border:1px solid var(--border);background:var(--bg-card2);
+  color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;
+  transition:all .2s;
+}
+.icon-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.icon-btn.danger:hover{border-color:var(--red);color:var(--red)}
+.add-item-btn{
+  width:100%;padding:12px;border:1.5px dashed var(--border);border-radius:10px;
+  background:transparent;color:var(--muted);font-family:var(--space);font-weight:600;font-size:13px;
+  cursor:pointer;transition:all .2s;
+}
+.add-item-btn:hover{border-color:var(--cyan);color:var(--cyan);background:rgba(0,212,255,.04)}
+
+.bullet-list{display:flex;flex-direction:column;gap:8px;margin-bottom:10px}
+.bullet-row{display:flex;gap:8px;align-items:flex-start}
+.bullet-row textarea{flex:1}
+
+/* ===== STATUS / SAVE BAR ===== */
+.savebar{
+  position:sticky;bottom:0;background:rgba(5,13,26,.95);backdrop-filter:blur(14px);
+  border-top:1px solid var(--border);padding:14px 32px;display:flex;justify-content:flex-end;
+  gap:12px;align-items:center;margin:32px -32px -28px;
+}
+.save-status{font-family:var(--mono);font-size:12px;color:var(--muted);margin-right:auto}
+.save-status.ok{color:var(--green)}
+.save-status.err{color:var(--red)}
+
+/* ===== TOAST ===== */
+#toast{
+  position:fixed;bottom:24px;right:24px;z-index:2000;
+  display:flex;flex-direction:column;gap:10px;
+}
+.toast-item{
+  background:var(--bg-card);border:1px solid var(--border);border-radius:10px;
+  padding:14px 18px;font-size:13px;max-width:340px;
+  box-shadow:0 12px 32px rgba(0,0,0,.4);
+  animation:toastIn .3s ease;display:flex;gap:10px;align-items:flex-start;
+}
+.toast-item.ok{border-color:rgba(0,255,136,.3)}
+.toast-item.err{border-color:rgba(255,92,92,.3)}
+@keyframes toastIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* ===== SETTINGS PANEL ===== */
+.settings-box{
+  background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:20px;margin-bottom:18px;
+}
+.settings-box h3{font-family:var(--space);font-size:15px;margin-bottom:4px}
+.settings-box .field-hint{margin-bottom:14px}
+.token-warning{
+  background:rgba(255,107,53,.06);border:1px solid rgba(255,107,53,.25);border-radius:10px;
+  padding:14px 16px;font-size:13px;color:var(--text);line-height:1.6;margin-bottom:14px;
+}
+.token-warning strong{color:var(--ember)}
+
+/* ===== MOBILE ===== */
+@media(max-width:900px){
+  .admin-layout{flex-direction:column}
+  .admin-sidebar{
+    width:100%;height:auto;position:static;border-right:none;border-bottom:1px solid var(--border);
+    display:flex;overflow-x:auto;padding:10px 12px;gap:6px;
+  }
+  .sidebar-link{white-space:nowrap;margin-bottom:0}
+  .admin-main{padding:20px 16px;max-width:100%}
+  .field-row,.field-row-3{grid-template-columns:1fr}
+  .savebar{margin:24px -16px -20px;padding:14px 16px;flex-wrap:wrap}
+  .save-status{width:100%;margin-right:0;order:3}
+  .admin-topbar{padding:12px 16px}
+  .admin-topbar-right{width:100%;justify-content:flex-start}
+}
+@media(max-width:480px){
+  .login-card{padding:36px 24px}
+  .admin-topbar-left h1{font-size:15px}
+  .panel-header h2{font-size:20px}
+}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+</style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div id="loginScreen">
+  <div class="login-card">
+    <svg class="login-hex" viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="loginGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#00D4FF"/><stop offset="100%" stop-color="#7B4FFF"/>
+        </linearGradient>
+      </defs>
+      <path d="M45 8 L80 27 L80 63 L45 82 L10 63 L10 27 Z" fill="rgba(0,212,255,0.06)" stroke="url(#loginGrad)" stroke-width="2"/>
+      <text x="50%" y="54%" dominant-baseline="central" text-anchor="middle" fill="url(#loginGrad)" font-family="'Space Grotesk',sans-serif" font-weight="700" font-size="20">PR</text>
+    </svg>
+    <div class="login-title">Back Office</div>
+    <div class="login-sub">Portfolio Admin</div>
+    <form class="login-form" id="loginForm" onsubmit="return false;">
+      <input type="text" id="loginUser" placeholder="Username" autocomplete="username" required>
+      <input type="password" id="loginPass" placeholder="Password" autocomplete="current-password" required>
+      <div class="login-error" id="loginError"></div>
+      <button type="submit" class="login-btn" id="loginBtn">Sign In</button>
+    </form>
+    <a href="index.html" class="login-back">← Back to portfolio</a>
+  </div>
+</div>
+
+<!-- ADMIN SHELL -->
+<div id="adminShell">
+  <div class="admin-topbar">
+    <div class="admin-topbar-left">
+      <h1>📊 Portfolio Back Office</h1>
+      <span class="admin-badge" id="connBadge">● Not connected</span>
+    </div>
+    <div class="admin-topbar-right">
+      <a href="index.html" target="_blank" class="btn btn-sm">↗ View Site</a>
+      <button class="btn btn-sm" onclick="showPanel('settings')">⚙ GitHub Settings</button>
+      <button class="btn btn-danger btn-sm" onclick="logout()">Log Out</button>
+    </div>
+  </div>
+
+  <div class="admin-layout">
+    <nav class="admin-sidebar" id="sidebar">
+      <button class="sidebar-link active" onclick="showPanel('hero')"><span class="sidebar-icon">🏠</span>Hero</button>
+      <button class="sidebar-link" onclick="showPanel('about')"><span class="sidebar-icon">👤</span>About</button>
+      <button class="sidebar-link" onclick="showPanel('experience')"><span class="sidebar-icon">💼</span>Experience</button>
+      <button class="sidebar-link" onclick="showPanel('projects')"><span class="sidebar-icon">🚀</span>Projects</button>
+      <button class="sidebar-link" onclick="showPanel('skills')"><span class="sidebar-icon">🧠</span>Skills</button>
+      <button class="sidebar-link" onclick="showPanel('resume')"><span class="sidebar-icon">📄</span>Resume</button>
+      <button class="sidebar-link" onclick="showPanel('contact')"><span class="sidebar-icon">✉️</span>Contact</button>
+      <button class="sidebar-link" onclick="showPanel('footer')"><span class="sidebar-icon">🔻</span>Footer</button>
+      <button class="sidebar-link" onclick="showPanel('settings')"><span class="sidebar-icon">⚙️</span>GitHub Settings</button>
+    </nav>
+
+    <main class="admin-main">
+
+      <!-- ===== HERO PANEL ===== -->
+      <section class="admin-panel active" id="panel-hero">
+        <div class="panel-header"><h2>Hero Section</h2><p>The first thing visitors see. Name, tagline, photo, and social links.</p></div>
+
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label">Greeting</label>
+            <input class="field-input" data-bind="hero.greeting" placeholder="Hi, I'm">
+          </div>
+          <div class="field-group">
+            <label class="field-label">Full Name</label>
+            <input class="field-input" data-bind="hero.name" placeholder="Your Name">
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Title / Role</label>
+          <input class="field-input" data-bind="hero.title" placeholder="Data Science Analyst & Software Engineer">
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Eyebrow Badge Text</label>
+          <input class="field-input" data-bind="hero.eyebrow" placeholder="Available for opportunities">
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Profile Photo URL</label>
+          <input class="field-input" data-bind="hero.photoUrl" placeholder="https://...">
+          <p class="field-hint">Tip: upload your photo to a GitHub repo and use the "raw.githubusercontent.com" link.</p>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Typewriter Phrases</label>
+          <div class="bullet-list" id="list-typewriter"></div>
+          <button class="add-item-btn" onclick="addBullet('hero.typewriterPhrases','list-typewriter')">+ Add Phrase</button>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Floating Badge 1</label>
+          <div class="field-row">
+            <input class="field-input" data-bind="hero.badge1.num" placeholder="100K+">
+            <input class="field-input" data-bind="hero.badge1.label" placeholder="Records / Week">
+          </div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Floating Badge 2</label>
+          <div class="field-row">
+            <input class="field-input" data-bind="hero.badge2.num" placeholder="3+">
+            <input class="field-input" data-bind="hero.badge2.label" placeholder="Years Experience">
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Social Links</label>
+          <div id="list-socials"></div>
+          <button class="add-item-btn" onclick="addRepeaterItem('hero.socials',{label:'🔗 Label',url:'https://'},'list-socials',renderSocialItem)">+ Add Social Link</button>
+        </div>
+      </section>
+
+      <!-- ===== ABOUT PANEL ===== -->
+      <section class="admin-panel" id="panel-about">
+        <div class="panel-header"><h2>About Section</h2><p>Your bio, stats, and core philosophy pillars.</p></div>
+
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label">Eyebrow</label>
+            <input class="field-input" data-bind="about.eyebrow">
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label">Title (normal part)</label>
+            <input class="field-input" data-bind="about.titleNormal" placeholder="Data-Driven ">
+          </div>
+          <div class="field-group">
+            <label class="field-label">Title (highlighted part)</label>
+            <input class="field-input" data-bind="about.titleHighlight" placeholder="Problem Solver">
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Stat Cards</label>
+          <div id="list-aboutStats"></div>
+          <button class="add-item-btn" onclick="addRepeaterItem('about.stats',{num:'0',label:'Label'},'list-aboutStats',renderStatItem)">+ Add Stat</button>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Bio Paragraphs</label>
+          <p class="field-hint">You can use &lt;strong&gt;text&lt;/strong&gt; to bold key phrases.</p>
+          <div class="bullet-list" id="list-paragraphs"></div>
+          <button class="add-item-btn" onclick="addBullet('about.paragraphs','list-paragraphs')">+ Add Paragraph</button>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Philosophy Pillars</label>
+          <div id="list-pillars"></div>
+          <button class="add-item-btn" onclick="addRepeaterItem('about.pillars',{icon:'⭐',title:'New Pillar',text:'Description...'},'list-pillars',renderPillarItem)">+ Add Pillar</button>
+        </div>
+      </section>
+
+      <!-- ===== EXPERIENCE PANEL ===== -->
+      <section class="admin-panel" id="panel-experience">
+        <div class="panel-header"><h2>Experience / Timeline</h2><p>Your professional journey, in reverse-chronological order.</p></div>
+
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label">Eyebrow</label>
+            <input class="field-input" data-bind="experience.eyebrow">
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label">Title (normal part)</label>
+            <input class="field-input" data-bind="experience.titleNormal">
+          </div>
+          <div class="field-group">
+            <label class="field-label">Title (highlighted part)</label>
+            <input class="field-input" data-bind="experience.titleHighlight">
+          </div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Description</label>
+          <input class="field-input" data-bind="experience.description">
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Timeline Entries</label>
+          <div id="list-experience"></div>
+          <button class="add-item-btn" onclick="addExperienceItem()">+ Add Experience</button>
+        </div>
+      </section>
+
+      <!-- ===== PROJECTS PANEL ===== -->
+      <section class="admin-panel" id="panel-projects">
+        <div class="panel-header"><h2>Projects</h2><p>Showcase your work with filters, tags, and links.</p></div>
+
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label">Eyebrow</label>
+            <input class="field-input" data-bind="projects.eyebrow">
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label">Title (normal part)</label>
+            <input class="field-input" data-bind="projects.titleNormal">
+          </div>
+          <div class="field-group">
+            <label class="field-label">Title (highlighted part)</label>
+            <input class="field-input" data-bind="projects.titleHighlight">
+          </div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Description</label>
+          <input class="field-input" data-bind="projects.description">
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Filter Categories</label>
+          <p class="field-hint">The "key" must match a project's Category Key exactly (e.g. "ml", "data", "web", "all").</p>
+          <div id="list-filters"></div>
+          <button class="add-item-btn" onclick="addRepeaterItem('projects.filters',{key:'new',label:'New Filter'},'list-filters',renderFilterItem)">+ Add Filter</button>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Project Cards</label>
+          <div id="list-projects"></div>
+          <button class="add-item-btn" onclick="addProjectItem()">+ Add Project</button>
+        </div>
+      </section>
+
+      <!-- ===== SKILLS PANEL ===== -->
+      <section class="admin-panel" id="panel-skills">
+        <div class="panel-header"><h2>Skills</h2><p>Skill groups and the proficiency radar chart.</p></div>
+
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label">Eyebrow</label>
+            <input class="field-input" data-bind="skills.eyebrow">
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label">Title (normal part)</label>
+            <input class="field-input" data-bind="skills.titleNormal">
+          </div>
+          <div class="field-group">
+            <label class="field-label">Title (highlighted part)</label>
+            <input class="field-input" data-bind="skills.titleHighlight">
+          </div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Description</label>
+          <input class="field-input" data-bind="skills.description">
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Skill Groups</label>
+          <div id="list-skillGroups"></div>
+          <button class="add-item-btn" onclick="addSkillGroup()">+ Add Skill Group</button>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Proficiency Radar (0–100)</label>
+          <div id="list-radar"></div>
+          <button class="add-item-btn" onclick="addRepeaterItem('skills.radar',{label:'New Skill',value:50},'list-radar',renderRadarItem)">+ Add Radar Skill</button>
+        </div>
+      </section>
+
+      <!-- ===== RESUME PANEL ===== -->
+      <section class="admin-panel" id="panel-resume">
+        <div class="panel-header"><h2>Resume</h2><p>The download-resume call to action.</p></div>
+
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label">Eyebrow</label>
+            <input class="field-input" data-bind="resume.eyebrow">
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label">Title (normal part)</label>
+            <input class="field-input" data-bind="resume.titleNormal">
+          </div>
+          <div class="field-group">
+            <label class="field-label">Title (highlighted part)</label>
+            <input class="field-input" data-bind="resume.titleHighlight">
+          </div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Description</label>
+          <input class="field-input" data-bind="resume.description">
+        </div>
+        <div class="field-group">
+          <label class="field-label">Resume File URL (PDF)</label>
+          <input class="field-input" data-bind="resume.fileUrl" placeholder="https://...">
+          <p class="field-hint">Use a direct link, e.g. raw.githubusercontent.com/.../resume.pdf</p>
+        </div>
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label">Button Label</label>
+            <input class="field-input" data-bind="resume.buttonLabel">
+          </div>
+          <div class="field-group">
+            <label class="field-label">Button Subtext</label>
+            <input class="field-input" data-bind="resume.buttonSub">
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== CONTACT PANEL ===== -->
+      <section class="admin-panel" id="panel-contact">
+        <div class="panel-header"><h2>Contact</h2><p>Contact methods and the closing note.</p></div>
+
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label">Eyebrow</label>
+            <input class="field-input" data-bind="contact.eyebrow">
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label">Title (normal part)</label>
+            <input class="field-input" data-bind="contact.titleNormal">
+          </div>
+          <div class="field-group">
+            <label class="field-label">Title (highlighted part)</label>
+            <input class="field-input" data-bind="contact.titleHighlight">
+          </div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Note</label>
+          <textarea class="field-textarea" data-bind="contact.note"></textarea>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Availability Badge</label>
+          <input class="field-input" data-bind="contact.badge">
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Contact Methods</label>
+          <div id="list-contactMethods"></div>
+          <button class="add-item-btn" onclick="addRepeaterItem('contact.methods',{icon:'🔗',label:'Label',value:'Value',url:'#'},'list-contactMethods',renderContactMethodItem)">+ Add Contact Method</button>
+        </div>
+      </section>
+
+      <!-- ===== FOOTER PANEL ===== -->
+      <section class="admin-panel" id="panel-footer">
+        <div class="panel-header"><h2>Footer</h2><p>Copyright, tagline, and footer social icons.</p></div>
+
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label">Copyright Text</label>
+            <input class="field-input" data-bind="footer.copyright">
+          </div>
+          <div class="field-group">
+            <label class="field-label">Stack Text</label>
+            <input class="field-input" data-bind="footer.stack">
+          </div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Tagline</label>
+          <input class="field-input" data-bind="footer.tagline">
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Footer Social Icons</label>
+          <div id="list-footerSocials"></div>
+          <button class="add-item-btn" onclick="addRepeaterItem('footer.socials',{icon:'🔗',label:'Label',url:'https://'},'list-footerSocials',renderFooterSocialItem)">+ Add Social Icon</button>
+        </div>
+      </section>
+
+      <!-- ===== SETTINGS PANEL ===== -->
+      <section class="admin-panel" id="panel-settings">
+        <div class="panel-header"><h2>GitHub Settings</h2><p>Connect this back office to your GitHub repository so changes publish directly to your live site.</p></div>
+
+        <div class="token-warning">
+          <strong>⚠ About your token:</strong> Your GitHub Personal Access Token is stored only in this browser's local storage — it is never sent anywhere except directly to GitHub's API. Use a <strong>fine-grained token</strong> scoped only to this one repository with <strong>Contents: Read and write</strong> permission. Do not share this device/browser profile with others, and do not commit your token into any file.
+        </div>
+
+        <div class="settings-box">
+          <h3>Repository</h3>
+          <p class="field-hint">Format: <code>username/repository-name</code> (e.g. RDrahul123/Portfolio-v2)</p>
+          <div class="field-group" style="margin-top:10px">
+            <label class="field-label">GitHub Repository</label>
+            <input class="field-input" id="cfgRepo" placeholder="username/repository-name">
+          </div>
+          <div class="field-row">
+            <div class="field-group">
+              <label class="field-label">Branch</label>
+              <input class="field-input" id="cfgBranch" placeholder="main" value="main">
+            </div>
+            <div class="field-group">
+              <label class="field-label">content.json Path</label>
+              <input class="field-input" id="cfgPath" placeholder="content.json" value="content.json">
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-box">
+          <h3>Personal Access Token</h3>
+          <p class="field-hint">Generate at GitHub → Settings → Developer settings → Personal access tokens → Fine-grained tokens.</p>
+          <div class="field-group" style="margin-top:10px">
+            <label class="field-label">Token</label>
+            <input class="field-input" id="cfgToken" type="password" placeholder="github_pat_...">
+          </div>
+        </div>
+
+        <button class="btn btn-primary" onclick="saveSettings()">💾 Save Connection Settings</button>
+        <button class="btn" onclick="testConnection()">🔌 Test Connection</button>
+        <p class="field-hint" id="settingsStatus" style="margin-top:12px"></p>
+      </section>
+
+    </main>
+  </div>
+
+  <div class="savebar">
+    <span class="save-status" id="saveStatus"></span>
+    <button class="btn" onclick="reloadFromGitHub()">↻ Reload from GitHub</button>
+    <button class="btn btn-primary" onclick="publishChanges()" id="publishBtn">🚀 Save &amp; Publish</button>
+  </div>
+</div>
+
+<div id="toast"></div>
+<script>
+// =====================================================================
+// AUTH
+// =====================================================================
+const ADMIN_USER='prakrit3625';
+const ADMIN_PASS='prakrit@3625';
+const SESSION_KEY='portfolioAdminSession';
+
+document.getElementById('loginForm').addEventListener('submit',e=>{
+  e.preventDefault();
+  const u=document.getElementById('loginUser').value.trim();
+  const p=document.getElementById('loginPass').value;
+  const err=document.getElementById('loginError');
+  if(u===ADMIN_USER && p===ADMIN_PASS){
+    sessionStorage.setItem(SESSION_KEY,'1');
+    err.textContent='';
+    enterAdmin();
+  } else {
+    err.textContent='Invalid username or password.';
+  }
+});
+
+function logout(){
+  sessionStorage.removeItem(SESSION_KEY);
+  document.getElementById('adminShell').classList.remove('visible');
+  document.getElementById('loginScreen').style.display='flex';
+  document.getElementById('loginUser').value='';
+  document.getElementById('loginPass').value='';
+}
+
+function enterAdmin(){
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('adminShell').classList.add('visible');
+  loadSettings();
+  reloadFromGitHub();
+}
+
+// auto-login if session active
+if(sessionStorage.getItem(SESSION_KEY)==='1'){
+  enterAdmin();
+}
+
+// =====================================================================
+// GITHUB SETTINGS
+// =====================================================================
+const SETTINGS_KEY='portfolioAdminSettings';
+
+function loadSettings(){
+  const raw=localStorage.getItem(SETTINGS_KEY);
+  const cfg=raw?JSON.parse(raw):{};
+  document.getElementById('cfgRepo').value=cfg.repo||'';
+  document.getElementById('cfgBranch').value=cfg.branch||'main';
+  document.getElementById('cfgPath').value=cfg.path||'content.json';
+  document.getElementById('cfgToken').value=cfg.token||'';
+  updateConnBadge(cfg);
+}
+
+function getSettings(){
+  const raw=localStorage.getItem(SETTINGS_KEY);
+  return raw?JSON.parse(raw):{repo:'',branch:'main',path:'content.json',token:''};
+}
+
+function saveSettings(){
+  const cfg={
+    repo:document.getElementById('cfgRepo').value.trim(),
+    branch:document.getElementById('cfgBranch').value.trim()||'main',
+    path:document.getElementById('cfgPath').value.trim()||'content.json',
+    token:document.getElementById('cfgToken').value.trim()
+  };
+  localStorage.setItem(SETTINGS_KEY,JSON.stringify(cfg));
+  updateConnBadge(cfg);
+  showToast('ok','Settings saved locally in this browser.');
+}
+
+function updateConnBadge(cfg){
+  const badge=document.getElementById('connBadge');
+  if(cfg.repo && cfg.token){
+    badge.textContent='● Connected: '+cfg.repo;
+    badge.style.color='var(--green)';
+    badge.style.borderColor='rgba(0,255,136,.25)';
+    badge.style.background='rgba(0,255,136,.08)';
+  } else {
+    badge.textContent='● Not connected — set up GitHub Settings';
+    badge.style.color='var(--ember)';
+    badge.style.borderColor='rgba(255,107,53,.25)';
+    badge.style.background='rgba(255,107,53,.08)';
+  }
+}
+
+async function testConnection(){
+  const cfg=getSettings();
+  const statusEl=document.getElementById('settingsStatus');
+  if(!cfg.repo||!cfg.token){
+    statusEl.textContent='Please fill in repository and token first.';
+    statusEl.style.color='var(--red)';
+    return;
+  }
+  statusEl.textContent='Testing connection...';
+  statusEl.style.color='var(--muted)';
+  try{
+    const res=await fetch(`https://api.github.com/repos/${cfg.repo}`,{
+      headers:{Authorization:`Bearer ${cfg.token}`,Accept:'application/vnd.github+json'}
+    });
+    if(!res.ok){
+      const body=await res.json().catch(()=>({}));
+      throw new Error(body.message||(`HTTP ${res.status}`));
+    }
+    const data=await res.json();
+    statusEl.textContent=`✓ Connected to ${data.full_name} (default branch: ${data.default_branch})`;
+    statusEl.style.color='var(--green)';
+  }catch(err){
+    statusEl.textContent='✗ Connection failed: '+err.message;
+    statusEl.style.color='var(--red)';
+  }
+}
+
+// =====================================================================
+// DATA STATE
+// =====================================================================
+let DATA=null;       // working copy of content.json
+let REMOTE_SHA=null; // sha of the file on GitHub (needed to update)
+const LOCAL_DRAFT_KEY='portfolioAdminDraft';
+
+function getPath(obj,path){
+  return path.split('.').reduce((o,k)=>(o&&o[k]!==undefined)?o[k]:undefined,obj);
+}
+function setPath(obj,path,value){
+  const keys=path.split('.');
+  let cur=obj;
+  for(let i=0;i<keys.length-1;i++){
+    if(cur[keys[i]]===undefined) cur[keys[i]]={};
+    cur=cur[keys[i]];
+  }
+  cur[keys[keys.length-1]]=value;
+}
+
+// =====================================================================
+// LOAD CONTENT (from GitHub if configured, else local content.json)
+// =====================================================================
+async function reloadFromGitHub(){
+  const statusEl=document.getElementById('saveStatus');
+  const cfg=getSettings();
+  statusEl.textContent='Loading content...';
+  statusEl.className='save-status';
+
+  try{
+    if(cfg.repo && cfg.token){
+      const url=`https://api.github.com/repos/${cfg.repo}/contents/${cfg.path}?ref=${cfg.branch}`;
+      const res=await fetch(url,{headers:{Authorization:`Bearer ${cfg.token}`,Accept:'application/vnd.github+json'}});
+      if(!res.ok){
+        const body=await res.json().catch(()=>({}));
+        throw new Error(body.message||`HTTP ${res.status}`);
+      }
+      const fileData=await res.json();
+      REMOTE_SHA=fileData.sha;
+      const jsonStr=decodeURIComponent(escape(atob(fileData.content.replace(/\n/g,''))));
+      DATA=JSON.parse(jsonStr);
+      statusEl.textContent='Loaded from GitHub ('+cfg.repo+')';
+      statusEl.className='save-status ok';
+    } else {
+      // fall back to local content.json next to admin.html
+      const res=await fetch('content.json',{cache:'no-store'});
+      if(!res.ok) throw new Error('content.json not found locally');
+      DATA=await res.json();
+      REMOTE_SHA=null;
+      statusEl.textContent='Loaded local content.json (set up GitHub Settings to publish)';
+      statusEl.className='save-status';
+    }
+    renderForm();
+    setTimeout(()=>{ if(statusEl.textContent.indexOf('Loaded')===0) statusEl.textContent=''; },4000);
+  }catch(err){
+    statusEl.textContent='Load failed: '+err.message;
+    statusEl.className='save-status err';
+    showToast('err','Failed to load content: '+err.message);
+  }
+}
+
+// =====================================================================
+// RENDER FORM FROM DATA
+// =====================================================================
+function renderForm(){
+  if(!DATA) return;
+
+  // simple data-bind inputs
+  document.querySelectorAll('[data-bind]').forEach(el=>{
+    const path=el.dataset.bind;
+    const val=getPath(DATA,path);
+    el.value=(val===undefined||val===null)?'':val;
+    el.oninput=()=>{ setPath(DATA,path,el.value); };
+  });
+
+  renderBulletList('hero.typewriterPhrases','list-typewriter');
+  renderRepeaterList('hero.socials','list-socials',renderSocialItem);
+
+  renderRepeaterList('about.stats','list-aboutStats',renderStatItem);
+  renderBulletList('about.paragraphs','list-paragraphs');
+  renderRepeaterList('about.pillars','list-pillars',renderPillarItem);
+
+  renderExperienceList();
+
+  renderRepeaterList('projects.filters','list-filters',renderFilterItem);
+  renderProjectsList();
+
+  renderSkillGroupsList();
+  renderRepeaterList('skills.radar','list-radar',renderRadarItem);
+
+  renderRepeaterList('contact.methods','list-contactMethods',renderContactMethodItem);
+  renderRepeaterList('footer.socials','list-footerSocials',renderFooterSocialItem);
+}
+
+// =====================================================================
+// GENERIC BULLET LIST (array of strings)
+// =====================================================================
+function renderBulletList(path,containerId){
+  const container=document.getElementById(containerId);
+  const arr=getPath(DATA,path)||[];
+  container.innerHTML='';
+  arr.forEach((val,i)=>{
+    const row=document.createElement('div');
+    row.className='bullet-row';
+    const ta=document.createElement('textarea');
+    ta.className='field-textarea';
+    ta.style.minHeight='44px';
+    ta.value=val;
+    ta.oninput=()=>{ arr[i]=ta.value; };
+    const del=document.createElement('button');
+    del.className='icon-btn danger';
+    del.innerHTML='✕';
+    del.title='Remove';
+    del.onclick=()=>{ arr.splice(i,1); renderBulletList(path,containerId); };
+    row.appendChild(ta);row.appendChild(del);
+    container.appendChild(row);
+  });
+}
+function addBullet(path,containerId){
+  const arr=getPath(DATA,path)||[];
+  arr.push('');
+  setPath(DATA,path,arr);
+  renderBulletList(path,containerId);
+}
+
+// =====================================================================
+// GENERIC REPEATER LIST (array of objects) — uses a render callback
+// =====================================================================
+function renderRepeaterList(path,containerId,renderFn){
+  const container=document.getElementById(containerId);
+  const arr=getPath(DATA,path)||[];
+  container.innerHTML='';
+  arr.forEach((item,i)=>{
+    container.appendChild(renderFn(item,i,arr,path,containerId));
+  });
+}
+function addRepeaterItem(path,template,containerId,renderFn){
+  const arr=getPath(DATA,path)||[];
+  arr.push(JSON.parse(JSON.stringify(template)));
+  setPath(DATA,path,arr);
+  renderRepeaterList(path,containerId,renderFn);
+}
+function removeRepeaterItem(arr,i,path,containerId,renderFn){
+  arr.splice(i,1);
+  renderRepeaterList(path,containerId,renderFn);
+}
+function moveItem(arr,i,dir,path,containerId,renderFn){
+  const j=i+dir;
+  if(j<0||j>=arr.length) return;
+  [arr[i],arr[j]]=[arr[j],arr[i]];
+  renderRepeaterList(path,containerId,renderFn);
+}
+
+function makeRepeaterShell(title,arr,i,path,containerId,renderFn){
+  const wrap=document.createElement('div');
+  wrap.className='repeater-item';
+  const header=document.createElement('div');
+  header.className='repeater-item-header';
+  const titleSpan=document.createElement('span');
+  titleSpan.textContent=title;
+  const controls=document.createElement('div');
+  controls.className='repeater-controls';
+  const up=document.createElement('button');up.className='icon-btn';up.innerHTML='↑';up.title='Move up';
+  up.onclick=()=>moveItem(arr,i,-1,path,containerId,renderFn);
+  const down=document.createElement('button');down.className='icon-btn';down.innerHTML='↓';down.title='Move down';
+  down.onclick=()=>moveItem(arr,i,1,path,containerId,renderFn);
+  const del=document.createElement('button');del.className='icon-btn danger';del.innerHTML='✕';del.title='Remove';
+  del.onclick=()=>removeRepeaterItem(arr,i,path,containerId,renderFn);
+  controls.appendChild(up);controls.appendChild(down);controls.appendChild(del);
+  header.appendChild(titleSpan);header.appendChild(controls);
+  wrap.appendChild(header);
+  return wrap;
+}
+
+function makeField(labelText,value,onChange,multiline){
+  const group=document.createElement('div');
+  group.className='field-group';
+  group.style.marginBottom='10px';
+  const label=document.createElement('label');
+  label.className='field-label';
+  label.textContent=labelText;
+  const input=document.createElement(multiline?'textarea':'input');
+  input.className=multiline?'field-textarea':'field-input';
+  if(!multiline) input.type='text';
+  input.value=value||'';
+  input.oninput=()=>onChange(input.value);
+  group.appendChild(label);group.appendChild(input);
+  return group;
+}
+
+function makeFieldRow(...fields){
+  const row=document.createElement('div');
+  row.className='field-row';
+  fields.forEach(f=>row.appendChild(f));
+  return row;
+}
+
+// ---- Social link item (hero.socials / footer.socials) ----
+function renderSocialItem(item,i,arr,path,containerId){
+  const wrap=makeRepeaterShell(item.label||'Social Link',arr,i,path,containerId,
+    path==='hero.socials'?renderSocialItem:renderFooterSocialItem);
+  wrap.appendChild(makeFieldRow(
+    makeField('Label (emoji + text)',item.label,v=>item.label=v),
+    makeField('URL',item.url,v=>item.url=v)
+  ));
+  return wrap;
+}
+
+// ---- Footer social icon item ----
+function renderFooterSocialItem(item,i,arr,path,containerId){
+  const wrap=makeRepeaterShell(item.label||'Icon',arr,i,path,containerId,renderFooterSocialItem);
+  wrap.appendChild(makeFieldRow(
+    makeField('Icon (emoji)',item.icon,v=>item.icon=v),
+    makeField('Label (for screen readers)',item.label,v=>item.label=v),
+    makeField('URL',item.url,v=>item.url=v)
+  ));
+  return wrap;
+}
+
+// ---- About stat item ----
+function renderStatItem(item,i,arr,path,containerId){
+  const wrap=makeRepeaterShell(item.label||'Stat',arr,i,path,containerId,renderStatItem);
+  wrap.appendChild(makeFieldRow(
+    makeField('Number',item.num,v=>item.num=v),
+    makeField('Label',item.label,v=>item.label=v)
+  ));
+  return wrap;
+}
+
+// ---- About pillar item ----
+function renderPillarItem(item,i,arr,path,containerId){
+  const wrap=makeRepeaterShell(item.title||'Pillar',arr,i,path,containerId,renderPillarItem);
+  wrap.appendChild(makeFieldRow(
+    makeField('Icon (emoji)',item.icon,v=>item.icon=v),
+    makeField('Title',item.title,v=>item.title=v)
+  ));
+  wrap.appendChild(makeField('Description',item.text,v=>item.text=v,true));
+  return wrap;
+}
+
+// ---- Project filter item ----
+function renderFilterItem(item,i,arr,path,containerId){
+  const wrap=makeRepeaterShell(item.label||'Filter',arr,i,path,containerId,renderFilterItem);
+  wrap.appendChild(makeFieldRow(
+    makeField('Key (must match project category)',item.key,v=>item.key=v),
+    makeField('Display Label',item.label,v=>item.label=v)
+  ));
+  return wrap;
+}
+
+// ---- Radar skill item ----
+function renderRadarItem(item,i,arr,path,containerId){
+  const wrap=makeRepeaterShell(item.label||'Skill',arr,i,path,containerId,renderRadarItem);
+  const valField=makeField('Value (0–100)',item.value,v=>item.value=parseInt(v)||0);
+  valField.querySelector('input').type='number';
+  valField.querySelector('input').min=0;
+  valField.querySelector('input').max=100;
+  wrap.appendChild(makeFieldRow(
+    makeField('Label',item.label,v=>item.label=v),
+    valField
+  ));
+  return wrap;
+}
+
+// ---- Contact method item ----
+function renderContactMethodItem(item,i,arr,path,containerId){
+  const wrap=makeRepeaterShell(item.label||'Method',arr,i,path,containerId,renderContactMethodItem);
+  wrap.appendChild(makeFieldRow(
+    makeField('Icon (emoji)',item.icon,v=>item.icon=v),
+    makeField('Label',item.label,v=>item.label=v)
+  ));
+  wrap.appendChild(makeFieldRow(
+    makeField('Display Value',item.value,v=>item.value=v),
+    makeField('URL / Link (mailto:, tel:, https://...)',item.url,v=>item.url=v)
+  ));
+  return wrap;
+}
+
+// =====================================================================
+// EXPERIENCE (timeline) — bullets within each item
+// =====================================================================
+function renderExperienceList(){
+  const container=document.getElementById('list-experience');
+  const arr=DATA.experience.items||[];
+  container.innerHTML='';
+  arr.forEach((item,i)=>{
+    const wrap=makeRepeaterShell(item.role||'Experience',arr,i,'experience.items','list-experience',()=>renderExperienceList());
+    wrap.querySelector('.repeater-item-header span').textContent=(item.role||'Experience')+' — '+(item.company||'');
+    wrap.appendChild(makeFieldRow(
+      makeField('Period (e.g. Sept 2024 — Present)',item.period,v=>item.period=v),
+      makeField('Role / Title',item.role,v=>{item.role=v;wrap.querySelector('.repeater-item-header span').textContent=(item.role||'Experience')+' — '+(item.company||'');})
+    ));
+    wrap.appendChild(makeFieldRow(
+      makeField('Company / Location',item.company,v=>{item.company=v;wrap.querySelector('.repeater-item-header span').textContent=(item.role||'Experience')+' — '+(item.company||'');}),
+      makeColorSelect(item)
+    ));
+
+    // bullets
+    const bulletLabel=document.createElement('label');
+    bulletLabel.className='field-label';
+    bulletLabel.textContent='Highlights / Bullet Points';
+    bulletLabel.style.marginTop='6px';
+    wrap.appendChild(bulletLabel);
+
+    const bulletsContainer=document.createElement('div');
+    bulletsContainer.className='bullet-list';
+    item.bullets=item.bullets||[];
+    function renderBullets(){
+      bulletsContainer.innerHTML='';
+      item.bullets.forEach((b,bi)=>{
+        const row=document.createElement('div');
+        row.className='bullet-row';
+        const ta=document.createElement('textarea');
+        ta.className='field-textarea';ta.style.minHeight='40px';ta.value=b;
+        ta.oninput=()=>item.bullets[bi]=ta.value;
+        const del=document.createElement('button');
+        del.className='icon-btn danger';del.innerHTML='✕';
+        del.onclick=()=>{item.bullets.splice(bi,1);renderBullets();};
+        row.appendChild(ta);row.appendChild(del);
+        bulletsContainer.appendChild(row);
+      });
+    }
+    renderBullets();
+    wrap.appendChild(bulletsContainer);
+    const addBulletBtn=document.createElement('button');
+    addBulletBtn.className='add-item-btn';
+    addBulletBtn.textContent='+ Add Bullet';
+    addBulletBtn.onclick=()=>{item.bullets.push('');renderBullets();};
+    wrap.appendChild(addBulletBtn);
+
+    container.appendChild(wrap);
+  });
+}
+function addExperienceItem(){
+  DATA.experience.items=DATA.experience.items||[];
+  DATA.experience.items.push({period:'2025 — Present',role:'New Role',company:'Company Name',color:'cyan',bullets:['Describe an achievement...']});
+  renderExperienceList();
+}
+function makeColorSelect(item){
+  const group=document.createElement('div');
+  group.className='field-group';group.style.marginBottom='10px';
+  const label=document.createElement('label');label.className='field-label';label.textContent='Accent Color';
+  const select=document.createElement('select');select.className='field-select';
+  ['cyan','purple','ember'].forEach(c=>{
+    const opt=document.createElement('option');opt.value=c;opt.textContent=c;
+    if((item.color||'cyan')===c) opt.selected=true;
+    select.appendChild(opt);
+  });
+  select.onchange=()=>item.color=select.value;
+  group.appendChild(label);group.appendChild(select);
+  return group;
+}
+
+// =====================================================================
+// PROJECTS — tags, metrics, links as sub-lists
+// =====================================================================
+function renderProjectsList(){
+  const container=document.getElementById('list-projects');
+  const arr=DATA.projects.items||[];
+  container.innerHTML='';
+  arr.forEach((item,i)=>{
+    const wrap=makeRepeaterShell(item.title||'Project',arr,i,'projects.items','list-projects',()=>renderProjectsList());
+    wrap.querySelector('.repeater-item-header span').textContent='🚀 '+(item.title||'Project');
+
+    wrap.appendChild(makeField('Title',item.title,v=>{item.title=v;wrap.querySelector('.repeater-item-header span').textContent='🚀 '+(item.title||'Project');}));
+    wrap.appendChild(makeField('Description',item.description,v=>item.description=v,true));
+
+    wrap.appendChild(makeFieldRow(
+      makeColorSelect(item),
+      makeField('Category Key (matches a filter key)',item.category,v=>item.category=v),
+      makeField('Category Label (shown on card)',item.categoryLabel,v=>item.categoryLabel=v)
+    ));
+
+    // tags
+    appendCsvField(wrap,'Tags (comma-separated)',item,'tags');
+    // metrics
+    appendCsvField(wrap,'Metric Pills (comma-separated)',item,'metrics');
+
+    // links
+    const linkLabel=document.createElement('label');
+    linkLabel.className='field-label';linkLabel.textContent='Links';linkLabel.style.marginTop='6px';
+    wrap.appendChild(linkLabel);
+    const linksContainer=document.createElement('div');
+    item.links=item.links||[];
+    function renderLinks(){
+      linksContainer.innerHTML='';
+      item.links.forEach((l,li)=>{
+        const row=document.createElement('div');
+        row.style.display='flex';row.style.gap='8px';row.style.marginBottom='8px';
+        const labelInput=document.createElement('input');
+        labelInput.className='field-input';labelInput.placeholder='Label (e.g. GitHub →)';labelInput.value=l.label||'';labelInput.style.flex='0 0 40%';
+        labelInput.oninput=()=>l.label=labelInput.value;
+        const urlInput=document.createElement('input');
+        urlInput.className='field-input';urlInput.placeholder='URL';urlInput.value=l.url||'';
+        urlInput.oninput=()=>l.url=urlInput.value;
+        const del=document.createElement('button');del.className='icon-btn danger';del.innerHTML='✕';
+        del.onclick=()=>{item.links.splice(li,1);renderLinks();};
+        row.appendChild(labelInput);row.appendChild(urlInput);row.appendChild(del);
+        linksContainer.appendChild(row);
+      });
+    }
+    renderLinks();
+    wrap.appendChild(linksContainer);
+    const addLinkBtn=document.createElement('button');
+    addLinkBtn.className='add-item-btn';addLinkBtn.textContent='+ Add Link';
+    addLinkBtn.onclick=()=>{item.links.push({label:'View →',url:'https://'});renderLinks();};
+    wrap.appendChild(addLinkBtn);
+
+    container.appendChild(wrap);
+  });
+}
+function addProjectItem(){
+  DATA.projects.items=DATA.projects.items||[];
+  DATA.projects.items.push({
+    color:'cyan',category:'all',categoryLabel:'Category',
+    title:'New Project',description:'Describe this project...',
+    tags:['Tag1','Tag2'],metrics:['Metric'],links:[{label:'GitHub →',url:'https://github.com/'}]
+  });
+  renderProjectsList();
+}
+function appendCsvField(wrap,labelText,item,key){
+  item[key]=item[key]||[];
+  const field=makeField(labelText,item[key].join(', '),v=>{
+    item[key]=v.split(',').map(s=>s.trim()).filter(Boolean);
+  });
+  wrap.appendChild(field);
+}
+
+// =====================================================================
+// SKILL GROUPS — tags as comma-separated
+// =====================================================================
+function renderSkillGroupsList(){
+  const container=document.getElementById('list-skillGroups');
+  const arr=DATA.skills.groups||[];
+  container.innerHTML='';
+  arr.forEach((item,i)=>{
+    const wrap=makeRepeaterShell(item.title||'Skill Group',arr,i,'skills.groups','list-skillGroups',()=>renderSkillGroupsList());
+    wrap.querySelector('.repeater-item-header span').textContent=(item.icon||'')+' '+(item.title||'Skill Group');
+    wrap.appendChild(makeFieldRow(
+      makeField('Icon (emoji)',item.icon,v=>{item.icon=v;wrap.querySelector('.repeater-item-header span').textContent=(item.icon||'')+' '+(item.title||'Skill Group');}),
+      makeField('Group Title',item.title,v=>{item.title=v;wrap.querySelector('.repeater-item-header span').textContent=(item.icon||'')+' '+(item.title||'Skill Group');})
+    ));
+    appendCsvField(wrap,'Skills (comma-separated)',item,'tags');
+    container.appendChild(wrap);
+  });
+}
+function addSkillGroup(){
+  DATA.skills.groups=DATA.skills.groups||[];
+  DATA.skills.groups.push({icon:'🧩',title:'New Group',tags:['Skill A','Skill B']});
+  renderSkillGroupsList();
+}
+
+// =====================================================================
+// SIDEBAR NAVIGATION
+// =====================================================================
+function showPanel(name){
+  document.querySelectorAll('.admin-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.sidebar-link').forEach(l=>l.classList.remove('active'));
+  const panel=document.getElementById('panel-'+name);
+  if(panel) panel.classList.add('active');
+  const links=[...document.querySelectorAll('.sidebar-link')];
+  const idx=['hero','about','experience','projects','skills','resume','contact','footer','settings'].indexOf(name);
+  if(links[idx]) links[idx].classList.add('active');
+  document.querySelector('.admin-main').scrollTo({top:0,behavior:'smooth'});
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// =====================================================================
+// PUBLISH (commit content.json to GitHub)
+// =====================================================================
+async function publishChanges(){
+  const cfg=getSettings();
+  const statusEl=document.getElementById('saveStatus');
+  const btn=document.getElementById('publishBtn');
+
+  if(!cfg.repo||!cfg.token){
+    showToast('err','Please configure GitHub Settings first (repo + token).');
+    showPanel('settings');
+    return;
+  }
+
+  btn.disabled=true;
+  statusEl.textContent='Publishing to GitHub...';
+  statusEl.className='save-status';
+
+  try{
+    const jsonStr=JSON.stringify(DATA,null,2);
+    const b64=btoa(unescape(encodeURIComponent(jsonStr)));
+
+    const url=`https://api.github.com/repos/${cfg.repo}/contents/${cfg.path}`;
+    const body={
+      message:'Update portfolio content via back office',
+      content:b64,
+      branch:cfg.branch
+    };
+    if(REMOTE_SHA) body.sha=REMOTE_SHA;
+
+    const res=await fetch(url,{
+      method:'PUT',
+      headers:{
+        Authorization:`Bearer ${cfg.token}`,
+        Accept:'application/vnd.github+json',
+        'Content-Type':'application/json'
+      },
+      body:JSON.stringify(body)
+    });
+
+    if(!res.ok){
+      const errBody=await res.json().catch(()=>({}));
+      throw new Error(errBody.message||`HTTP ${res.status}`);
+    }
+    const result=await res.json();
+    REMOTE_SHA=result.content.sha;
+    statusEl.textContent='✓ Published successfully';
+    statusEl.className='save-status ok';
+    showToast('ok','Changes published! Your live site will update in a few moments (GitHub Pages may take 1-2 minutes to rebuild).');
+  }catch(err){
+    statusEl.textContent='✗ Publish failed';
+    statusEl.className='save-status err';
+    showToast('err','Publish failed: '+err.message);
+  }finally{
+    btn.disabled=false;
+    setTimeout(()=>{ if(statusEl.textContent.indexOf('✓')===0) statusEl.textContent=''; },5000);
+  }
+}
+
+// =====================================================================
+// TOAST
+// =====================================================================
+function showToast(type,msg){
+  const container=document.getElementById('toast');
+  const item=document.createElement('div');
+  item.className='toast-item '+type;
+  item.innerHTML=`<span>${type==='ok'?'✅':'⚠️'}</span><span>${msg.replace(/</g,'&lt;')}</span>`;
+  container.appendChild(item);
+  setTimeout(()=>{item.style.opacity='0';item.style.transform='translateY(10px)';item.style.transition='all .3s';setTimeout(()=>item.remove(),300)},5000);
+}
+</script>
+</body>
+</html>
