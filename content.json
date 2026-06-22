@@ -327,12 +327,6 @@
     "note": "Interested in collaborating or have an opportunity? I'm always open to new ideas and conversations — let's talk.",
     "methods": [
       {
-        "icon": "📞",
-        "label": "Phone",
-        "value": "+91-9993308372",
-        "url": "tel:+919993308372"
-      },
-      {
         "icon": "📍",
         "label": "Location",
         "value": "Indore, Madhya Pradesh",
