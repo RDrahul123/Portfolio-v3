@@ -206,33 +206,6 @@
         ]
       },
       {
-        "color": "ember",
-        "category": "web",
-        "categoryLabel": "Web / Full-Stack",
-        "title": "Personal Portfolio (GitHub Pages)",
-        "description": "This site — a GitHub API-driven portfolio with a custom admin back office for content publishing, fully responsive layouts, and mobile-first styling.",
-        "tags": [
-          "HTML",
-          "CSS",
-          "Vanilla JS",
-          "GitHub API"
-        ],
-        "metrics": [
-          "Admin back office",
-          "GitHub Pages"
-        ],
-        "links": [
-          {
-            "label": "Live Site →",
-            "url": "https://rdrahul123.github.io/Portfolio-v2/"
-          },
-          {
-            "label": "GitHub →",
-            "url": "https://github.com/RDrahul123"
-          }
-        ]
-      },
-      {
         "color": "cyan",
         "category": "ml",
         "categoryLabel": "Machine Learning",
