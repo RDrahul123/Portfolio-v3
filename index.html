@@ -643,7 +643,266 @@ pre,code{overflow-x:auto;max-width:100%;white-space:pre-wrap;word-break:break-wo
   body,a,button{cursor:auto!important}
 }
 
-/* ===== HIDDEN ADMIN ACCESS ===== */
+/* =====================================================================
+   3D ANIMATION LAYER
+   ===================================================================== */
+
+/* ---- Global 3D scene setup ---- */
+.scene-3d{perspective:1000px;perspective-origin:50% 50%}
+.preserve-3d{transform-style:preserve-3d}
+
+/* ---- HERO: 3D rotating wireframe mesh (CSS only) ---- */
+#meshCanvas3d{
+  position:absolute;inset:0;width:100%;height:100%;
+  pointer-events:none;z-index:2;
+}
+
+/* ---- HERO NAME: scroll-driven perspective warp ---- */
+.hero-name-script{
+  display:inline-block;
+  transform-style:preserve-3d;
+  will-change:transform;
+}
+
+/* ---- PARALLAX DEPTH LAYERS ---- */
+.depth-layer{
+  position:absolute;pointer-events:none;
+  will-change:transform;
+  transition:transform .1s linear;
+}
+
+/* ---- SECTION TITLE 3D ENTRANCE ---- */
+.section-title{
+  transform-origin:left center;
+  transform-style:preserve-3d;
+}
+.section-title.t3d-enter{
+  animation:title3dIn .9s cubic-bezier(.22,1,.36,1) forwards;
+}
+@keyframes title3dIn{
+  from{opacity:0;transform:perspective(600px) rotateX(40deg) translateY(30px);filter:blur(4px)}
+  to{opacity:1;transform:perspective(600px) rotateX(0deg) translateY(0);filter:blur(0)}
+}
+
+/* ---- ABOUT STATS: 3D flip on hover ---- */
+.about-stat{
+  transform-style:preserve-3d;
+  transition:transform .6s cubic-bezier(.22,1,.36,1),border-color .3s,box-shadow .3s!important;
+  cursor:default;
+  position:relative;
+}
+.about-stat:hover{
+  transform:perspective(400px) rotateY(10deg) rotateX(-6deg) scale(1.04) translateZ(12px)!important;
+  border-color:rgba(0,212,255,.5)!important;
+  box-shadow:
+    0 24px 48px rgba(0,212,255,.15),
+    -6px 0 24px rgba(0,212,255,.08),
+    inset 0 0 32px rgba(0,212,255,.04)!important;
+}
+.about-stat::after{
+  content:'';position:absolute;inset:0;border-radius:var(--radius);
+  background:linear-gradient(135deg,rgba(0,212,255,.04),rgba(123,79,255,.04));
+  opacity:0;transition:opacity .3s;pointer-events:none;
+}
+.about-stat:hover::after{opacity:1}
+
+/* ---- SKILL TAGS: 3D pop on hover ---- */
+.skill-tag{
+  transform-style:preserve-3d;
+  transition:transform .35s cubic-bezier(.22,1,.36,1),border-color .3s,box-shadow .3s,background .3s!important;
+  position:relative;
+}
+.skill-tag:hover{
+  transform:perspective(300px) rotateX(-12deg) translateZ(10px) scale(1.06)!important;
+  border-color:var(--cyan)!important;
+  box-shadow:0 12px 28px rgba(0,212,255,.2),0 0 0 1px rgba(0,212,255,.3)!important;
+  background:rgba(0,212,255,.1)!important;
+}
+
+/* ---- PROJECT CARDS: enhanced 3D + depth shadow ---- */
+.project-card{
+  transition:box-shadow .3s,border-color .3s;
+  will-change:transform;
+}
+
+/* ---- TIMELINE CARDS: 3D slide entrance ---- */
+.timeline-card{
+  transition:transform .5s cubic-bezier(.22,1,.36,1),border-color .3s,box-shadow .3s;
+  will-change:transform;
+}
+.timeline-entry:nth-child(odd) .timeline-card{
+  transform-origin:right center;
+}
+.timeline-entry:nth-child(even) .timeline-card{
+  transform-origin:left center;
+}
+.timeline-card.t3d-ready{
+  transform:perspective(600px) rotateY(-18deg) translateX(-20px);
+  opacity:0;
+}
+.timeline-card.t3d-in{
+  transform:perspective(600px) rotateY(0deg) translateX(0);
+  opacity:1;
+  transition:transform .8s cubic-bezier(.22,1,.36,1),opacity .6s ease;
+}
+.timeline-entry:nth-child(odd) .timeline-card.t3d-ready{
+  transform:perspective(600px) rotateY(18deg) translateX(20px);
+  opacity:0;
+}
+.timeline-card:hover{
+  transform:perspective(600px) rotateY(3deg) translateY(-4px) translateZ(8px)!important;
+  border-color:rgba(0,212,255,.35)!important;
+  box-shadow:0 20px 48px rgba(0,212,255,.1),-3px 0 16px rgba(0,212,255,.06)!important;
+}
+
+/* ---- CONTACT CARDS: Z-push on click ---- */
+.contact-card{
+  transition:transform .3s cubic-bezier(.22,1,.36,1),border-color .3s,box-shadow .3s;
+  transform-style:preserve-3d;
+  will-change:transform;
+}
+.contact-card:hover{
+  transform:perspective(500px) rotateX(-4deg) translateY(-4px) translateZ(10px)!important;
+  border-color:rgba(0,212,255,.5)!important;
+  box-shadow:0 20px 48px rgba(0,212,255,.12),0 4px 0 rgba(0,212,255,.2)!important;
+}
+.contact-card:active{
+  transform:perspective(500px) rotateX(2deg) translateY(2px) translateZ(-2px)!important;
+  transition-duration:.1s!important;
+}
+
+/* ---- NEON DIVIDERS: animated laser pulse ---- */
+.neon-divider{
+  height:1px;width:100%;position:relative;
+  background:linear-gradient(90deg,transparent,var(--cyan),var(--purple),transparent);
+  opacity:.35;overflow:visible;
+}
+.neon-divider::after{
+  content:'';position:absolute;top:0;left:-10%;
+  width:30%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(0,212,255,.8),transparent);
+  animation:laserSweep 4s ease-in-out infinite;
+  filter:blur(1px);
+}
+@keyframes laserSweep{
+  0%{left:-10%;opacity:0}
+  20%{opacity:1}
+  80%{opacity:1}
+  100%{left:90%;opacity:0}
+}
+
+/* ---- FLOATING 3D NODES in skills section ---- */
+.skill-node-3d{
+  position:absolute;border-radius:50%;pointer-events:none;
+  animation:node3dFloat 8s ease-in-out infinite;
+  will-change:transform;
+  z-index:0;
+}
+@keyframes node3dFloat{
+  0%,100%{transform:translateY(0) translateZ(0) rotate(0deg)}
+  33%{transform:translateY(-20px) translateZ(10px) rotate(120deg)}
+  66%{transform:translateY(10px) translateZ(-5px) rotate(240deg)}
+}
+
+/* ---- PILLAR: 3D tilt on hover ---- */
+.pillar{
+  transition:transform .4s cubic-bezier(.22,1,.36,1);
+  transform-style:preserve-3d;
+}
+.pillar:hover{
+  transform:perspective(400px) rotateY(6deg) translateX(8px) translateZ(4px)!important;
+}
+.pillar-icon{
+  transition:transform .4s cubic-bezier(.22,1,.36,1),background .3s,box-shadow .3s!important;
+}
+.pillar:hover .pillar-icon{
+  transform:perspective(200px) rotateY(-12deg) rotateX(8deg) scale(1.1);
+  background:rgba(0,212,255,.22)!important;
+  box-shadow:0 0 20px rgba(0,212,255,.25)!important;
+}
+
+/* ---- FOOTER SOCIALS: 3D bounce ---- */
+.footer-social{
+  transform-style:preserve-3d;
+  transition:transform .35s cubic-bezier(.22,1,.36,1),border-color .3s,color .3s,box-shadow .3s!important;
+}
+.footer-social:hover{
+  transform:perspective(200px) rotateX(-20deg) translateY(-4px) translateZ(8px)!important;
+  border-color:var(--cyan)!important;color:var(--cyan)!important;
+  box-shadow:0 8px 24px rgba(0,212,255,.3),0 0 0 1px rgba(0,212,255,.2)!important;
+}
+
+/* ---- RESUME DOWNLOAD BUTTON: 3D lift ---- */
+.btn-download-large{
+  transform-style:preserve-3d;
+  transition:transform .4s cubic-bezier(.22,1,.36,1),box-shadow .4s!important;
+  position:relative;
+}
+.btn-download-large::after{
+  content:'';
+  position:absolute;inset:4px -4px -8px 4px;
+  border-radius:inherit;
+  background:rgba(0,212,255,.15);
+  transform:translateZ(-8px);
+  filter:blur(4px);
+  pointer-events:none;
+  transition:opacity .4s;opacity:0;
+}
+.btn-download-large:hover{
+  transform:perspective(400px) rotateX(-6deg) translateY(-6px) translateZ(12px) scale(1.02)!important;
+  box-shadow:0 24px 48px rgba(0,212,255,.35),0 8px 0 rgba(0,212,255,.2)!important;
+}
+.btn-download-large:hover::after{opacity:1}
+
+/* ---- SCROLL-DRIVEN 3D SECTION HEADERS ---- */
+@keyframes sectionWarp{
+  from{transform:perspective(800px) rotateX(20deg) scaleY(.9);opacity:0;filter:blur(3px)}
+  to{transform:perspective(800px) rotateX(0deg) scaleY(1);opacity:1;filter:blur(0)}
+}
+.section-eyebrow.s3d-in{
+  animation:eyebrow3d .6s cubic-bezier(.22,1,.36,1) forwards;
+}
+@keyframes eyebrow3d{
+  from{transform:translateX(-20px) skewX(-5deg);opacity:0}
+  to{transform:translateX(0) skewX(0deg);opacity:1}
+}
+
+/* ---- 3D HEX GRID BACKGROUND (skills) ---- */
+#skillsSection{position:relative;overflow:hidden}
+#hexBg3d{
+  position:absolute;inset:0;pointer-events:none;z-index:0;opacity:.04;
+}
+
+/* ---- PUB CARDS: Z-depth lift ---- */
+.pub-card{
+  transform-style:preserve-3d;
+  transition:transform .4s cubic-bezier(.22,1,.36,1),border-color .3s,box-shadow .3s!important;
+}
+.pub-card:hover{
+  transform:perspective(500px) rotateY(-6deg) rotateX(3deg) translateZ(10px) translateY(-6px)!important;
+  border-color:rgba(0,212,255,.5)!important;
+  box-shadow:0 24px 48px rgba(0,212,255,.12),6px 0 20px rgba(0,212,255,.06)!important;
+}
+
+/* ---- MOBILE: reduce 3D intensity to avoid jank ---- */
+@media(max-width:768px),(hover:none){
+  .about-stat:hover,.skill-tag:hover,.timeline-card:hover,
+  .contact-card:hover,.pub-card:hover,.pillar:hover,
+  .btn-download-large:hover,.footer-social:hover{
+    transform:translateY(-3px)!important;
+  }
+  .pillar:hover .pillar-icon{transform:scale(1.05)!important}
+  .timeline-card.t3d-ready,.timeline-card.t3d-in{
+    transform:none!important;opacity:1!important;
+  }
+  .section-title.t3d-enter{animation:none!important;opacity:1}
+}
+@media(prefers-reduced-motion:reduce){
+  .section-title.t3d-enter,.section-eyebrow.s3d-in{animation:none!important}
+  .timeline-card.t3d-ready{transform:none!important;opacity:1!important}
+  .neon-divider::after{animation:none!important}
+}
+
 .admin-access{
   position:fixed;bottom:0;right:0;width:36px;height:36px;
   z-index:500;opacity:0;cursor:pointer;background:transparent;border:none;
@@ -716,6 +975,7 @@ pre,code{overflow-x:auto;max-width:100%;white-space:pre-wrap;word-break:break-wo
 <!-- HERO -->
 <section id="hero" aria-label="Hero">
   <canvas id="heroCanvas" aria-hidden="true"></canvas>
+  <canvas id="meshCanvas3d" aria-hidden="true"></canvas>
   <div class="hero-inner">
     <div>
       <div class="hero-eyebrow"><span class="pulse-dot" aria-hidden="true"></span><span id="heroEyebrow">Available for opportunities</span></div>
@@ -1454,7 +1714,347 @@ if(window.location.hash==='#admin'){
   window.location.href='admin.html';
 }
 
+
+// =====================================================================
+// 3D ANIMATION SYSTEMS
+// =====================================================================
+
+// ---- HERO: 3D rotating wireframe icosphere ----
+(function(){
+  const canvas=document.getElementById('meshCanvas3d');
+  if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  let W,H,t=0;
+  const isMobile=()=>window.innerWidth<768;
+
+  function resize(){W=canvas.width=canvas.offsetWidth;H=canvas.height=canvas.offsetHeight}
+  resize();window.addEventListener('resize',resize,{passive:true});
+
+  // 20 vertices of a dodecahedron-ish spread
+  const phi=(1+Math.sqrt(5))/2;
+  const baseVerts=[
+    [1,1,1],[1,1,-1],[1,-1,1],[1,-1,-1],
+    [-1,1,1],[-1,1,-1],[-1,-1,1],[-1,-1,-1],
+    [0,phi,1/phi],[0,phi,-1/phi],[0,-phi,1/phi],[0,-phi,-1/phi],
+    [1/phi,0,phi],[1/phi,0,-phi],[-1/phi,0,phi],[-1/phi,0,-phi],
+    [phi,1/phi,0],[phi,-1/phi,0],[-phi,1/phi,0],[-phi,-1/phi,0]
+  ];
+  // edges connecting nearby vertices
+  const edges=[];
+  for(let i=0;i<baseVerts.length;i++){
+    for(let j=i+1;j<baseVerts.length;j++){
+      const dx=baseVerts[i][0]-baseVerts[j][0];
+      const dy=baseVerts[i][1]-baseVerts[j][1];
+      const dz=baseVerts[i][2]-baseVerts[j][2];
+      const d=Math.sqrt(dx*dx+dy*dy+dz*dz);
+      if(d<2.1) edges.push([i,j]);
+    }
+  }
+
+  let mouse={x:0,y:0};
+  document.addEventListener('mousemove',e=>{
+    if(isMobile())return;
+    mouse.x=(e.clientX/window.innerWidth-.5)*2;
+    mouse.y=(e.clientY/window.innerHeight-.5)*2;
+  },{passive:true});
+
+  function rotate3D(v,rx,ry){
+    let [x,y,z]=v;
+    // rotate Y
+    let x2=x*Math.cos(ry)-z*Math.sin(ry);
+    let z2=x*Math.sin(ry)+z*Math.cos(ry);
+    x=x2;z=z2;
+    // rotate X
+    let y2=y*Math.cos(rx)-z*Math.sin(rx);
+    let z3=y*Math.sin(rx)+z*Math.cos(rx);
+    return[x,y2,z3];
+  }
+  function project(v,scale=120){
+    const fov=4;const z=v[2]+fov;
+    if(z<=0.1)return null;
+    return[W/2+v[0]/z*scale*W/800,H/2+v[1]/z*scale*H/600];
+  }
+
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    if(isMobile()){requestAnimationFrame(draw);t+=.004;return;}
+    t+=.006;
+    const ry=t+mouse.x*0.5;
+    const rx=Math.sin(t*0.4)*0.4+mouse.y*0.3;
+    const verts2d=baseVerts.map(v=>project(rotate3D(v,rx,ry)));
+
+    edges.forEach(([a,b])=>{
+      const pa=verts2d[a],pb=verts2d[b];
+      if(!pa||!pb)return;
+      const rA=rotate3D(baseVerts[a],rx,ry);
+      const rB=rotate3D(baseVerts[b],rx,ry);
+      const zAvg=(rA[2]+rB[2])/2;
+      const alpha=Math.max(0,(zAvg+2)/4)*0.18;
+      // colour lerp cyan→purple based on position
+      const hue=195+Math.abs(Math.sin(a*0.3+t))*75;
+      ctx.beginPath();
+      ctx.moveTo(pa[0],pa[1]);
+      ctx.lineTo(pb[0],pb[1]);
+      ctx.strokeStyle=`hsla(${hue},100%,65%,${alpha})`;
+      ctx.lineWidth=0.8;
+      ctx.stroke();
+    });
+
+    verts2d.forEach((p,i)=>{
+      if(!p)return;
+      const rV=rotate3D(baseVerts[i],rx,ry);
+      const alpha=Math.max(0,(rV[2]+2)/4)*0.35;
+      const hue=195+i*12;
+      ctx.beginPath();ctx.arc(p[0],p[1],1.5,0,Math.PI*2);
+      ctx.fillStyle=`hsla(${hue},100%,70%,${alpha})`;ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ---- HERO NAME: 3D gyroscope on mouse ----
+(function(){
+  const nameEl=document.querySelector('.hero-name-script');
+  if(!nameEl||window.innerWidth<768)return;
+  document.addEventListener('mousemove',e=>{
+    const rx=((e.clientY/window.innerHeight)-.5)*-16;
+    const ry=((e.clientX/window.innerWidth)-.5)*24;
+    nameEl.style.transform=`perspective(600px) rotateX(${rx}deg) rotateY(${ry}deg)`;
+    nameEl.style.transition='transform .12s ease';
+  },{passive:true});
+})();
+
+// ---- SECTION TITLES: 3D entrance animation ----
+(function(){
+  const io=new IntersectionObserver(entries=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        entry.target.classList.add('t3d-enter');
+        io.unobserve(entry.target);
+      }
+    });
+  },{threshold:.2});
+  document.querySelectorAll('.section-title').forEach(el=>io.observe(el));
+
+  const io2=new IntersectionObserver(entries=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        entry.target.classList.add('s3d-in');
+        io2.unobserve(entry.target);
+      }
+    });
+  },{threshold:.3});
+  document.querySelectorAll('.section-eyebrow').forEach(el=>io2.observe(el));
+})();
+
+// ---- TIMELINE CARDS: 3D alternating slide-in ----
+(function(){
+  if(window.innerWidth<768)return;
+  // prepare cards (only set classes, no inline transforms initially so they're invisible until IObs fires)
+  const cards=document.querySelectorAll('.timeline-card');
+  cards.forEach(c=>c.classList.add('t3d-ready'));
+
+  const io=new IntersectionObserver(entries=>{
+    entries.forEach((entry,i)=>{
+      if(entry.isIntersecting){
+        setTimeout(()=>{
+          entry.target.classList.remove('t3d-ready');
+          entry.target.classList.add('t3d-in');
+        },i*80);
+        io.unobserve(entry.target);
+      }
+    });
+  },{threshold:.15});
+  cards.forEach(c=>io.observe(c));
+})();
+
+// ---- ABOUT STATS: staggered 3D bounce entrance ----
+(function(){
+  function animateStats(){
+    const stats=document.querySelectorAll('.about-stat');
+    if(!stats.length)return;
+    const io=new IntersectionObserver(entries=>{
+      entries.forEach(entry=>{
+        if(entry.isIntersecting){
+          const all=[...document.querySelectorAll('.about-stat')];
+          all.forEach((s,i)=>{
+            s.style.opacity='0';
+            s.style.transform='perspective(400px) rotateY(-30deg) translateX(-20px)';
+            setTimeout(()=>{
+              s.style.transition='transform .7s cubic-bezier(.22,1,.36,1), opacity .5s ease, border-color .3s, box-shadow .3s';
+              s.style.transform='';
+              s.style.opacity='';
+            },i*120+100);
+          });
+          io.disconnect();
+        }
+      });
+    },{threshold:.3});
+    io.observe(stats[0]);
+  }
+  // call after content renders
+  setTimeout(animateStats,1200);
+})();
+
+// ---- SKILL TAGS: wave ripple 3D entrance ----
+(function(){
+  function animateSkillTags(){
+    const groups=document.querySelectorAll('.skill-tags-row');
+    if(!groups.length)return;
+    const io=new IntersectionObserver(entries=>{
+      entries.forEach(entry=>{
+        if(entry.isIntersecting){
+          const tags=[...entry.target.querySelectorAll('.skill-tag')];
+          tags.forEach((tag,i)=>{
+            tag.style.opacity='0';
+            tag.style.transform='perspective(200px) rotateX(30deg) translateY(10px) scale(.85)';
+            setTimeout(()=>{
+              tag.style.transition='transform .5s cubic-bezier(.22,1,.36,1), opacity .4s ease';
+              tag.style.transform='';
+              tag.style.opacity='';
+              // After in-animation completes, remove inline transition so :hover CSS takes over
+              setTimeout(()=>{tag.style.transition=''},550);
+            },i*50+100);
+          });
+          io.unobserve(entry.target);
+        }
+      });
+    },{threshold:.2});
+    groups.forEach(g=>io.observe(g));
+  }
+  setTimeout(animateSkillTags,1300);
+})();
+
+// ---- PROJECT CARDS: 3D depth-sort stagger ----
+(function(){
+  function animateProjectCards(){
+    const grid=document.getElementById('projectsGrid');
+    if(!grid)return;
+    const io=new IntersectionObserver(entries=>{
+      entries.forEach(entry=>{
+        if(entry.isIntersecting){
+          const cards=[...entry.target.querySelectorAll('.project-card')];
+          cards.forEach((card,i)=>{
+            card.style.opacity='0';
+            card.style.transform=`perspective(600px) rotateX(${i%2===0?'20':'-20'}deg) rotateY(${i%3===0?'10':'-10'}deg) scale(.85)`;
+            setTimeout(()=>{
+              card.style.transition='transform .7s cubic-bezier(.22,1,.36,1), opacity .5s ease';
+              card.style.transform='';
+              card.style.opacity='';
+              setTimeout(()=>{card.style.transition=''},750);
+            },i*120+100);
+          });
+          io.unobserve(entry.target);
+        }
+      });
+    },{threshold:.1});
+    io.observe(grid);
+  }
+  setTimeout(animateProjectCards,1400);
+})();
+
+// ---- PUB CARDS: stagger 3D tilt in ----
+(function(){
+  function animatePubCards(){
+    const grid=document.querySelector('.pubs-grid');
+    if(!grid)return;
+    const io=new IntersectionObserver(entries=>{
+      entries.forEach(entry=>{
+        if(entry.isIntersecting){
+          const cards=[...entry.target.querySelectorAll('.pub-card')];
+          cards.forEach((card,i)=>{
+            card.style.opacity='0';
+            card.style.transform='perspective(500px) rotateY(30deg) translateX(30px)';
+            setTimeout(()=>{
+              card.style.transition='transform .75s cubic-bezier(.22,1,.36,1), opacity .5s ease';
+              card.style.transform='';
+              card.style.opacity='';
+              setTimeout(()=>{card.style.transition=''},800);
+            },i*140+80);
+          });
+          io.unobserve(entry.target);
+        }
+      });
+    },{threshold:.1});
+    io.observe(grid);
+  }
+  setTimeout(animatePubCards,1500);
+})();
+
+// ---- CONTACT CARDS: 3D slide-up ----
+(function(){
+  function animateContactCards(){
+    const methods=document.getElementById('contactMethods');
+    if(!methods)return;
+    const io=new IntersectionObserver(entries=>{
+      entries.forEach(entry=>{
+        if(entry.isIntersecting){
+          const cards=[...entry.target.querySelectorAll('.contact-card')];
+          cards.forEach((card,i)=>{
+            card.style.opacity='0';
+            card.style.transform='perspective(400px) rotateX(20deg) translateY(20px)';
+            setTimeout(()=>{
+              card.style.transition='transform .6s cubic-bezier(.22,1,.36,1), opacity .4s ease';
+              card.style.transform='';
+              card.style.opacity='';
+              setTimeout(()=>{card.style.transition=''},650);
+            },i*100+80);
+          });
+          io.unobserve(entry.target);
+        }
+      });
+    },{threshold:.2});
+    io.observe(methods);
+  }
+  setTimeout(animateContactCards,1500);
+})();
+
+// ---- PARALLAX: multi-depth scroll effect ----
+(function(){
+  if(window.innerWidth<768)return;
+  let lastY=0;
+  function onScroll(){
+    const y=window.scrollY;
+    if(Math.abs(y-lastY)<1)return;
+    lastY=y;
+
+    // Hero photo parallax — move slower than scroll
+    const heroPhoto=document.querySelector('.hero-photo-wrap');
+    if(heroPhoto){
+      const heroSection=document.getElementById('hero');
+      const heroH=heroSection?heroSection.offsetHeight:window.innerHeight;
+      const progress=Math.min(y/heroH,1);
+      heroPhoto.style.transform=`translateY(${progress*-40}px) scale(${1-progress*.04})`;
+    }
+    // Orbit dots extra parallax
+    document.querySelectorAll('.photo-orbit-dot').forEach((dot,i)=>{
+      dot.style.transform=`translateY(${y*(-.02+i*.006)}px)`;
+    });
+  }
+  window.addEventListener('scroll',onScroll,{passive:true});
+})();
+
+// ---- MOUSE PARALLAX: floating badges depth ----
+(function(){
+  if(window.innerWidth<768)return;
+  document.addEventListener('mousemove',e=>{
+    const xN=(e.clientX/window.innerWidth-.5);
+    const yN=(e.clientY/window.innerHeight-.5);
+    const fb1=document.querySelector('.fb-1');
+    const fb2=document.querySelector('.fb-2');
+    if(fb1) fb1.style.transform=`translate(${xN*-18}px, ${yN*-12}px)`;
+    if(fb2) fb2.style.transform=`translate(${xN*14}px, ${yN*10}px)`;
+    // aurora blobs follow mouse at different depths
+    document.querySelectorAll('.aurora-blob').forEach((blob,i)=>{
+      const factor=(i+1)*8;
+      blob.style.transform=`translate(${xN*factor}px,${yN*factor*.6}px)`;
+    });
+  },{passive:true});
+})();
+
 } // end initAnimations
+
 </script>
 </body>
 </html>
