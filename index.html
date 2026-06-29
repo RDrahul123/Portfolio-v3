@@ -236,7 +236,7 @@ section{padding:100px clamp(16px,4vw,48px);position:relative;z-index:2}
 .timeline-entry:nth-child(odd){flex-direction:row-reverse}
 .timeline-entry:nth-child(odd) .timeline-card{margin-right:60px}
 .timeline-entry:nth-child(even) .timeline-card{margin-left:60px}
-.timeline-dot{position:absolute;left:50%;transform:translateX(-50%);width:16px;height:16px;border-radius:50%;background:var(--cyan);border:3px solid var(--bg-void);box-shadow:0 0 16px var(--cyan),0 0 32px rgba(0,212,255,.4);top:22px;z-index:2;animation:dotPulse 2s ease-in-out infinite}
+.timeline-dot{position:absolute;left:50%;transform:translateX(-50%);width:16px;height:16px;border-radius:50%;background:var(--cyan);border:3px solid var(--bg-void);box-shadow:0 0 16px var(--cyan),0 0 32px rgba(0,212,255,.4);top:22px;z-index:5;animation:dotPulse 2s ease-in-out infinite}
 @keyframes dotPulse{0%,100%{box-shadow:0 0 12px var(--cyan),0 0 24px rgba(0,212,255,.3)}50%{box-shadow:0 0 20px var(--cyan),0 0 40px rgba(0,212,255,.5)}}
 .timeline-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:24px;flex:0 0 calc(50% - 30px);max-width:calc(50% - 30px);transition:border-color .3s,transform .3s,box-shadow .3s}
 .timeline-card:hover{border-color:rgba(0,212,255,.3);transform:translateY(-4px);box-shadow:0 12px 32px rgba(0,212,255,.08)}
@@ -424,10 +424,10 @@ footer{padding:40px clamp(16px,4vw,48px);border-top:1px solid var(--border);disp
   .hero-visual{order:-1;max-width:380px;margin:0 auto;padding:24px}
   .about-grid{grid-template-columns:1fr;gap:40px}
   .about-stats{flex-direction:row;flex-wrap:wrap}
-  .timeline-entry{flex-direction:column!important;padding-left:40px}
+  .timeline-entry{flex-direction:column!important;padding-left:52px}
   .timeline-entry .timeline-card{max-width:100%;flex:1;margin:0!important}
-  .timeline-spine{left:16px}
-  .timeline-dot{left:16px}
+  .timeline-spine{left:18px}
+  .timeline-dot{left:18px;transform:translateX(-50%)}
   .skills-layout{grid-template-columns:1fr}
   .radar-wrap{position:static}
   .contact-grid{grid-template-columns:1fr;gap:40px}
@@ -474,9 +474,9 @@ footer{padding:40px clamp(16px,4vw,48px);border-top:1px solid var(--border);disp
   .pillars{gap:16px}
 
   /* Experience */
-  .timeline-entry{padding-left:32px}
-  .timeline-spine{left:10px;width:1.5px}
-  .timeline-dot{left:10px;width:14px;height:14px;top:20px}
+  .timeline-entry{padding-left:48px}
+  .timeline-spine{left:14px;width:1.5px}
+  .timeline-dot{left:14px;width:14px;height:14px;top:20px;transform:translateX(-50%)}
   .timeline-card{padding:16px}
   .timeline-role{font-size:16px}
   .timeline-desc li{font-size:13.5px}
@@ -559,9 +559,9 @@ footer{padding:40px clamp(16px,4vw,48px);border-top:1px solid var(--border);disp
   .btn-primary,.btn-ghost,.btn-submit{width:100%;text-align:center;justify-content:center}
 
   /* Timeline tighter */
-  .timeline-entry{padding-left:26px}
-  .timeline-spine{left:7px;width:1.5px}
-  .timeline-dot{left:7px;width:13px;height:13px;top:18px}
+  .timeline-entry{padding-left:42px}
+  .timeline-spine{left:12px;width:1.5px}
+  .timeline-dot{left:12px;width:13px;height:13px;top:18px;transform:translateX(-50%)}
   .timeline-card{padding:14px 12px}
   .timeline-period{font-size:11px}
   .timeline-role{font-size:14.5px}
@@ -620,6 +620,9 @@ footer{padding:40px clamp(16px,4vw,48px);border-top:1px solid var(--border);disp
   .card-body{padding:13px}
   nav{padding:10px 12px}
   .timeline-card{padding:12px 10px}
+  .timeline-entry{padding-left:38px}
+  .timeline-spine{left:10px}
+  .timeline-dot{left:10px;width:12px;height:12px;transform:translateX(-50%)}
   .about-stat .as-num{font-size:28px}
 }
 
