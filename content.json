@@ -159,6 +159,28 @@
     ],
     "items": [
       {
+        "color": "ember",
+        "category": "all",
+        "categoryLabel": "Deep Learning",
+        "title": "Sentiment Analysis Studio",
+        "description": "Sentiment Analysis Studio is a complete machine learning web application that automatically detects the emotional tone of text — classifying it as negative, neutral, or positive.\n\nIt's built for two types of text: tweets (short, noisy social media posts) and product reviews (longer, structured feedback). The app covers the entire ML workflow from data to deployment, all accessible through a browser.",
+        "tags": [
+          "Python",
+          "CSV",
+          "Visual Studio"
+        ],
+        "metrics": [
+          "Sentiment Analysis",
+          "Positive+Negative+Neutral"
+        ],
+        "links": [
+          {
+            "label": "GitHub →",
+            "url": "https://github.com/RDrahul123/Sentiment-Analysis"
+          }
+        ]
+      },
+      {
         "color": "cyan",
         "category": "data",
         "categoryLabel": "Data Analysis",
