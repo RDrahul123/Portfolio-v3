@@ -8,6 +8,17 @@
 <meta name="description" content="Rahul Dodke — Data Science Analyst & Software Engineer. Python, SQL, Machine Learning, and data-driven decision-making.">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="apple-touch-icon" href="favicon.svg">
+<script>
+(function(){
+  try{
+    const stored = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    if(stored === 'dark' || (!stored && prefersDark)){
+      document.documentElement.setAttribute('data-theme','dark');
+    }
+  }catch(e){}
+})();
+</script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700;9..144,900&family=Archivo:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Kalam:wght@400;700&display=swap');
 
@@ -27,6 +38,9 @@
   --moss:#4E6B4E;
   --moss-dark:#374C37;
   --gold:#C1932F;
+  --shadow-ink:#20241F;
+  --glow:0;
+  --node-color:32,36,31;
 
   --display:'Fraunces',serif;
   --body:'Archivo',sans-serif;
@@ -36,6 +50,26 @@
   --radius:6px;
   --ease:cubic-bezier(.22,1,.36,1);
 }
+
+/* ---- DARK THEME — "Night Lab" ---- */
+[data-theme="dark"]{
+  --paper:#0B0F16;
+  --paper-dim:#0F1420;
+  --card:#141A26;
+  --ink:#F1ECDD;
+  --ink-soft:#9BA3AC;
+  --line:#232B3B;
+  --line-strong:#303B50;
+  --rust:#FF8A5B;
+  --rust-dark:#FFAD85;
+  --moss:#6FCF97;
+  --moss-dark:#8FE3B0;
+  --gold:#F0C36B;
+  --shadow-ink:#04060A;
+  --glow:1;
+  --node-color:255,138,91;
+}
+
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{
@@ -46,17 +80,35 @@ body{
   line-height:1.65;
   overflow-x:hidden;
   -webkit-font-smoothing:antialiased;
+  transition:background .5s var(--ease),color .5s var(--ease);
 }
 img{max-width:100%;display:block}
 a{color:inherit}
 ::selection{background:var(--rust);color:var(--paper)}
 
+nav,footer,.project-card,.polaroid,.dossier,.postcard,.compass-wrap,.skill-tag,.filter-btn,
+.about-stat,.pillar,.log-dot,.eyebrow-tag,.social-pill,.contact-method-icon,.mobile-menu,#hero::before{
+  transition:background-color .5s var(--ease),border-color .5s var(--ease),color .5s var(--ease),box-shadow .5s var(--ease);
+}
+
 /* paper grain overlay, applied globally */
 #grain{
   position:fixed;inset:0;z-index:9990;pointer-events:none;
   opacity:.05;mix-blend-mode:multiply;
+  transition:opacity .5s var(--ease);
 }
 #grain svg{width:100%;height:100%}
+[data-theme="dark"] #grain{opacity:.09;mix-blend-mode:overlay}
+
+/* dark-mode glow accents — subtle, elegant, not neon */
+[data-theme="dark"] .project-card:hover{box-shadow:8px 12px 0 -4px var(--line-strong),0 25px 50px -20px rgba(255,138,91,.22),0 0 0 1px rgba(255,138,91,.12) inset}
+[data-theme="dark"] .btn-primary:hover{box-shadow:6px 6px 0 var(--rust),0 0 34px rgba(255,138,91,.28)}
+[data-theme="dark"] .skill-tag:hover{box-shadow:0 0 16px rgba(255,138,91,.18)}
+[data-theme="dark"] .polaroid{box-shadow:0 25px 60px -18px rgba(0,0,0,.65),0 0 46px rgba(255,138,91,.07)}
+[data-theme="dark"] .compass-wrap{box-shadow:0 0 46px rgba(255,138,91,.06)}
+[data-theme="dark"] .social-pill:hover{box-shadow:0 0 14px rgba(255,138,91,.2)}
+[data-theme="dark"] .resume-btn:hover{box-shadow:6px 6px 0 var(--rust),0 0 34px rgba(255,138,91,.28)}
+[data-theme="dark"] .nav-logo svg circle:first-of-type{filter:drop-shadow(0 0 6px rgba(255,138,91,.4))}
 
 /* scroll progress — a ruled ink line */
 #scroll-progress{
@@ -93,6 +145,12 @@ a{color:inherit}
 .eyebrow-tag::before{content:'§';font-family:var(--display);font-weight:700;color:var(--rust)}
 
 .section-head{max-width:640px;margin-bottom:56px}
+.loss-curve{margin-top:16px}
+.loss-curve svg{width:136px;height:30px;display:block}
+.loss-curve path{stroke:var(--rust);stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:220;stroke-dashoffset:220;transition:stroke-dashoffset 1.5s var(--ease) .15s}
+.loss-curve circle{fill:var(--rust);opacity:0;transition:opacity .4s var(--ease) 1.4s}
+.section-head.in-view .loss-curve path{stroke-dashoffset:0}
+.section-head.in-view .loss-curve circle{opacity:1}
 .section-head h2{
   font-family:var(--display);font-weight:600;font-optical-sizing:auto;
   font-size:clamp(32px,5vw,52px);line-height:1.08;letter-spacing:-.01em;
@@ -144,9 +202,24 @@ nav.scrolled{
   font-family:var(--mono)!important;background:var(--rust);color:var(--paper)!important;
   padding:9px 20px!important;border-radius:100px!important;font-weight:600;font-size:12.5px!important;
   text-transform:uppercase;letter-spacing:.08em;
-  box-shadow:2px 2px 0 var(--ink);transition:transform .25s var(--ease),box-shadow .25s var(--ease)!important;
+  box-shadow:2px 2px 0 var(--shadow-ink);transition:transform .25s var(--ease),box-shadow .25s var(--ease),background .5s var(--ease)!important;
 }
-.nav-cv:hover{transform:translate(-2px,-2px)!important;box-shadow:4px 4px 0 var(--ink)!important;background:var(--rust-dark)}
+.nav-cv:hover{transform:translate(-2px,-2px)!important;box-shadow:4px 4px 0 var(--shadow-ink)!important;background:var(--rust-dark)}
+
+/* ---- THEME TOGGLE ---- */
+.theme-toggle{
+  position:relative;width:52px;height:28px;border-radius:100px;
+  background:var(--card);border:1px solid var(--line-strong);cursor:pointer;
+  display:flex;align-items:center;padding:3px;margin-left:6px;flex-shrink:0;
+  transition:background .4s var(--ease),border-color .4s var(--ease);
+}
+.theme-toggle .knob{
+  width:20px;height:20px;border-radius:50%;background:var(--ink);
+  display:flex;align-items:center;justify-content:center;color:var(--paper);font-size:11px;
+  transform:translateX(0);transition:transform .4s var(--ease),background .4s var(--ease);
+}
+[data-theme="dark"] .theme-toggle .knob{transform:translateX(24px)}
+.theme-toggle svg{width:12px;height:12px}
 
 .hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;padding:8px;cursor:pointer}
 .hamburger span{display:block;width:24px;height:2px;background:var(--ink);transition:.3s}
@@ -177,6 +250,7 @@ nav.scrolled{
   background-size:26px 26px;
   mask-image:radial-gradient(ellipse 80% 60% at 60% 40%,black,transparent 75%);
 }
+#neuralCanvas{position:absolute;inset:0;z-index:1;width:100%;height:100%;opacity:.55}
 .hero-inner{
   position:relative;z-index:2;max-width:1160px;margin:0 auto;width:100%;
   padding:60px clamp(20px,5vw,56px) 40px;
@@ -497,7 +571,14 @@ footer{background:var(--ink);color:var(--paper);padding:56px clamp(20px,5vw,56px
     <li><a href="#contact"><span class="num">05</span>Contact</a></li>
     <li><a href="#resume" class="nav-cv">Résumé</a></li>
   </ul>
-  <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+  <div style="display:flex;align-items:center">
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+      <span class="knob">
+        <svg id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M4.2 4.2l1.8 1.8M18 18l1.8 1.8M2 12h2.5M19.5 12H22M4.2 19.8l1.8-1.8M18 6l1.8-1.8"/></svg>
+      </span>
+    </button>
+    <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
 </nav>
 
 <div class="mobile-menu" id="mobileMenu">
@@ -507,9 +588,16 @@ footer{background:var(--ink);color:var(--paper);padding:56px clamp(20px,5vw,56px
   <a href="#skills"><span>04</span>Skills</a>
   <a href="#contact"><span>05</span>Contact</a>
   <a href="#resume"><span>—</span>Résumé</a>
+  <div style="display:flex;align-items:center;gap:12px;margin-top:20px">
+    <span style="font-family:var(--mono);font-size:12px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.08em">Theme</span>
+    <button class="theme-toggle" id="themeToggleMobile" aria-label="Toggle dark mode">
+      <span class="knob"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M4.2 4.2l1.8 1.8M18 18l1.8 1.8M2 12h2.5M19.5 12H22M4.2 19.8l1.8-1.8M18 6l1.8-1.8"/></svg></span>
+    </button>
+  </div>
 </div>
 
 <section id="hero">
+  <canvas id="neuralCanvas"></canvas>
   <div class="hero-inner">
     <div class="hero-copy">
       <div class="eyebrow-tag hero-eyebrow" id="heroEyebrow"><span class="pulse-dot"></span>Available for opportunities</div>
@@ -561,6 +649,7 @@ footer{background:var(--ink);color:var(--paper);padding:56px clamp(20px,5vw,56px
       <div class="eyebrow-tag" id="expEyebrow">Career</div>
       <h2 id="expHeading">Professional <em>Journey</em></h2>
       <p id="expDesc"></p>
+      <div class="loss-curve"><svg viewBox="0 0 136 30"><path d="M2 6 C 24 10, 30 22, 50 20 S 78 26, 96 24 S 118 27, 134 27"/><circle cx="134" cy="27" r="3"/></svg></div>
     </div>
     <div class="log" id="logList"></div>
   </div>
@@ -573,6 +662,7 @@ footer{background:var(--ink);color:var(--paper);padding:56px clamp(20px,5vw,56px
       <div class="eyebrow-tag" id="projEyebrow">Portfolio</div>
       <h2 id="projHeading">Featured <em>Projects</em></h2>
       <p id="projDesc"></p>
+      <div class="loss-curve"><svg viewBox="0 0 136 30"><path d="M2 24 L 30 24 L 30 14 L 62 14 L 62 20 L 94 20 L 94 6 L 134 6"/><circle cx="134" cy="6" r="3"/></svg></div>
     </div>
     <div class="filter-row" id="filterRow"></div>
     <div class="project-grid" id="projectGrid"></div>
@@ -586,6 +676,7 @@ footer{background:var(--ink);color:var(--paper);padding:56px clamp(20px,5vw,56px
       <div class="eyebrow-tag" id="skillsEyebrow">Expertise</div>
       <h2 id="skillsHeading">Technical <em>Arsenal</em></h2>
       <p id="skillsDesc"></p>
+      <div class="loss-curve"><svg viewBox="0 0 136 30"><path d="M2 27 C 26 26, 34 16, 52 14 S 76 4, 96 4 S 120 3, 134 2"/><circle cx="134" cy="2" r="3"/></svg></div>
     </div>
     <div class="skills-layout">
       <div id="skillGroups"></div>
@@ -637,6 +728,83 @@ footer{background:var(--ink);color:var(--paper);padding:56px clamp(20px,5vw,56px
 </footer>
 
 <script>
+/* ---------- THEME TOGGLE ---------- */
+(function(){
+  const root = document.documentElement;
+  updateMeta();
+
+  function updateMeta(){
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if(meta) meta.setAttribute('content', root.getAttribute('data-theme') === 'dark' ? '#0B0F16' : '#F3EEE0');
+  }
+  function toggle(){
+    const isDark = root.getAttribute('data-theme') === 'dark';
+    if(isDark){ root.removeAttribute('data-theme'); localStorage.setItem('theme','light'); }
+    else{ root.setAttribute('data-theme','dark'); localStorage.setItem('theme','dark'); }
+    updateMeta();
+  }
+  document.getElementById('themeToggle')?.addEventListener('click', toggle);
+  document.getElementById('themeToggleMobile')?.addEventListener('click', toggle);
+})();
+
+/* ---------- NEURAL NETWORK CANVAS (hero backdrop) ---------- */
+(function(){
+  const canvas = document.getElementById('neuralCanvas');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let w,h,nodes=[];
+  const NODE_COUNT = window.innerWidth < 700 ? 26 : 48;
+  const LINK_DIST = window.innerWidth < 700 ? 110 : 150;
+
+  function resize(){
+    const hero = document.getElementById('hero');
+    w = canvas.width = hero.offsetWidth;
+    h = canvas.height = hero.offsetHeight;
+  }
+  function makeNodes(){
+    nodes = Array.from({length:NODE_COUNT}, ()=>({
+      x:Math.random()*w, y:Math.random()*h,
+      vx:(Math.random()-.5)*.25, vy:(Math.random()-.5)*.25,
+      r:Math.random()*1.6+1
+    }));
+  }
+  function getAccent(){
+    const c = getComputedStyle(document.documentElement).getPropertyValue('--node-color').trim();
+    return c || '32,36,31';
+  }
+  function draw(){
+    ctx.clearRect(0,0,w,h);
+    const accent = getAccent();
+    const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+    for(const n of nodes){
+      n.x += n.vx; n.y += n.vy;
+      if(n.x<0||n.x>w) n.vx*=-1;
+      if(n.y<0||n.y>h) n.vy*=-1;
+    }
+    for(let i=0;i<nodes.length;i++){
+      for(let j=i+1;j<nodes.length;j++){
+        const a=nodes[i], b=nodes[j];
+        const d = Math.hypot(a.x-b.x, a.y-b.y);
+        if(d < LINK_DIST){
+          const alpha = (1 - d/LINK_DIST) * (dark ? .22 : .12);
+          ctx.strokeStyle = `rgba(${accent},${alpha})`;
+          ctx.lineWidth = 1;
+          ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
+        }
+      }
+    }
+    for(const n of nodes){
+      ctx.beginPath();
+      ctx.arc(n.x,n.y,n.r,0,Math.PI*2);
+      ctx.fillStyle = `rgba(${accent},${dark?.55:.35})`;
+      ctx.fill();
+    }
+    requestAnimationFrame(draw);
+  }
+  window.addEventListener('resize', ()=>{ resize(); });
+  resize(); makeNodes(); draw();
+})();
+
 (async function(){
   const $ = (id) => document.getElementById(id);
   let data;
