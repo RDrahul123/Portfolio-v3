@@ -689,6 +689,11 @@ footer{background:#1B2118;color:#F1ECDD;padding:56px clamp(20px,5vw,56px) 36px}
 .footer-socials a:hover{color:#FFFFFF}
 .footer-socials a:hover::after{transform:scaleX(1);transform-origin:left}
 .footer-rule{border-top:1px solid #333A2C;margin-top:32px;padding-top:20px}
+.footer-admin-link{
+  font-family:var(--mono);font-size:11px;color:#5C6152;text-decoration:none;
+  letter-spacing:.04em;transition:color .25s;
+}
+.footer-admin-link:hover{color:#D8D2C4}
 </style>
 </head>
 <body>
@@ -729,8 +734,11 @@ footer{background:#1B2118;color:#F1ECDD;padding:56px clamp(20px,5vw,56px) 36px}
   <a href="#hero" class="nav-logo">
     <svg viewBox="0 0 40 40" fill="none">
       <circle cx="20" cy="20" r="18" fill="#FBF8EE" stroke="#20241F" stroke-width="1.5"/>
-      <path d="M20 8 L20 20 L28 24" stroke="#BE4F2C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      <circle cx="20" cy="20" r="2" fill="#20241F"/>
+      <path d="M20 20 L20 8.5 M20 20 L9.5 26 M20 20 L30.5 26" stroke="#BE4F2C" stroke-width="1.6" stroke-linecap="round"/>
+      <circle cx="20" cy="8.5" r="2.4" fill="#20241F"/>
+      <circle cx="9.5" cy="26" r="2.4" fill="#20241F"/>
+      <circle cx="30.5" cy="26" r="2.4" fill="#20241F"/>
+      <circle cx="20" cy="20" r="3" fill="#BE4F2C"/>
     </svg>
     <span>Rahul <em>Dodke</em></span>
   </a>
@@ -900,6 +908,9 @@ footer{background:#1B2118;color:#F1ECDD;padding:56px clamp(20px,5vw,56px) 36px}
       <div class="footer-copy" id="footerCopy" style="margin-top:8px"></div>
     </div>
     <div class="footer-socials" id="footerSocials"></div>
+  </div>
+  <div class="footer-rule" style="max-width:1160px;margin-inline:auto">
+    <a href="admin.html" class="footer-admin-link" title="Content admin panel">⚙ admin</a>
   </div>
 </footer>
 
