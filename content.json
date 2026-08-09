@@ -1,20 +1,9 @@
-{
-  "site": {
-    "title": "Rahul Dodke · Data Science & Engineering",
-    "description": "Rahul Dodke — Data Science Analyst & Software Engineer. Python, SQL, Machine Learning, and data-driven decision-making."
-  },
-  "hero": {
-    "greeting": "Hi, I'm",
-    "name": "Prakrit Rahul",
-    "title": "Data Science Analyst & Software Engineer",
-    "typewriterPhrases": [
-      "Data Science Analyst.",
-      "Python · SQL · ML.",
-      "Turning data into decisions.",
-      "Open to new opportunities."
+@ -15,15 +15,39 @@
     ],
     "eyebrow": "Available for opportunities",
     "photoUrl": "https://raw.githubusercontent.com/RDrahul123/RDrahul123/main/20251206_111856-IMG_STYLE~2.jpg",
+    "badge1": { "num": "100K+", "label": "Records / Week" },
+    "badge2": { "num": "3+", "label": "Years Experience" },
     "badge1": {
       "num": "100K+",
       "label": "Records / Week"
@@ -24,6 +13,12 @@
       "label": "Years Experience"
     },
     "socials": [
+      { "label": "⌨️ GitHub", "url": "https://github.com/RDrahul123" },
+      { "label": "💼 LinkedIn", "url": "https://www.linkedin.com/in/rahul-dodke" },
+      { "label": "🧩 LeetCode", "url": "https://leetcode.com/u/rahul0566" },
+      { "label": "📊 Kaggle", "url": "https://www.kaggle.com/prakrit0566" },
+      { "label": "🏆 HackerRank", "url": "https://www.hackerrank.com/profile/heyrahul_0566" },
+      { "label": "🛠️ Google Dev", "url": "https://g.dev/rahulprakrit" }
       {
         "label": "⌨️ GitHub",
         "url": "https://github.com/RDrahul123"
@@ -48,21 +43,16 @@
         "label": "🛠️ Google Dev",
         "url": "https://g.dev/rahulprakrit"
       }
-    ],
-    "roleRotator": [
-      "DATA SCIENCE ANALYST",
-      "ASPIRING ML ENGINEER",
-      "AI-CURIOUS ENGINEER",
-      "BUILDING TOWARD GENAI"
-    ],
-    "headline": "Turning Data Into Intelligent Systems.",
-    "supporting": "I build data pipelines, machine learning models, and dashboards that turn messy, real-world data into decisions teams actually trust — and I'm actively growing toward deeper ML/AI engineering work."
+    ]
   },
   "about": {
-    "eyebrow": "About Me",
+@ -31,9 +55,18 @@
     "titleNormal": "Data-Driven ",
     "titleHighlight": "Problem Solver",
     "stats": [
+      { "num": "3+", "label": "Years Experience" },
+      { "num": "100K+", "label": "Records / Week" },
+      { "num": "99.9%", "label": "Pipeline Accuracy" }
       {
         "num": "3+",
         "label": "Years Experience"
@@ -78,10 +68,13 @@
     ],
     "paragraphs": [
       "I'm a <strong>results-oriented Data Science Analyst</strong> with hands-on experience across Python, SQL, and Machine Learning — turning raw, messy datasets into pipelines and insights that teams actually rely on for decisions.",
-      "My work has improved <strong>data-driven decision-making by 15%</strong> and helped achieve <strong>99.9% accuracy</strong> in production data-preprocessing pipelines, processing over <strong>100,000 records every week</strong>.",
+@ -41,9 +74,21 @@
       "I enjoy the full lifecycle — from writing the SQL that pulls clean data, to building the ML model, to shipping the dashboard that a non-technical stakeholder can actually use."
     ],
     "pillars": [
+      { "icon": "🧹", "title": "Clean Data, Clean Decisions", "text": "Rigorous preprocessing and validation pipelines so models and dashboards are built on data people can trust." },
+      { "icon": "📈", "title": "Insight Into Action", "text": "Analysis isn't the finish line — I focus on translating findings into decisions stakeholders can act on immediately." },
+      { "icon": "⚙️", "title": "Engineering Mindset", "text": "I bring software engineering discipline — version control, testing, automation — into every data science workflow." }
       {
         "icon": "🧹",
         "title": "Clean Data, Clean Decisions",
@@ -100,54 +93,14 @@
     ]
   },
   "experience": {
-    "eyebrow": "Career",
-    "titleNormal": "Professional ",
-    "titleHighlight": "Journey",
-    "description": "A timeline of impactful contributions in Data Science and Engineering.",
-    "items": [
-      {
-        "period": "Sept 2024 — Present",
-        "role": "Data Science Analyst",
-        "company": "Samatrix Consulting Pvt. Ltd. · Indore, M.P",
-        "color": "cyan",
-        "bullets": [
-          "Interpreted datasets to extract insights that led to a 15% improvement in data-driven decision-making across key business areas.",
-          "Standardized data cleaning procedures using Python and Pandas, leading to 99.9% accuracy in data preprocessing outputs.",
-          "Queried and examined over 100K records weekly using SQL and Python, cutting retrieval time by 20%.",
-          "Audited data quality on data sources, identifying and resolving 95% of data discrepancies to maintain high data integrity."
-        ]
-      },
-      {
-        "period": "Oct 2022 — Apr 2024",
-        "role": "Software Development Engineer",
-        "company": "Antardrishti Foundation · Indore, M.P",
-        "color": "purple",
-        "bullets": [
-          "Directed a team of three in developing responsive websites, increasing user engagement by 20%.",
-          "Instituted automated code validation and CI pipelines, cutting bugs by 25% and reducing deployment times.",
-          "Boosted system efficiency by cutting load times by 25% using advanced programming techniques in C++ and Python.",
-          "Configured front-end and back-end systems with HTML, CSS, and Linux."
-        ]
-      },
-      {
-        "period": "Jun 2022 — Sept 2022",
-        "role": "Software Development Intern",
-        "company": "TCS iON · Indore, M.P",
-        "color": "ember",
-        "bullets": [
-          "Engineered blockchain application solutions with Python and Solidity, improving code efficiency by 30%.",
-          "Orchestrated Docker deployments on AWS, improving transaction speed by 15%.",
-          "Configured Linux-based environments to support scalable, fault-tolerant applications, improving deployment efficiency by approximately 30%."
-        ]
-      }
-    ]
-  },
-  "projects": {
-    "eyebrow": "Portfolio",
-    "titleNormal": "Featured ",
+@ -95,10 +140,22 @@
     "titleHighlight": "Projects",
     "description": "Real-world applications of data science, ML, and engineering.",
     "filters": [
+      { "key": "all", "label": "All" },
+      { "key": "ml", "label": "Machine Learning" },
+      { "key": "data", "label": "Data Analysis" },
+      { "key": "web", "label": "Web / Full-Stack" }
       {
         "key": "all",
         "label": "All"
@@ -167,33 +120,12 @@
     ],
     "items": [
       {
-        "color": "ember",
-        "category": "Deep Learning",
-        "categoryLabel": "Deep Learning",
-        "title": "Sentiment Analysis Studio",
-        "description": "Sentiment Analysis Studio is a complete machine learning web application that automatically detects the emotional tone of text — classifying it as negative, neutral, or positive.\n\nIt's built for two types of text: tweets (short, noisy social media posts) and product reviews (longer, structured feedback). The app covers the entire ML workflow from data to deployment, all accessible through a browser.",
-        "tags": [
-          "Python",
-          "CSV",
-          "Visual Studio"
-        ],
-        "metrics": [
-          "Sentiment Analysis",
-          "Positive+Negative+Neutral"
-        ],
-        "links": [
-          {
-            "label": "GitHub →",
-            "url": "https://github.com/RDrahul123/Sentiment-Analysis"
-          }
-        ]
-      },
-      {
-        "color": "cyan",
-        "category": "data",
+@ -107,10 +164,21 @@
         "categoryLabel": "Data Analysis",
         "title": "Sales Analysis Dashboard",
         "description": "Interactive Power BI dashboard analysing 12 months of sales data, with 5+ reports mapping regional profits across 50 zones and segmenting 15+ product subcategories.",
+        "tags": ["Power BI", "Excel", "JSON"],
+        "metrics": ["12 months of data", "50 zones mapped", "15+ subcategories"],
         "tags": [
           "Power BI",
           "Excel",
@@ -205,6 +137,7 @@
           "15+ subcategories"
         ],
         "links": [
+          { "label": "GitHub →", "url": "https://github.com/RDrahul123/Sales-Dashboard.git" }
           {
             "label": "GitHub →",
             "url": "https://github.com/RDrahul123/Sales-Dashboard.git"
@@ -212,11 +145,12 @@
         ]
       },
       {
-        "color": "purple",
-        "category": "ml",
+@ -119,10 +187,22 @@
         "categoryLabel": "Machine Learning",
         "title": "Financial Market Trend Predictor",
         "description": "Python-based analytics engine evaluating stock and cryptocurrency trends with ML models, achieving a 15% increase in predictive accuracy. Refactored pipelines to cut processing latency by 30%.",
+        "tags": ["Python", "Pandas", "NumPy", "Matplotlib", "ML"],
+        "metrics": ["+15% predictive accuracy", "-30% latency"],
         "tags": [
           "Python",
           "Pandas",
@@ -229,6 +163,7 @@
           "-30% latency"
         ],
         "links": [
+          { "label": "GitHub →", "url": "https://github.com/RDrahul123/The-Stock.git" }
           {
             "label": "GitHub →",
             "url": "https://github.com/RDrahul123/The-Stock.git"
@@ -236,11 +171,42 @@
         ]
       },
       {
-        "color": "cyan",
-        "category": "ml",
+@ -131,11 +211,25 @@
+        "categoryLabel": "Web / Full-Stack",
+        "title": "Personal Portfolio (GitHub Pages)",
+        "description": "This site — a GitHub API-driven portfolio with a custom admin back office for content publishing, fully responsive layouts, and mobile-first styling.",
+        "tags": ["HTML", "CSS", "Vanilla JS", "GitHub API"],
+        "metrics": ["Admin back office", "GitHub Pages"],
+        "tags": [
+          "HTML",
+          "CSS",
+          "Vanilla JS",
+          "GitHub API"
+        ],
+        "metrics": [
+          "Admin back office",
+          "GitHub Pages"
+        ],
+        "links": [
+          { "label": "Live Site →", "url": "https://rdrahul123.github.io/Portfolio-v2/" },
+          { "label": "GitHub →", "url": "https://github.com/RDrahul123" }
+          {
+            "label": "Live Site →",
+            "url": "https://rdrahul123.github.io/Portfolio-v2/"
+          },
+          {
+            "label": "GitHub →",
+            "url": "https://github.com/RDrahul123"
+          }
+        ]
+      },
+      {
+@ -144,11 +238,23 @@
         "categoryLabel": "Machine Learning",
         "title": "Competitive ML & DSA Practice",
         "description": "Ongoing problem-solving across LeetCode and HackerRank — algorithms, data structures, and applied ML challenges on Kaggle to sharpen core engineering fundamentals.",
+        "tags": ["Python", "DSA", "Kaggle"],
+        "metrics": ["LeetCode + HackerRank"],
         "tags": [
           "Python",
           "DSA",
@@ -250,6 +216,8 @@
           "LeetCode + HackerRank"
         ],
         "links": [
+          { "label": "LeetCode →", "url": "https://leetcode.com/u/rahul0566" },
+          { "label": "Kaggle →", "url": "https://www.kaggle.com/prakrit0566" }
           {
             "label": "LeetCode →",
             "url": "https://leetcode.com/u/rahul0566"
@@ -261,13 +229,14 @@
         ]
       }
     ]
-  },
-  "skills": {
-    "eyebrow": "Expertise",
-    "titleNormal": "Technical ",
+@ -159,18 +265,77 @@
     "titleHighlight": "Arsenal",
     "description": "From raw SQL queries to ML models deployed on cloud infrastructure.",
     "groups": [
+      { "icon": "🐍", "title": "Languages & Core", "tags": ["Python", "SQL", "C++", "Java", "R"] },
+      { "icon": "🤖", "title": "Machine Learning", "tags": ["Scikit-learn", "Pandas", "NumPy", "TensorFlow (Basics)", "Feature Engineering"] },
+      { "icon": "📊", "title": "Visualization & BI", "tags": ["Power BI", "Tableau", "Matplotlib", "Seaborn", "Excel"] },
+      { "icon": "☁️", "title": "Tools & Platforms", "tags": ["Git / GitHub", "Docker", "AWS (EC2, S3)", "Azure", "Linux", "Jupyter"] }
       {
         "icon": "🐍",
         "title": "Languages & Core",
@@ -315,6 +284,12 @@
       }
     ],
     "radar": [
+      { "label": "Python", "value": 90 },
+      { "label": "SQL", "value": 88 },
+      { "label": "Machine Learning", "value": 82 },
+      { "label": "Data Viz", "value": 78 },
+      { "label": "Cloud / Tools", "value": 70 },
+      { "label": "Statistics", "value": 80 }
       {
         "label": "Python",
         "value": 90
@@ -342,20 +317,20 @@
     ]
   },
   "resume": {
-    "eyebrow": "CV",
-    "titleNormal": "My ",
-    "titleHighlight": "Resume",
-    "description": "Get a complete overview of my experience, projects, and skills.",
-    "fileUrl": "./Rahul_Dodke_Resume__Data.pdf",
-    "buttonLabel": "Download Resume",
-    "buttonSub": "PDF · Updated 2026"
-  },
-  "contact": {
-    "eyebrow": "Get In Touch",
-    "titleNormal": "Let's ",
+@ -188,10 +353,30 @@
     "titleHighlight": "Connect",
     "note": "Interested in collaborating or have an opportunity? I'm always open to new ideas and conversations — let's talk.",
     "methods": [
+      { "icon": "📞", "label": "Phone", "value": "+91-9993308372", "url": "tel:+919993308372" },
+      { "icon": "📍", "label": "Location", "value": "Indore, Madhya Pradesh", "url": "https://www.google.com/maps/search/Indore,+Madhya+Pradesh" },
+      { "icon": "💼", "label": "LinkedIn", "value": "linkedin.com/in/rahul-dodke", "url": "https://www.linkedin.com/in/rahul-dodke" },
+      { "icon": "⌨️", "label": "GitHub", "value": "github.com/RDrahul123", "url": "https://github.com/RDrahul123" }
+      {
+        "icon": "📞",
+        "label": "Phone",
+        "value": "+91-9993308372",
+        "url": "tel:+919993308372"
+      },
       {
         "icon": "📍",
         "label": "Location",
@@ -377,11 +352,13 @@
     ],
     "badge": "Open to freelance & full-time roles"
   },
-  "footer": {
-    "copyright": "© 2026 Prakrit Rahul. All rights reserved.",
+@ -200,9 +385,21 @@
     "stack": "HTML · CSS · Vanilla JS",
     "tagline": "Built with Python intuition and CSS stubbornness.",
     "socials": [
+      { "icon": "⌨️", "label": "GitHub", "url": "https://github.com/RDrahul123" },
+      { "icon": "💼", "label": "LinkedIn", "url": "https://www.linkedin.com/in/rahul-dodke" },
+      { "icon": "🧩", "label": "LeetCode", "url": "https://leetcode.com/u/rahul0566" }
       {
         "icon": "⌨️",
         "label": "GitHub",
@@ -398,170 +375,6 @@
         "url": "https://leetcode.com/u/rahul0566"
       }
     ]
-  },
-  "techStrip": [
-    "Python",
-    "SQL",
-    "Pandas",
-    "NumPy",
-    "Scikit-learn",
-    "TensorFlow (Basics)",
-    "Power BI",
-    "Tableau",
-    "Matplotlib",
-    "Docker",
-    "Git",
-    "AWS",
-    "Azure",
-    "Linux"
-  ],
-  "snapshot": {
-    "eyebrow": "Snapshot",
-    "titleNormal": "By The ",
-    "titleHighlight": "Numbers",
-    "stats": [
-      {
-        "num": "3+",
-        "label": "Years Experience"
-      },
-      {
-        "num": "100K+",
-        "label": "Records Processed / Week"
-      },
-      {
-        "num": "99.9%",
-        "label": "Pipeline Accuracy"
-      },
-      {
-        "num": "4+",
-        "label": "Projects Shipped"
-      }
-    ]
-  },
-  "mlPipeline": {
-    "eyebrow": "Methodology",
-    "titleNormal": "How I Build ",
-    "titleHighlight": "ML Systems",
-    "description": "The lifecycle I follow on every data science and ML project, from raw data to something a team can rely on.",
-    "stages": [
-      {
-        "n": "01",
-        "title": "Data Collection",
-        "text": "Pulling from SQL databases, APIs, and raw files — understanding what the data actually represents before touching it."
-      },
-      {
-        "n": "02",
-        "title": "Data Cleaning",
-        "text": "Standardized preprocessing with Python and Pandas — handling nulls, duplicates, and inconsistencies."
-      },
-      {
-        "n": "03",
-        "title": "EDA",
-        "text": "Exploratory analysis to find patterns, outliers, and relationships before choosing an approach."
-      },
-      {
-        "n": "04",
-        "title": "Feature Engineering",
-        "text": "Shaping raw fields into signals a model can actually learn from."
-      },
-      {
-        "n": "05",
-        "title": "Model Training",
-        "text": "Scikit-learn and TensorFlow for classification, regression, and clustering tasks, iterated against a validation set."
-      },
-      {
-        "n": "06",
-        "title": "Evaluation",
-        "text": "Checking accuracy against the metric that actually matters for the business question — not just the easiest one to report."
-      },
-      {
-        "n": "07",
-        "title": "Deployment",
-        "text": "Shipping via dashboards (Power BI/Tableau) or lightweight apps so non-technical stakeholders can use the output directly."
-      },
-      {
-        "n": "08",
-        "title": "Monitoring",
-        "text": "Auditing data quality on an ongoing basis — in my current role this catches ~95% of data discrepancies before they become decisions."
-      }
-    ]
-  },
-  "aiLab": {
-    "eyebrow": "AI Lab",
-    "titleNormal": "Currently In The ",
-    "titleHighlight": "Lab",
-    "description": "I'm not going to pretend I've shipped production LLM systems — I haven't yet. This is what I'm actually building toward, in progress, right now.",
-    "entries": [
-      {
-        "status": "IN PROGRESS",
-        "title": "Power BI — PL-300 / DP-600 track",
-        "detail": "Module 1 (architecture & the VertiPaq engine) completed. Working through the certification curriculum."
-      },
-      {
-        "status": "STUDIED",
-        "title": "Azure AZ-900 Fundamentals",
-        "detail": "Built and debugged my own interactive study app to work through the material."
-      },
-      {
-        "status": "EXPLORING",
-        "title": "Azure DP-100 (Data Scientist Associate)",
-        "detail": "Evaluating this as the next step on the Microsoft AI Engineer / Data Scientist certification path."
-      },
-      {
-        "status": "LEARNING",
-        "title": "LLMs & Applied GenAI",
-        "detail": "[ADD SPECIFIC COURSE / PROJECT ONCE UNDERWAY — currently early-stage self-study]"
-      },
-      {
-        "status": "QUEUED",
-        "title": "Scala",
-        "detail": "On the list to learn in more depth next."
-      }
-    ]
-  },
-  "credentials": {
-    "eyebrow": "Credentials",
-    "titleNormal": "Education & ",
-    "titleHighlight": "Certifications",
-    "education": [
-      {
-        "institution": "[ADD YOUR DEGREE / INSTITUTION]",
-        "credential": "[ADD DEGREE NAME]",
-        "year": "[ADD YEAR]"
-      }
-    ],
-    "certifications": [
-      {
-        "name": "Microsoft Power BI (PL-300 / DP-600)",
-        "status": "In progress — Module 1 complete",
-        "url": ""
-      },
-      {
-        "name": "Microsoft Azure AZ-900",
-        "status": "Studied — [ADD IF/WHEN CERTIFIED]",
-        "url": ""
-      }
-    ]
-  },
-  "notes": {
-    "eyebrow": "Notes From The Lab",
-    "titleNormal": "Notes From The ",
-    "titleHighlight": "Lab",
-    "description": "Writing on machine learning, data science, and what I'm learning — coming soon.",
-    "categories": [
-      "Machine Learning",
-      "NLP",
-      "Data Science",
-      "Python",
-      "MLOps"
-    ],
-    "articles": []
-  },
-  "github": {
-    "eyebrow": "Built In Public",
-    "titleNormal": "Built In ",
-    "titleHighlight": "Public",
-    "description": "Live from GitHub — pulled directly from my profile.",
-    "username": "RDrahul123"
   }
+}
 }
