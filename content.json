@@ -48,7 +48,15 @@
         "label": "🛠️ Google Dev",
         "url": "https://g.dev/rahulprakrit"
       }
-    ]
+    ],
+    "roleRotator": [
+      "DATA SCIENCE ANALYST",
+      "ASPIRING ML ENGINEER",
+      "AI-CURIOUS ENGINEER",
+      "BUILDING TOWARD GENAI"
+    ],
+    "headline": "Turning Data Into Intelligent Systems.",
+    "supporting": "I build data pipelines, machine learning models, and dashboards that turn messy, real-world data into decisions teams actually trust — and I'm actively growing toward deeper ML/AI engineering work."
   },
   "about": {
     "eyebrow": "About Me",
@@ -338,7 +346,7 @@
     "titleNormal": "My ",
     "titleHighlight": "Resume",
     "description": "Get a complete overview of my experience, projects, and skills.",
-    "fileUrl": "https://github.com/RDrahul123/Portfolio-v3/blob/main/Rahul_Dodke_Resume__Data.pdf",
+    "fileUrl": "./Rahul_Dodke_Resume__Data.pdf",
     "buttonLabel": "Download Resume",
     "buttonSub": "PDF · Updated 2026"
   },
@@ -390,5 +398,170 @@
         "url": "https://leetcode.com/u/rahul0566"
       }
     ]
+  },
+  "techStrip": [
+    "Python",
+    "SQL",
+    "Pandas",
+    "NumPy",
+    "Scikit-learn",
+    "TensorFlow (Basics)",
+    "Power BI",
+    "Tableau",
+    "Matplotlib",
+    "Docker",
+    "Git",
+    "AWS",
+    "Azure",
+    "Linux"
+  ],
+  "snapshot": {
+    "eyebrow": "Snapshot",
+    "titleNormal": "By The ",
+    "titleHighlight": "Numbers",
+    "stats": [
+      {
+        "num": "3+",
+        "label": "Years Experience"
+      },
+      {
+        "num": "100K+",
+        "label": "Records Processed / Week"
+      },
+      {
+        "num": "99.9%",
+        "label": "Pipeline Accuracy"
+      },
+      {
+        "num": "4+",
+        "label": "Projects Shipped"
+      }
+    ]
+  },
+  "mlPipeline": {
+    "eyebrow": "Methodology",
+    "titleNormal": "How I Build ",
+    "titleHighlight": "ML Systems",
+    "description": "The lifecycle I follow on every data science and ML project, from raw data to something a team can rely on.",
+    "stages": [
+      {
+        "n": "01",
+        "title": "Data Collection",
+        "text": "Pulling from SQL databases, APIs, and raw files — understanding what the data actually represents before touching it."
+      },
+      {
+        "n": "02",
+        "title": "Data Cleaning",
+        "text": "Standardized preprocessing with Python and Pandas — handling nulls, duplicates, and inconsistencies."
+      },
+      {
+        "n": "03",
+        "title": "EDA",
+        "text": "Exploratory analysis to find patterns, outliers, and relationships before choosing an approach."
+      },
+      {
+        "n": "04",
+        "title": "Feature Engineering",
+        "text": "Shaping raw fields into signals a model can actually learn from."
+      },
+      {
+        "n": "05",
+        "title": "Model Training",
+        "text": "Scikit-learn and TensorFlow for classification, regression, and clustering tasks, iterated against a validation set."
+      },
+      {
+        "n": "06",
+        "title": "Evaluation",
+        "text": "Checking accuracy against the metric that actually matters for the business question — not just the easiest one to report."
+      },
+      {
+        "n": "07",
+        "title": "Deployment",
+        "text": "Shipping via dashboards (Power BI/Tableau) or lightweight apps so non-technical stakeholders can use the output directly."
+      },
+      {
+        "n": "08",
+        "title": "Monitoring",
+        "text": "Auditing data quality on an ongoing basis — in my current role this catches ~95% of data discrepancies before they become decisions."
+      }
+    ]
+  },
+  "aiLab": {
+    "eyebrow": "AI Lab",
+    "titleNormal": "Currently In The ",
+    "titleHighlight": "Lab",
+    "description": "I'm not going to pretend I've shipped production LLM systems — I haven't yet. This is what I'm actually building toward, in progress, right now.",
+    "entries": [
+      {
+        "status": "IN PROGRESS",
+        "title": "Power BI — PL-300 / DP-600 track",
+        "detail": "Module 1 (architecture & the VertiPaq engine) completed. Working through the certification curriculum."
+      },
+      {
+        "status": "STUDIED",
+        "title": "Azure AZ-900 Fundamentals",
+        "detail": "Built and debugged my own interactive study app to work through the material."
+      },
+      {
+        "status": "EXPLORING",
+        "title": "Azure DP-100 (Data Scientist Associate)",
+        "detail": "Evaluating this as the next step on the Microsoft AI Engineer / Data Scientist certification path."
+      },
+      {
+        "status": "LEARNING",
+        "title": "LLMs & Applied GenAI",
+        "detail": "[ADD SPECIFIC COURSE / PROJECT ONCE UNDERWAY — currently early-stage self-study]"
+      },
+      {
+        "status": "QUEUED",
+        "title": "Scala",
+        "detail": "On the list to learn in more depth next."
+      }
+    ]
+  },
+  "credentials": {
+    "eyebrow": "Credentials",
+    "titleNormal": "Education & ",
+    "titleHighlight": "Certifications",
+    "education": [
+      {
+        "institution": "[ADD YOUR DEGREE / INSTITUTION]",
+        "credential": "[ADD DEGREE NAME]",
+        "year": "[ADD YEAR]"
+      }
+    ],
+    "certifications": [
+      {
+        "name": "Microsoft Power BI (PL-300 / DP-600)",
+        "status": "In progress — Module 1 complete",
+        "url": ""
+      },
+      {
+        "name": "Microsoft Azure AZ-900",
+        "status": "Studied — [ADD IF/WHEN CERTIFIED]",
+        "url": ""
+      }
+    ]
+  },
+  "notes": {
+    "eyebrow": "Notes From The Lab",
+    "titleNormal": "Notes From The ",
+    "titleHighlight": "Lab",
+    "description": "Writing on machine learning, data science, and what I'm learning — coming soon.",
+    "categories": [
+      "Machine Learning",
+      "NLP",
+      "Data Science",
+      "Python",
+      "MLOps"
+    ],
+    "articles": []
+  },
+  "github": {
+    "eyebrow": "Built In Public",
+    "titleNormal": "Built In ",
+    "titleHighlight": "Public",
+    "description": "Live from GitHub — pulled directly from my profile.",
+    "username": "RDrahul123"
   }
 }
