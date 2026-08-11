@@ -76,12 +76,31 @@
   --text:#E7E9EC;
   --text-muted:#8B92A0;
   --text-faint:#565D6B;
-  --accent:#4E8CFF;
-  --accent-hi:#7BAAFF;
-  --accent-soft:rgba(78,140,255,.12);
-  --accent-soft-strong:rgba(78,140,255,.22);
-  --good:#34D399;
-  --warn:#F5A623;
+
+  /* tri-color system — blue / green / yellow, each a full citizen, not just blue-with-accents */
+  --blue:#4E8CFF;
+  --blue-hi:#7BAAFF;
+  --blue-soft:rgba(78,140,255,.12);
+  --blue-soft-strong:rgba(78,140,255,.26);
+
+  --green:#22D3A6;
+  --green-hi:#5FEAC7;
+  --green-soft:rgba(34,211,166,.12);
+  --green-soft-strong:rgba(34,211,166,.26);
+
+  --yellow:#F0C33C;
+  --yellow-hi:#FFDE7A;
+  --yellow-soft:rgba(240,195,60,.13);
+  --yellow-soft-strong:rgba(240,195,60,.28);
+
+  /* primary alias — most generic chrome (buttons/links) defaults to blue; green & yellow are
+     woven in deliberately at specific points rather than left as one flat blue site */
+  --accent:var(--blue);
+  --accent-hi:var(--blue-hi);
+  --accent-soft:var(--blue-soft);
+  --accent-soft-strong:var(--blue-soft-strong);
+  --good:var(--green);
+  --warn:var(--yellow);
 
   --sans:'Plus Jakarta Sans',-apple-system,sans-serif;
   --mono:'JetBrains Mono',monospace;
@@ -129,13 +148,26 @@ section{position:relative;padding-block:120px}
   color:var(--accent-hi);
 }
 .eyebrow::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent)}
+.eyebrow.c-blue{color:var(--blue-hi)}
+.eyebrow.c-blue::before{background:var(--blue);box-shadow:0 0 8px var(--blue)}
+.eyebrow.c-green{color:var(--green-hi)}
+.eyebrow.c-green::before{background:var(--green);box-shadow:0 0 8px var(--green)}
+.eyebrow.c-yellow{color:var(--yellow-hi)}
+.eyebrow.c-yellow::before{background:var(--yellow);box-shadow:0 0 8px var(--yellow)}
 
 .section-head{max-width:680px;margin-bottom:56px}
 .section-head h2{
   font-family:var(--sans);font-weight:700;font-size:clamp(30px,4.2vw,46px);line-height:1.12;
   letter-spacing:-.01em;color:var(--text);margin-top:14px;
 }
-.section-head h2 .accent{color:var(--accent-hi)}
+.section-head h2 .accent,h1.hero-headline .accent,.contact-layout h2 .accent{
+  background:linear-gradient(100deg,var(--blue-hi),var(--green-hi) 45%,var(--yellow-hi) 75%,var(--blue-hi));
+  background-size:300% 100%;
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:var(--blue-hi);
+  animation:accentShift 9s ease-in-out infinite;
+}
+@keyframes accentShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+@media(prefers-reduced-motion:reduce){.section-head h2 .accent,h1.hero-headline .accent,.contact-layout h2 .accent{animation:none}}
 .section-head p{margin-top:14px;color:var(--text-muted);font-size:16.5px;max-width:56ch}
 
 /* reveal-on-scroll (respects reduced motion via the global rule above) */
@@ -147,8 +179,8 @@ section{position:relative;padding-block:120px}
   display:inline-flex;align-items:center;gap:8px;padding:13px 26px;border-radius:100px;
   font-weight:600;font-size:14.5px;border:1px solid transparent;transition:all .25s var(--ease);
 }
-.btn-primary{background:var(--accent);color:#fff}
-.btn-primary:hover{background:var(--accent-hi);transform:translateY(-2px);box-shadow:0 8px 24px -8px var(--accent-soft-strong)}
+.btn-primary{background:linear-gradient(100deg,var(--blue),var(--green));color:#0A0C10;font-weight:700}
+.btn-primary:hover{background:linear-gradient(100deg,var(--blue-hi),var(--green-hi));transform:translateY(-2px);box-shadow:0 10px 28px -10px var(--green-soft-strong)}
 .btn-ghost{border-color:var(--border-strong);color:var(--text)}
 .btn-ghost:hover{border-color:var(--accent);background:var(--accent-soft);transform:translateY(-2px)}
 .btn-text{color:var(--accent-hi);font-weight:600;font-size:14.5px;display:inline-flex;align-items:center;gap:6px}
@@ -166,8 +198,15 @@ nav{
 nav.scrolled{background:rgba(10,12,16,.82);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-color:var(--border);height:64px}
 .nav-mark{display:flex;align-items:center;gap:10px}
 .nav-mark .mono-badge{
-  width:34px;height:34px;border-radius:8px;background:var(--accent-soft);border:1px solid var(--accent-soft-strong);
-  display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-weight:700;font-size:14px;color:var(--accent-hi);
+  width:34px;height:34px;border-radius:8px;position:relative;
+  background:linear-gradient(145deg,var(--blue-soft),var(--green-soft) 60%,var(--yellow-soft));
+  border:1px solid var(--border-strong);
+  display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-weight:700;font-size:14px;
+  background-clip:padding-box;
+}
+.nav-mark .mono-badge span{
+  background:linear-gradient(100deg,var(--blue-hi),var(--green-hi) 50%,var(--yellow-hi));
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:var(--blue-hi);
 }
 .nav-mark span{font-weight:700;font-size:16px;letter-spacing:-.01em}
 .nav-links{display:flex;align-items:center;gap:2px;list-style:none}
@@ -191,7 +230,66 @@ nav.scrolled{background:rgba(10,12,16,.82);backdrop-filter:blur(14px);-webkit-ba
 .mobile-menu a{font-size:30px;font-weight:700;padding:12px 0;border-bottom:1px solid var(--border);color:var(--text)}
 
 /* scroll progress */
-#scroll-progress{position:fixed;top:0;left:0;height:2px;width:0%;background:var(--accent);z-index:1001;transition:width .08s linear}
+#scroll-progress{position:fixed;top:0;left:0;height:2.5px;width:0%;background:linear-gradient(90deg,var(--blue),var(--green),var(--yellow));z-index:1001;transition:width .08s linear}
+
+/* ===== PRELOADER — SQL boot sequence ===== */
+html.intro-lock,html.intro-lock body{overflow:hidden;height:100%}
+#preloader{
+  position:fixed;inset:0;z-index:20000;background:#07080B;
+  display:flex;align-items:center;justify-content:center;padding:20px;
+  transition:opacity .7s var(--ease),visibility .7s var(--ease),transform .7s var(--ease);
+}
+#preloader.hidden{opacity:0;visibility:hidden;transform:scale(1.03);pointer-events:none}
+#preloader::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(circle at 15% 20%,var(--blue-soft),transparent 45%),
+    radial-gradient(circle at 85% 30%,var(--green-soft),transparent 45%),
+    radial-gradient(circle at 50% 90%,var(--yellow-soft),transparent 50%);
+}
+.console-window{
+  width:min(620px,92vw);background:#0D0F13;border-radius:12px;
+  border:1px solid var(--border-strong);
+  box-shadow:0 40px 90px -30px rgba(0,0,0,.7);
+  overflow:hidden;position:relative;
+}
+.console-chrome{
+  display:flex;align-items:center;gap:8px;padding:12px 16px;
+  background:#12151A;border-bottom:1px solid var(--border);
+}
+.console-dot{width:10px;height:10px;border-radius:50%}
+.console-dot.d-blue{background:var(--blue)}
+.console-dot.d-green{background:var(--green)}
+.console-dot.d-yellow{background:var(--yellow)}
+.console-chrome-title{margin-left:8px;font-family:var(--mono);font-size:11.5px;color:var(--text-faint);letter-spacing:.03em}
+.console-body{
+  padding:26px 24px 30px;font-family:var(--mono);font-size:13.5px;line-height:1.85;
+  min-height:230px;color:var(--text);
+}
+.console-line{opacity:0}
+.console-line.shown{opacity:1}
+.console-prompt{color:var(--green-hi);margin-right:8px}
+.tok-kw{color:var(--blue-hi);font-weight:600}
+.tok-id{color:var(--green-hi)}
+.tok-str{color:var(--yellow-hi)}
+.tok-comment{color:var(--text-faint);font-style:italic}
+.console-cursor{display:inline-block;width:7px;height:14px;background:var(--text);margin-left:2px;animation:blink .9s step-end infinite;vertical-align:-2px}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.console-result{display:flex;align-items:center;gap:10px;color:var(--text-muted);font-size:13px;opacity:0;transform:translateX(-6px);transition:opacity .4s var(--ease),transform .4s var(--ease)}
+.console-result.shown{opacity:1;transform:translateX(0)}
+.console-result .check{color:var(--green-hi)}
+.console-progress-row{margin-top:16px;display:flex;align-items:center;gap:12px;opacity:0;transition:opacity .5s var(--ease)}
+.console-progress-row.shown{opacity:1}
+.console-progress-track{flex:1;height:3px;background:var(--border);border-radius:100px;overflow:hidden}
+.console-progress-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--blue),var(--green),var(--yellow));transition:width 1.1s var(--ease)}
+.console-progress-pct{font-family:var(--mono);font-size:11px;color:var(--text-faint);min-width:34px;text-align:right}
+.console-skip{
+  position:absolute;top:14px;right:18px;font-family:var(--mono);font-size:11px;color:var(--text-faint);
+  background:none;border:none;cursor:pointer;letter-spacing:.05em;padding:4px 8px;border-radius:4px;
+  transition:color .2s,background .2s;
+}
+.console-skip:hover{color:var(--text);background:var(--surface-hi)}
+@media(max-width:600px){.console-body{font-size:12px;padding:20px 16px 24px;min-height:210px}.console-window{width:94vw}}
 
 /* ===== HERO ===== */
 #hero{min-height:100vh;display:flex;align-items:center;padding-top:72px;position:relative;overflow:hidden}
@@ -216,7 +314,6 @@ h1.hero-headline{
   font-family:var(--sans);font-weight:800;font-size:clamp(38px,5.6vw,64px);line-height:1.08;
   letter-spacing:-.02em;color:var(--text);margin-bottom:22px;
 }
-h1.hero-headline .accent{color:var(--accent-hi)}
 
 .hero-support{color:var(--text-muted);font-size:17px;max-width:52ch;margin-bottom:34px;line-height:1.7}
 .hero-ctas{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:34px}
@@ -229,7 +326,10 @@ h1.hero-headline .accent{color:var(--accent-hi)}
 #pipelineCanvas{width:100%;height:100%;display:block}
 .hero-visual-frame{
   position:absolute;inset:0;border:1px solid var(--border);border-radius:16px;
-  background:radial-gradient(circle at 50% 40%,rgba(78,140,255,.06),transparent 65%);
+  background:
+    radial-gradient(circle at 20% 30%,var(--blue-soft),transparent 55%),
+    radial-gradient(circle at 55% 55%,var(--green-soft),transparent 55%),
+    radial-gradient(circle at 85% 25%,var(--yellow-soft),transparent 50%);
   pointer-events:none;
 }
 .hero-visual-label{
@@ -254,7 +354,9 @@ h1.hero-headline .accent{color:var(--accent-hi)}
   display:flex;align-items:center;gap:10px;padding:22px 32px;font-family:var(--mono);font-size:14px;
   color:var(--text-muted);white-space:nowrap;border-right:1px solid var(--border);
 }
-.marquee-item::before{content:'▹';color:var(--accent)}
+.marquee-item::before{content:'▹';color:var(--blue)}
+.marquee-item:nth-child(3n+2)::before{color:var(--green)}
+.marquee-item:nth-child(3n+3)::before{color:var(--yellow)}
 
 /* ===== ABOUT ===== */
 #about{background:var(--bg)}
@@ -284,9 +386,12 @@ h1.hero-headline .accent{color:var(--accent-hi)}
 .snapshot-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border)}
 .snapshot-cell{background:var(--bg-alt);padding:36px 24px;text-align:center}
 .snapshot-cell .num{
-  font-family:var(--mono);font-weight:700;font-size:clamp(30px,4vw,44px);color:var(--accent-hi);display:block;
+  font-family:var(--mono);font-weight:700;font-size:clamp(30px,4vw,44px);color:var(--blue-hi);display:block;
   font-variant-numeric:tabular-nums;
 }
+.snapshot-cell:nth-child(4n+2) .num{color:var(--green-hi)}
+.snapshot-cell:nth-child(4n+3) .num{color:var(--yellow-hi)}
+.snapshot-cell:nth-child(4n+4) .num{color:var(--blue-hi)}
 .snapshot-cell .label{font-size:13.5px;color:var(--text-muted);margin-top:8px;display:block}
 @media(max-width:700px){.snapshot-grid{grid-template-columns:repeat(2,1fr)}}
 
@@ -306,7 +411,9 @@ h1.hero-headline .accent{color:var(--accent-hi)}
   display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-weight:700;font-size:15px;color:var(--text-muted);
   transition:border-color .4s var(--ease),color .4s var(--ease),background .4s var(--ease),box-shadow .4s var(--ease);
 }
-.pipeline-stage.active .pipeline-stage-num{border-color:var(--accent);color:var(--accent-hi);background:var(--accent-soft);box-shadow:0 0 20px -4px var(--accent-soft-strong)}
+.pipeline-stage.active .pipeline-stage-num{border-color:var(--blue);color:var(--blue-hi);background:var(--blue-soft);box-shadow:0 0 20px -4px var(--blue-soft-strong)}
+.pipeline-stage:nth-child(3n+2).active .pipeline-stage-num{border-color:var(--green);color:var(--green-hi);background:var(--green-soft);box-shadow:0 0 20px -4px var(--green-soft-strong)}
+.pipeline-stage:nth-child(3n+3).active .pipeline-stage-num{border-color:var(--yellow);color:var(--yellow-hi);background:var(--yellow-soft);box-shadow:0 0 20px -4px var(--yellow-soft-strong)}
 .pipeline-stage-title{font-weight:700;font-size:18px;margin-bottom:6px;color:var(--text)}
 .pipeline-stage-text{color:var(--text-muted);font-size:14.5px;line-height:1.65;max-width:56ch}
 
@@ -317,12 +424,16 @@ h1.hero-headline .accent{color:var(--accent-hi)}
   background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:26px;
   transition:border-color .3s var(--ease),transform .3s var(--ease);
 }
-.skill-card:hover{border-color:var(--accent-soft-strong);transform:translateY(-3px)}
+.skill-card:hover{border-color:var(--blue-soft-strong);transform:translateY(-3px)}
+.skill-card:nth-child(4n+2):hover{border-color:var(--green-soft-strong)}
+.skill-card:nth-child(4n+3):hover{border-color:var(--yellow-soft-strong)}
 .skill-card-head{display:flex;align-items:center;gap:12px;margin-bottom:16px}
 .skill-card-icon{
-  width:38px;height:38px;border-radius:8px;background:var(--accent-soft);display:flex;align-items:center;
+  width:38px;height:38px;border-radius:8px;background:var(--blue-soft);display:flex;align-items:center;
   justify-content:center;font-size:17px;flex-shrink:0;
 }
+.skill-card:nth-child(4n+2) .skill-card-icon{background:var(--green-soft)}
+.skill-card:nth-child(4n+3) .skill-card-icon{background:var(--yellow-soft)}
 .skill-card-title{font-weight:700;font-size:16px}
 .skill-tag-list{display:flex;flex-wrap:wrap;gap:8px}
 .skill-tag{
@@ -349,20 +460,24 @@ h1.hero-headline .accent{color:var(--accent-hi)}
   transition:border-color .35s var(--ease),transform .35s var(--ease);
 }
 .project-card.show{display:flex}
-.project-card:hover{border-color:var(--accent-soft-strong);transform:translateY(-4px)}
+.project-card:hover{border-color:var(--blue-soft-strong);transform:translateY(-4px)}
+.project-card[data-category="data"]:hover{border-color:var(--green-soft-strong)}
+.project-card[data-category="web"]:hover{border-color:var(--yellow-soft-strong)}
 .project-card-top{padding:26px 26px 0}
 .project-num{font-family:var(--mono);font-size:12px;color:var(--text-faint)}
 .project-cat{
   display:inline-block;font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;
-  color:var(--accent-hi);background:var(--accent-soft);padding:4px 10px;border-radius:100px;margin-top:10px;margin-bottom:14px;
+  color:var(--blue-hi);background:var(--blue-soft);padding:4px 10px;border-radius:100px;margin-top:10px;margin-bottom:14px;
 }
+.project-card[data-category="data"] .project-cat{color:var(--green-hi);background:var(--green-soft)}
+.project-card[data-category="web"] .project-cat{color:var(--yellow-hi);background:var(--yellow-soft)}
 .project-title{font-weight:700;font-size:21px;margin-bottom:10px;color:var(--text)}
 .project-desc{color:var(--text-muted);font-size:14.5px;line-height:1.65;margin-bottom:16px}
 .project-desc-full{display:none;color:var(--text-muted);font-size:14.5px;line-height:1.65;margin-bottom:16px;white-space:pre-line}
 .project-desc-full.show{display:block}
 .project-readmore{font-family:var(--mono);font-size:12px;color:var(--accent-hi);background:none;border:none;padding:0;margin-bottom:16px;cursor:pointer}
 .project-metrics{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
-.project-metric{font-family:var(--mono);font-size:11.5px;color:var(--good);background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.22);padding:4px 10px;border-radius:6px}
+.project-metric{font-family:var(--mono);font-size:11.5px;color:var(--green-hi);background:var(--green-soft);border:1px solid var(--green-soft-strong);padding:4px 10px;border-radius:6px}
 .project-tags{display:flex;flex-wrap:wrap;gap:6px;padding:0 26px;margin-bottom:20px}
 .project-tag{font-family:var(--mono);font-size:11px;color:var(--text-faint)}
 .project-card-foot{
@@ -383,9 +498,9 @@ h1.hero-headline .accent{color:var(--accent-hi)}
   display:inline-block;font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;
   padding:4px 10px;border-radius:5px;margin-bottom:14px;
 }
-.lab-status.in-progress{color:var(--accent-hi);background:var(--accent-soft)}
-.lab-status.studied{color:var(--good);background:rgba(52,211,153,.1)}
-.lab-status.exploring{color:var(--warn);background:rgba(245,166,35,.1)}
+.lab-status.in-progress{color:var(--blue-hi);background:var(--blue-soft)}
+.lab-status.studied{color:var(--green-hi);background:var(--green-soft)}
+.lab-status.exploring{color:var(--yellow-hi);background:var(--yellow-soft)}
 .lab-status.learning{color:var(--text-muted);background:var(--surface-hi)}
 .lab-status.queued{color:var(--text-faint);background:var(--surface-hi)}
 .lab-card-title{font-weight:700;font-size:16.5px;margin-bottom:8px}
@@ -409,13 +524,12 @@ h1.hero-headline .accent{color:var(--accent-hi)}
 
 /* ===== CREDENTIALS ===== */
 #credentials{background:var(--bg-alt);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
-.cred-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px}
+.cred-grid{max-width:520px}
 .cred-col-title{font-family:var(--mono);font-size:11.5px;color:var(--text-faint);text-transform:uppercase;letter-spacing:.1em;margin-bottom:18px}
 .cred-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:18px 20px;margin-bottom:12px}
 .cred-item-name{font-weight:600;font-size:15px;margin-bottom:4px}
 .cred-item-meta{font-family:var(--mono);font-size:12px;color:var(--text-muted)}
 .cred-placeholder{border-style:dashed;color:var(--text-faint)}
-@media(max-width:800px){.cred-grid{grid-template-columns:1fr}}
 
 /* ===== NOTES ===== */
 #notes{background:var(--bg)}
@@ -457,7 +571,6 @@ h1.hero-headline .accent{color:var(--accent-hi)}
 #contact{background:var(--bg-alt);border-top:1px solid var(--border)}
 .contact-layout{display:grid;grid-template-columns:1.1fr .9fr;gap:56px;align-items:center}
 .contact-layout h2{font-weight:800;font-size:clamp(30px,4.4vw,48px);line-height:1.1;margin-top:14px}
-.contact-layout h2 .accent{color:var(--accent-hi)}
 .contact-layout > div:first-child p{color:var(--text-muted);margin-top:16px;max-width:48ch;font-size:16.5px}
 .contact-methods{display:flex;flex-direction:column;gap:14px}
 .contact-method{
@@ -493,11 +606,30 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:44px clam
 </head>
 <body>
 
+<div id="preloader">
+  <div class="console-window">
+    <button class="console-skip" id="consoleSkip">Skip ↷</button>
+    <div class="console-chrome">
+      <span class="console-dot d-blue"></span><span class="console-dot d-green"></span><span class="console-dot d-yellow"></span>
+      <span class="console-chrome-title">portfolio.sql — query console</span>
+    </div>
+    <div class="console-body" id="consoleBody">
+      <div class="console-line" id="cLine1"><span class="console-prompt">rahul@lab:~$</span><span id="typed1"></span></div>
+      <div class="console-line" id="cLine2" style="padding-left:10px"></div>
+      <div id="consoleResults" style="margin-top:14px"></div>
+      <div class="console-progress-row" id="consoleProgressRow">
+        <div class="console-progress-track"><div class="console-progress-fill" id="consoleProgressFill"></div></div>
+        <div class="console-progress-pct" id="consoleProgressPct">0%</div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div id="scroll-progress"></div>
 
 <nav id="nav">
   <a href="#hero" class="nav-mark">
-    <span class="mono-badge">RD</span>
+    <span class="mono-badge"><span>RD</span></span>
     <span>Rahul Dodke</span>
   </a>
   <ul class="nav-links">
@@ -557,7 +689,7 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:44px clam
   <div class="container">
     <div class="about-layout">
       <div>
-        <div class="eyebrow" id="aboutEyebrow">About</div>
+        <div class="eyebrow c-blue" id="aboutEyebrow">About</div>
         <h2 style="font-family:var(--sans);font-weight:700;font-size:clamp(28px,3.6vw,40px);margin-top:14px;margin-bottom:32px" id="aboutHeading"></h2>
         <div class="about-block reveal">
           <span class="about-block-label">Who I Am</span>
@@ -583,7 +715,7 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:44px clam
 <section id="snapshot">
   <div class="container">
     <div class="section-head reveal" style="margin-bottom:36px">
-      <div class="eyebrow" id="snapshotEyebrow">Snapshot</div>
+      <div class="eyebrow c-green" id="snapshotEyebrow">Snapshot</div>
       <h2 id="snapshotHeading"></h2>
     </div>
   </div>
@@ -593,7 +725,7 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:44px clam
 <section id="ml-pipeline">
   <div class="container">
     <div class="section-head reveal">
-      <div class="eyebrow" id="pipelineEyebrow">Methodology</div>
+      <div class="eyebrow c-yellow" id="pipelineEyebrow">Methodology</div>
       <h2 id="pipelineHeading"></h2>
       <p id="pipelineDesc"></p>
     </div>
@@ -604,7 +736,7 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:44px clam
 <section id="skills">
   <div class="container">
     <div class="section-head reveal">
-      <div class="eyebrow" id="skillsEyebrow">Expertise</div>
+      <div class="eyebrow c-blue" id="skillsEyebrow">Expertise</div>
       <h2 id="skillsHeading"></h2>
       <p id="skillsDesc"></p>
     </div>
@@ -615,7 +747,7 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:44px clam
 <section id="projects">
   <div class="container">
     <div class="section-head reveal">
-      <div class="eyebrow" id="projEyebrow">Portfolio</div>
+      <div class="eyebrow c-green" id="projEyebrow">Portfolio</div>
       <h2 id="projHeading"></h2>
       <p id="projDesc"></p>
     </div>
@@ -627,7 +759,7 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:44px clam
 <section id="ai-lab">
   <div class="container">
     <div class="section-head reveal">
-      <div class="eyebrow" id="labEyebrow">AI Lab</div>
+      <div class="eyebrow c-yellow" id="labEyebrow">AI Lab</div>
       <h2 id="labHeading"></h2>
       <p id="labDesc"></p>
     </div>
@@ -638,7 +770,7 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:44px clam
 <section id="experience">
   <div class="container">
     <div class="section-head reveal">
-      <div class="eyebrow" id="expEyebrow">Career</div>
+      <div class="eyebrow c-blue" id="expEyebrow">Career</div>
       <h2 id="expHeading"></h2>
       <p id="expDesc"></p>
     </div>
@@ -649,14 +781,10 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:44px clam
 <section id="credentials">
   <div class="container">
     <div class="section-head reveal">
-      <div class="eyebrow" id="credEyebrow">Credentials</div>
+      <div class="eyebrow c-green" id="credEyebrow">Credentials</div>
       <h2 id="credHeading"></h2>
     </div>
     <div class="cred-grid">
-      <div>
-        <div class="cred-col-title">Education</div>
-        <div id="eduList"></div>
-      </div>
       <div>
         <div class="cred-col-title">Certifications</div>
         <div id="certList"></div>
@@ -668,7 +796,7 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:44px clam
 <section id="notes">
   <div class="container">
     <div class="section-head reveal">
-      <div class="eyebrow" id="notesEyebrow">Notes</div>
+      <div class="eyebrow c-yellow" id="notesEyebrow">Notes</div>
       <h2 id="notesHeading"></h2>
       <p id="notesDesc"></p>
     </div>
@@ -683,7 +811,7 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:44px clam
 <section id="github">
   <div class="container">
     <div class="section-head reveal">
-      <div class="eyebrow" id="ghEyebrow">Built In Public</div>
+      <div class="eyebrow c-blue" id="ghEyebrow">Built In Public</div>
       <h2 id="ghHeading"></h2>
       <p id="ghDesc"></p>
     </div>
@@ -708,7 +836,7 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:44px clam
   <div class="container">
     <div class="contact-layout">
       <div class="reveal">
-        <div class="eyebrow" id="contactEyebrow">Contact</div>
+        <div class="eyebrow c-green" id="contactEyebrow">Contact</div>
         <h2 id="contactHeading"></h2>
         <p id="contactNote"></p>
       </div>
@@ -732,6 +860,114 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:44px clam
 </footer>
 
 <script>
+/* ---------- PRELOADER — SQL boot sequence ---------- */
+(function(){
+  const pre = document.getElementById('preloader');
+  if(!pre) return;
+  const root = document.documentElement;
+
+  if(sessionStorage.getItem('introDone') === '1'){
+    pre.classList.add('hidden');
+    return;
+  }
+  root.classList.add('intro-lock');
+
+  const typed1 = document.getElementById('typed1');
+  const line2 = document.getElementById('cLine2');
+  const resultsWrap = document.getElementById('consoleResults');
+  const progressRow = document.getElementById('consoleProgressRow');
+  const progressFill = document.getElementById('consoleProgressFill');
+  const progressPct = document.getElementById('consoleProgressPct');
+  const skipBtn = document.getElementById('consoleSkip');
+
+  const queryPlain = "SELECT * FROM data_scientists WHERE name = 'Rahul' AND status = 'building';";
+  const queryHTML = '<span class="tok-kw">SELECT</span> * <span class="tok-kw">FROM</span> <span class="tok-id">data_scientists</span> <span class="tok-kw">WHERE</span> name = <span class="tok-str">\'Rahul\'</span> <span class="tok-kw">AND</span> status = <span class="tok-str">\'building\'</span>;';
+  const commentPlain = '-- compiling portfolio, please stand by';
+
+  const results = [
+    'experience.log loaded',
+    'projects[] loaded — 5 records',
+    'skills{} indexed',
+    'ai_lab.status loaded',
+    'resume.pdf attached'
+  ];
+
+  let cancelled = false;
+  const timers = [];
+  function wait(fn, ms){ const id = setTimeout(fn, ms); timers.push(id); return id; }
+
+  function typeInto(el, text, speed, done){
+    let i = 0;
+    (function step(){
+      if(cancelled) return;
+      el.textContent = text.slice(0, i);
+      i++;
+      if(i <= text.length){ wait(step, speed); }
+      else if(done){ done(); }
+    })();
+  }
+
+  function finishIntro(){
+    if(cancelled) return;
+    cancelled = true;
+    timers.forEach(clearTimeout);
+    sessionStorage.setItem('introDone', '1');
+    pre.classList.add('hidden');
+    root.classList.remove('intro-lock');
+  }
+  skipBtn.addEventListener('click', finishIntro);
+  document.addEventListener('keydown', (e)=>{
+    if(!cancelled && (e.key === 'Escape' || e.key === 'Enter')) finishIntro();
+  });
+
+  document.getElementById('cLine1').classList.add('shown');
+  typeInto(typed1, queryPlain, 24, ()=>{
+    typed1.innerHTML = queryHTML;
+    const cursor1 = document.createElement('span');
+    cursor1.className = 'console-cursor';
+    typed1.appendChild(cursor1);
+
+    wait(()=>{
+      cursor1.remove();
+      line2.classList.add('shown');
+      const typed2 = document.createElement('span');
+      typed2.className = 'tok-comment';
+      line2.appendChild(typed2);
+      typeInto(typed2, commentPlain, 16, ()=>{
+        runResults(0);
+      });
+    }, 360);
+  });
+
+  function runResults(i){
+    if(cancelled) return;
+    if(i >= results.length){
+      wait(runProgress, 200);
+      return;
+    }
+    const row = document.createElement('div');
+    row.className = 'console-result';
+    row.innerHTML = `<span class="check">✓</span> ${results[i]}`;
+    resultsWrap.appendChild(row);
+    requestAnimationFrame(()=>row.classList.add('shown'));
+    wait(()=>runResults(i+1), 230);
+  }
+
+  function runProgress(){
+    if(cancelled) return;
+    progressRow.classList.add('shown');
+    progressFill.style.width = '100%';
+    const start = performance.now(), dur = 950;
+    (function tick(t){
+      if(cancelled) return;
+      const p = Math.min((t-start)/dur, 1);
+      progressPct.textContent = Math.round(p*100) + '%';
+      if(p < 1) requestAnimationFrame(tick);
+      else wait(finishIntro, 400);
+    })(start);
+  }
+})();
+
 (async function(){
   const $ = id => document.getElementById(id);
   let data;
@@ -897,11 +1133,6 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:44px clam
   const cred = data.credentials;
   $('credEyebrow').textContent = cred.eyebrow;
   $('credHeading').innerHTML = `${cred.titleNormal}<span class="accent">${cred.titleHighlight}</span>`;
-  $('eduList').innerHTML = cred.education.map(e=>`
-    <div class="cred-item ${e.institution.startsWith('[') ? 'cred-placeholder' : ''}">
-      <div class="cred-item-name">${e.institution}</div>
-      <div class="cred-item-meta">${e.credential} ${e.year ? '· ' + e.year : ''}</div>
-    </div>`).join('');
   $('certList').innerHTML = cred.certifications.map(c=>`
     <div class="cred-item">
       <div class="cred-item-name">${c.name}</div>
@@ -1050,22 +1281,25 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:44px clam
 
     function draw(t){
       ctx.clearRect(0, 0, w, h);
+      const layerColors = ['#4E8CFF', '#22D3A6', '#22D3A6', '#F0C33C'];
+      const layerColor = li => layerColors[Math.min(li, layerColors.length-1)];
       // recompute x in case of resize
       layers.forEach((count, li) => {
         const x = w * (0.12 + li * (0.76 / (layers.length - 1)));
         nodePositions[li].forEach(n => n.x = x);
       });
-      // connections
+      // connections — tinted by the source layer's color, gently blending blue → green → yellow
       for(let li = 0; li < layers.length - 1; li++){
+        const c = layerColor(li);
         nodePositions[li].forEach(a => {
           nodePositions[li+1].forEach(b => {
-            ctx.strokeStyle = 'rgba(78,140,255,.14)';
+            ctx.strokeStyle = c + '24'; // ~14% alpha hex suffix
             ctx.lineWidth = 1;
             ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
           });
         });
       }
-      // pulse traveling along one path (purely decorative, cheap)
+      // pulse traveling along one path (purely decorative, cheap) — picks up each layer's color as it travels
       if(!reducedMotion){
         const cycle = 2600;
         const p = (t % cycle) / cycle;
@@ -1078,24 +1312,26 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:44px clam
             const b = nodePositions[li+1][0];
             const px = a.x + (b.x - a.x) * localP;
             const py = a.y + (b.y - a.y) * localP;
+            const c = layerColor(li+1);
             ctx.beginPath();
             ctx.arc(px, py, 3, 0, Math.PI*2);
-            ctx.fillStyle = '#7BAAFF';
-            ctx.shadowColor = '#4E8CFF';
-            ctx.shadowBlur = 8;
+            ctx.fillStyle = c;
+            ctx.shadowColor = c;
+            ctx.shadowBlur = 9;
             ctx.fill();
             ctx.shadowBlur = 0;
           }
         }
       }
-      // nodes
+      // nodes — each layer takes its place in the data → model → insight color story
       nodePositions.forEach((col, li) => {
+        const c = layerColor(li);
         col.forEach(n => {
           const bob = reducedMotion ? 0 : Math.sin(t/1400 + n.phase) * 2;
           ctx.beginPath();
           ctx.arc(n.x, n.y + bob, li === layers.length-1 ? 7 : 5, 0, Math.PI*2);
-          ctx.fillStyle = li === layers.length-1 ? '#7BAAFF' : '#21262E';
-          ctx.strokeStyle = '#4E8CFF';
+          ctx.fillStyle = li === layers.length-1 ? c : '#171B22';
+          ctx.strokeStyle = c;
           ctx.lineWidth = 1.4;
           ctx.fill();
           ctx.stroke();

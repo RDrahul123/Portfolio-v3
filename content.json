@@ -168,7 +168,7 @@
     "items": [
       {
         "color": "ember",
-        "category": "Deep Learning",
+        "category": "ml",
         "categoryLabel": "Deep Learning",
         "title": "Sentiment Analysis Studio",
         "description": "Sentiment Analysis Studio is a complete machine learning web application that automatically detects the emotional tone of text — classifying it as negative, neutral, or positive.\n\nIt's built for two types of text: tweets (short, noisy social media posts) and product reviews (longer, structured feedback). The app covers the entire ML workflow from data to deployment, all accessible through a browser.",
@@ -383,12 +383,6 @@
     "note": "Interested in collaborating or have an opportunity? I'm always open to new ideas and conversations — let's talk.",
     "methods": [
       {
-        "icon": "📞",
-        "label": "Phone",
-        "value": "+91-9993308372",
-        "url": "tel:+919993308372"
-      },
-      {
         "icon": "📍",
         "label": "Location",
         "value": "Indore, Madhya Pradesh",
@@ -553,15 +547,8 @@
   },
   "credentials": {
     "eyebrow": "Credentials",
-    "titleNormal": "Education & ",
+    "titleNormal": "",
     "titleHighlight": "Certifications",
-    "education": [
-      {
-        "institution": "[ADD YOUR DEGREE / INSTITUTION]",
-        "credential": "[ADD DEGREE NAME]",
-        "year": "[ADD YEAR]"
-      }
-    ],
     "certifications": [
       {
         "name": "Microsoft Power BI (PL-300 / DP-600)",
