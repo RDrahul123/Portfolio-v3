@@ -342,6 +342,7 @@ h1.hero-headline{
   .hero-visual{order:-1;max-width:340px}
   .nav-links{display:none}
   .hamburger{display:flex}
+  .nav-cta .btn-ghost{display:none}
 }
 
 /* ===== TECH MARQUEE ===== */
@@ -361,6 +362,7 @@ h1.hero-headline{
 /* ===== ABOUT ===== */
 #about{background:var(--bg)}
 .about-layout{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start}
+@media(max-width:900px){.about-layout{grid-template-columns:1fr;gap:40px}}
 .about-block{margin-bottom:30px}
 .about-block:last-child{margin-bottom:0}
 .about-block-label{
@@ -598,6 +600,32 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:44px clam
 }
 .footer-admin{color:var(--text-faint);transition:color .2s}
 .footer-admin:hover{color:var(--accent-hi)}
+
+/* ===== MOBILE REFINEMENT PASS ===== */
+@media(max-width:980px){
+  .nav-mark{flex-shrink:0;min-width:0}
+  .nav-mark span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:150px}
+}
+@media(max-width:700px){
+  section{padding-block:72px}
+  #hero{padding-top:64px}
+  .section-head{margin-bottom:38px}
+  .snapshot-cell{padding:26px 14px}
+  .pipeline-stage{padding-left:56px;padding-bottom:34px}
+  .pipeline-stage-num{width:44px;height:44px;font-size:13px}
+  .pipeline-rail::before{left:21px}
+  .xp-entry{padding-left:40px;padding-bottom:38px}
+  .xp-dot{width:18px;height:18px}
+  .xp-rail::before{left:8px}
+  .resume-panel{padding:40px 22px}
+  .console-window{width:94vw}
+}
+@media(max-width:420px){
+  .snapshot-grid{grid-template-columns:1fr 1fr}
+  .snapshot-cell .num{font-size:26px}
+  .hero-badge{font-size:11px;padding:6px 12px}
+  .nav-mark span{max-width:96px}
+}
 </style>
 
 
