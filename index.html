@@ -420,14 +420,57 @@ h1.hero-headline{
 
 .lifecycle-strip{
   background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;
+  position:relative;overflow:hidden;
 }
-.lifecycle-strip-title{font-family:var(--mono);font-size:11.5px;color:var(--text-faint);text-transform:uppercase;letter-spacing:.1em;margin-bottom:20px}
-.lifecycle-row{display:flex;flex-wrap:wrap;gap:0;align-items:center}
+.lifecycle-strip::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2.5px;
+  background:linear-gradient(90deg,var(--blue),var(--green),var(--yellow));
+}
+.lifecycle-strip-title{
+  display:flex;align-items:center;gap:8px;
+  font-family:var(--mono);font-size:11.5px;color:var(--text-faint);text-transform:uppercase;letter-spacing:.1em;margin-bottom:22px;
+}
+.lifecycle-strip-title::before{content:'◆';color:var(--blue);font-size:9px}
+.lifecycle-row{display:flex;flex-wrap:wrap;gap:10px 4px;align-items:center}
 .lifecycle-node{
-  font-family:var(--mono);font-size:12.5px;color:var(--text-muted);background:var(--surface-hi);
-  border:1px solid var(--border-strong);padding:8px 14px;border-radius:100px;white-space:nowrap;
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--mono);font-size:12.5px;color:var(--text);background:var(--surface-hi);
+  border:1px solid var(--border-strong);padding:9px 16px 9px 10px;border-radius:100px;white-space:nowrap;
+  opacity:0;transform:translateY(10px) scale(.92);
+  transition:transform .3s var(--ease),box-shadow .3s var(--ease),border-color .3s var(--ease),background .3s var(--ease);
 }
-.lifecycle-arrow{color:var(--accent);padding:0 8px;font-size:14px}
+.lifecycle-strip.in-view .lifecycle-node{opacity:1;transform:translateY(0) scale(1);transition:opacity .5s var(--ease),transform .5s var(--ease)}
+.lifecycle-node:nth-child(1){transition-delay:.05s}
+.lifecycle-node:nth-child(3){transition-delay:.15s}
+.lifecycle-node:nth-child(5){transition-delay:.25s}
+.lifecycle-node:nth-child(7){transition-delay:.35s}
+.lifecycle-node:nth-child(9){transition-delay:.45s}
+.lifecycle-node:nth-child(11){transition-delay:.55s}
+.lifecycle-node:nth-child(13){transition-delay:.65s}
+.lifecycle-node .num{
+  display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;
+  font-size:10px;font-weight:700;flex-shrink:0;
+}
+.lifecycle-node:hover{transform:translateY(-3px) scale(1.03);background:var(--surface)}
+.lifecycle-node:nth-child(6n+1){border-color:var(--blue-soft-strong)}
+.lifecycle-node:nth-child(6n+1) .num{background:var(--blue-soft);color:var(--blue-hi)}
+.lifecycle-node:nth-child(6n+1):hover{box-shadow:0 6px 18px -6px var(--blue-soft-strong)}
+.lifecycle-node:nth-child(6n+3){border-color:var(--green-soft-strong)}
+.lifecycle-node:nth-child(6n+3) .num{background:var(--green-soft);color:var(--green-hi)}
+.lifecycle-node:nth-child(6n+3):hover{box-shadow:0 6px 18px -6px var(--green-soft-strong)}
+.lifecycle-node:nth-child(6n+5){border-color:var(--yellow-soft-strong)}
+.lifecycle-node:nth-child(6n+5) .num{background:var(--yellow-soft);color:var(--yellow-hi)}
+.lifecycle-node:nth-child(6n+5):hover{box-shadow:0 6px 18px -6px var(--yellow-soft-strong)}
+.lifecycle-arrow{
+  display:inline-flex;align-items:center;color:var(--text-faint);padding:0 2px;font-size:13px;
+  opacity:0;animation:arrowFade .4s ease forwards;
+}
+.lifecycle-strip.in-view .lifecycle-arrow{opacity:1}
+@keyframes arrowFade{to{opacity:1}}
+@media(prefers-reduced-motion:reduce){
+  .lifecycle-node{opacity:1;transform:none}
+  .lifecycle-arrow{opacity:1;animation:none}
+}
 
 /* ===== SNAPSHOT ===== */
 #snapshot{background-color:var(--bg-alt);background-image:radial-gradient(700px circle at 50% 0%,var(--green-soft),transparent 60%);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
@@ -1214,9 +1257,13 @@ function apply3DTilt(selector, opts={}){
   $('aboutThink').innerHTML = paras[2] || '';
   if(hero.photoUrl) $('aboutPhoto').src = hero.photoUrl;
   apply3DTilt('.photo-card', {strength:4});
-  const lifecycleStages = ['Problem','Data','Experimentation','Model','Evaluation','Deployment','Monitoring'];
+  const lifecycleStages = [
+    {icon:'🎯', label:'Problem'}, {icon:'🗃️', label:'Data'}, {icon:'🧪', label:'Experimentation'},
+    {icon:'🤖', label:'Model'}, {icon:'📐', label:'Evaluation'}, {icon:'🚀', label:'Deployment'},
+    {icon:'📡', label:'Monitoring'}
+  ];
   $('lifecycleRow').innerHTML = lifecycleStages.map((s,i)=>
-    `<span class="lifecycle-node">${s}</span>${i<lifecycleStages.length-1?'<span class="lifecycle-arrow">→</span>':''}`
+    `<span class="lifecycle-node"><span class="num">${i+1}</span>${s.icon} ${s.label}</span>${i<lifecycleStages.length-1?`<span class="lifecycle-arrow" style="animation-delay:${.1+i*.1}s">→</span>`:''}`
   ).join('');
 
   /* ---------- SNAPSHOT ---------- */
