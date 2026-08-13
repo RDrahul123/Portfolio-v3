@@ -232,6 +232,20 @@ nav.scrolled{background:rgba(10,12,16,.82);backdrop-filter:blur(14px);-webkit-ba
 /* scroll progress */
 #scroll-progress{position:fixed;top:0;left:0;height:2.5px;width:0%;background:linear-gradient(90deg,var(--blue),var(--green),var(--yellow));z-index:1001;transition:width .08s linear}
 
+/* ===== AURORA — ambient tri-color atmosphere, sits behind all sections ===== */
+#aurora{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.aurora-blob{position:absolute;border-radius:50%;filter:blur(110px);opacity:.16;mix-blend-mode:screen;animation:auroraDrift 24s ease-in-out infinite alternate}
+.aurora-blob.a1{width:560px;height:560px;background:var(--blue);top:-10%;left:-8%;animation-duration:26s}
+.aurora-blob.a2{width:520px;height:520px;background:var(--green);top:32%;right:-10%;animation-duration:22s;animation-delay:-6s}
+.aurora-blob.a3{width:480px;height:480px;background:var(--yellow);bottom:-14%;left:24%;animation-duration:29s;animation-delay:-11s;opacity:.12}
+@keyframes auroraDrift{
+  0%{transform:translate(0,0) scale(1)}
+  33%{transform:translate(40px,-30px) scale(1.1)}
+  66%{transform:translate(-25px,35px) scale(.94)}
+  100%{transform:translate(30px,20px) scale(1.05)}
+}
+@media(prefers-reduced-motion:reduce){.aurora-blob{animation:none}}
+
 /* ===== PRELOADER — SQL boot sequence ===== */
 html.intro-lock,html.intro-lock body{overflow:hidden;height:100%}
 #preloader{
@@ -360,7 +374,7 @@ h1.hero-headline{
 .marquee-item:nth-child(3n+3)::before{color:var(--yellow)}
 
 /* ===== ABOUT ===== */
-#about{background:var(--bg)}
+#about{background-color:var(--bg);background-image:radial-gradient(560px circle at 90% 0%,var(--blue-soft),transparent 60%),radial-gradient(480px circle at 0% 100%,var(--green-soft),transparent 60%)}
 .about-layout{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start}
 @media(max-width:900px){.about-layout{grid-template-columns:1fr;gap:40px}}
 .about-block{margin-bottom:30px}
@@ -384,7 +398,7 @@ h1.hero-headline{
 .lifecycle-arrow{color:var(--accent);padding:0 8px;font-size:14px}
 
 /* ===== SNAPSHOT ===== */
-#snapshot{background:var(--bg-alt);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+#snapshot{background-color:var(--bg-alt);background-image:radial-gradient(700px circle at 50% 0%,var(--green-soft),transparent 60%);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
 .snapshot-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border)}
 .snapshot-cell{background:var(--bg-alt);padding:36px 24px;text-align:center}
 .snapshot-cell .num{
@@ -398,7 +412,7 @@ h1.hero-headline{
 @media(max-width:700px){.snapshot-grid{grid-template-columns:repeat(2,1fr)}}
 
 /* ===== ML PIPELINE ===== */
-#ml-pipeline{background:var(--bg)}
+#ml-pipeline{background-color:var(--bg);background-image:radial-gradient(600px circle at 8% 10%,var(--yellow-soft),transparent 60%),radial-gradient(520px circle at 100% 90%,var(--blue-soft),transparent 60%)}
 .pipeline-rail{position:relative;max-width:820px;margin:0 auto}
 .pipeline-rail::before{
   content:'';position:absolute;left:27px;top:8px;bottom:8px;width:1px;
@@ -420,11 +434,12 @@ h1.hero-headline{
 .pipeline-stage-text{color:var(--text-muted);font-size:14.5px;line-height:1.65;max-width:56ch}
 
 /* ===== SKILLS ===== */
-#skills{background:var(--bg-alt);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+#skills{background-color:var(--bg-alt);background-image:radial-gradient(560px circle at 4% 4%,var(--blue-soft),transparent 60%),radial-gradient(520px circle at 96% 96%,var(--green-soft),transparent 60%);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
 .skills-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
 .skill-card{
   background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:26px;
   transition:border-color .3s var(--ease),transform .3s var(--ease);
+  position:relative;overflow:hidden;will-change:transform;
 }
 .skill-card:hover{border-color:var(--blue-soft-strong);transform:translateY(-3px)}
 .skill-card:nth-child(4n+2):hover{border-color:var(--green-soft-strong)}
@@ -446,7 +461,7 @@ h1.hero-headline{
 @media(max-width:800px){.skills-grid{grid-template-columns:1fr}}
 
 /* ===== FEATURED PROJECTS ===== */
-#projects{background:var(--bg)}
+#projects{background-color:var(--bg);background-image:radial-gradient(620px circle at 92% 0%,var(--green-soft),transparent 60%),radial-gradient(500px circle at 0% 100%,var(--yellow-soft),transparent 60%)}
 .project-filter-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:40px}
 .pf-btn{
   font-family:var(--mono);font-size:12.5px;background:var(--surface);border:1px solid var(--border);color:var(--text-muted);
@@ -458,9 +473,11 @@ h1.hero-headline{
 .project-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px}
 .project-card{
   background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
-  padding:0;overflow:hidden;display:none;flex-direction:column;
+  padding:0;overflow:hidden;display:none;flex-direction:column;position:relative;
   transition:border-color .35s var(--ease),transform .35s var(--ease);
+  will-change:transform;
 }
+.tilt-glare{position:absolute;inset:0;pointer-events:none;z-index:5;mix-blend-mode:overlay;transition:background .15s ease-out}
 .project-card.show{display:flex}
 .project-card:hover{border-color:var(--blue-soft-strong);transform:translateY(-4px)}
 .project-card[data-category="data"]:hover{border-color:var(--green-soft-strong)}
@@ -489,11 +506,12 @@ h1.hero-headline{
 @media(max-width:800px){.project-grid{grid-template-columns:1fr}}
 
 /* ===== AI LAB ===== */
-#ai-lab{background:var(--bg-alt);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+#ai-lab{background-color:var(--bg-alt);background-image:radial-gradient(560px circle at 6% 90%,var(--yellow-soft),transparent 60%),radial-gradient(520px circle at 96% 10%,var(--blue-soft),transparent 60%);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
 .lab-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
 .lab-card{
   background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;
   transition:border-color .3s var(--ease),transform .3s var(--ease);
+  position:relative;overflow:hidden;will-change:transform;
 }
 .lab-card:hover{border-color:var(--accent-soft-strong);transform:translateY(-3px)}
 .lab-status{
@@ -510,7 +528,7 @@ h1.hero-headline{
 @media(max-width:800px){.lab-grid{grid-template-columns:1fr}}
 
 /* ===== EXPERIENCE ===== */
-#experience{background:var(--bg)}
+#experience{background-color:var(--bg);background-image:radial-gradient(600px circle at 100% 20%,var(--blue-soft),transparent 60%)}
 .xp-rail{position:relative;max-width:840px}
 .xp-rail::before{content:'';position:absolute;left:11px;top:6px;bottom:6px;width:1px;background:var(--border-strong)}
 .xp-entry{position:relative;padding-left:50px;padding-bottom:52px}
@@ -525,7 +543,7 @@ h1.hero-headline{
 .xp-bullets li::before{content:'▹';position:absolute;left:0;color:var(--accent)}
 
 /* ===== CREDENTIALS ===== */
-#credentials{background:var(--bg-alt);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+#credentials{background-color:var(--bg-alt);background-image:radial-gradient(560px circle at 0% 0%,var(--green-soft),transparent 60%);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
 .cred-grid{max-width:520px}
 .cred-col-title{font-family:var(--mono);font-size:11.5px;color:var(--text-faint);text-transform:uppercase;letter-spacing:.1em;margin-bottom:18px}
 .cred-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:18px 20px;margin-bottom:12px}
@@ -534,7 +552,7 @@ h1.hero-headline{
 .cred-placeholder{border-style:dashed;color:var(--text-faint)}
 
 /* ===== NOTES ===== */
-#notes{background:var(--bg)}
+#notes{background-color:var(--bg);background-image:radial-gradient(560px circle at 100% 100%,var(--yellow-soft),transparent 60%)}
 .notes-categories{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:32px}
 .notes-cat{font-family:var(--mono);font-size:12px;color:var(--text-muted);border:1px solid var(--border);padding:6px 14px;border-radius:100px}
 .notes-empty{
@@ -544,7 +562,7 @@ h1.hero-headline{
 .notes-empty-text{color:var(--text-muted);font-size:14.5px}
 
 /* ===== GITHUB ===== */
-#github{background:var(--bg-alt);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+#github{background-color:var(--bg-alt);background-image:radial-gradient(600px circle at 8% 8%,var(--blue-soft),transparent 60%);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
 .gh-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
 .gh-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:20px;transition:border-color .25s,transform .25s}
 .gh-card:hover{border-color:var(--accent-soft-strong);transform:translateY(-3px)}
@@ -556,7 +574,7 @@ h1.hero-headline{
 @media(max-width:600px){.gh-grid{grid-template-columns:1fr}}
 
 /* ===== RESUME CTA ===== */
-#resume{background:var(--bg)}
+#resume{background-color:var(--bg);background-image:radial-gradient(700px circle at 50% 100%,var(--green-soft),transparent 60%)}
 .resume-panel{
   max-width:780px;margin:0 auto;text-align:center;background:var(--surface);
   border:1px solid var(--border);border-radius:var(--radius);padding:56px clamp(24px,6vw,64px);
@@ -570,7 +588,7 @@ h1.hero-headline{
 .resume-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;position:relative}
 
 /* ===== CONTACT ===== */
-#contact{background:var(--bg-alt);border-top:1px solid var(--border)}
+#contact{background-color:var(--bg-alt);background-image:radial-gradient(600px circle at 95% 100%,var(--yellow-soft),transparent 60%),radial-gradient(500px circle at 0% 0%,var(--blue-soft),transparent 60%);border-top:1px solid var(--border)}
 .contact-layout{display:grid;grid-template-columns:1.1fr .9fr;gap:56px;align-items:center}
 .contact-layout h2{font-weight:800;font-size:clamp(30px,4.4vw,48px);line-height:1.1;margin-top:14px}
 .contact-layout > div:first-child p{color:var(--text-muted);margin-top:16px;max-width:48ch;font-size:16.5px}
@@ -586,7 +604,7 @@ h1.hero-headline{
 @media(max-width:900px){.contact-layout{grid-template-columns:1fr}}
 
 /* ===== FOOTER ===== */
-footer{background:var(--bg);border-top:1px solid var(--border);padding:44px clamp(20px,5vw,48px)}
+footer{background:var(--bg);border-top:1px solid var(--border);padding:44px clamp(20px,5vw,48px);position:relative}
 .footer-inner{max-width:var(--container);margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px}
 .footer-brand{font-weight:700;font-size:15px}
 .footer-role{font-family:var(--mono);font-size:12px;color:var(--text-muted);margin-top:4px}
@@ -626,6 +644,49 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:44px clam
   .hero-badge{font-size:11px;padding:6px 12px}
   .nav-mark span{max-width:96px}
 }
+
+/* ===== circuit-trace decorative divider ===== */
+.circuit-divider{position:relative;z-index:1;background:var(--bg-alt);height:44px;overflow:hidden}
+.circuit-divider svg{width:100%;height:100%;display:block}
+.circuit-divider path{
+  fill:none;stroke:url(#circuitGrad);stroke-width:1.5;
+  stroke-dasharray:2400;stroke-dashoffset:2400;
+  animation:drawCircuit 2.6s var(--ease) .3s forwards;
+}
+@keyframes drawCircuit{to{stroke-dashoffset:0}}
+.c-node{opacity:0;animation:nodeFade .5s ease forwards}
+.c-node.c-blue{fill:var(--blue);animation-delay:.9s}
+.c-node.c-green{fill:var(--green);animation-delay:1.5s}
+.c-node.c-yellow{fill:var(--yellow);animation-delay:2.1s}
+@keyframes nodeFade{to{opacity:1}}
+@media(prefers-reduced-motion:reduce){.circuit-divider path{animation:none;stroke-dashoffset:0}.c-node{animation:none;opacity:1}}
+
+/* ===== TOUCH TAP FEEDBACK (hover doesn't apply on touch devices) ===== */
+@media(hover:none){
+  .project-card:active,.skill-card:active,.lab-card:active,.gh-card:active,.contact-method:active{
+    transform:scale(.97);border-color:var(--blue-soft-strong);transition:transform .15s var(--ease)
+  }
+  .btn:active{transform:scale(.96)}
+  .pf-btn:active,.marquee-item:active,.social-pill:active{transform:scale(.94)}
+  .nav-links a:active,.mobile-menu a:active{opacity:.6}
+}
+
+/* ===== MOBILE ATTRACTIVENESS PASS ===== */
+@media(max-width:700px){
+  .hero-visual{max-width:280px}
+  .aurora-blob{filter:blur(70px);opacity:.22}
+  .aurora-blob.a1{width:340px;height:340px}
+  .aurora-blob.a2{width:320px;height:320px}
+  .aurora-blob.a3{width:300px;height:300px}
+  h1.hero-headline{font-size:clamp(32px,9vw,44px)}
+  .hero-support{font-size:15.5px}
+  .section-head h2{font-size:clamp(26px,7vw,34px)}
+  .project-card-top{padding:22px 20px 0}
+  .project-tags{padding:0 20px}
+  .project-card-foot{padding:14px 20px}
+  .skill-card,.lab-card{padding:20px}
+  .marquee-item{padding:16px 22px;font-size:13px}
+}
 </style>
 
 
@@ -633,6 +694,12 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:44px clam
 
 </head>
 <body>
+
+<div id="aurora">
+  <div class="aurora-blob a1"></div>
+  <div class="aurora-blob a2"></div>
+  <div class="aurora-blob a3"></div>
+</div>
 
 <div id="preloader">
   <div class="console-window">
@@ -708,6 +775,22 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:44px clam
     </div>
   </div>
 </section>
+
+<div class="circuit-divider" aria-hidden="true">
+  <svg viewBox="0 0 1200 60" preserveAspectRatio="none">
+    <defs>
+      <linearGradient id="circuitGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#4E8CFF"/>
+        <stop offset="50%" stop-color="#22D3A6"/>
+        <stop offset="100%" stop-color="#F0C33C"/>
+      </linearGradient>
+    </defs>
+    <path id="circuitPath" d="M0,30 L180,30 L210,10 L260,10 L290,30 L520,30 L550,50 L610,50 L640,30 L900,30 L930,12 L980,12 L1010,30 L1200,30"/>
+    <circle cx="210" cy="10" r="4" class="c-node c-blue"/>
+    <circle cx="550" cy="50" r="4" class="c-node c-green"/>
+    <circle cx="930" cy="12" r="4" class="c-node c-yellow"/>
+  </svg>
+</div>
 
 <section id="tech-strip" aria-label="Technologies">
   <div class="marquee-track" id="marqueeTrack"></div>
@@ -887,7 +970,38 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:44px clam
   </div>
 </footer>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
+/* ---------- 3D TILT ON HOVER (desktop/hover-capable devices only) ---------- */
+const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+function apply3DTilt(selector, opts={}){
+  if(!canHover) return;
+  const strength = opts.strength || 7;
+  document.querySelectorAll(selector).forEach(el=>{
+    if(el.dataset.tiltBound) return;
+    el.dataset.tiltBound = '1';
+    el.style.transformStyle = 'preserve-3d';
+    let rect;
+    el.addEventListener('mouseenter', ()=>{ rect = el.getBoundingClientRect(); el.style.transition = 'transform .1s ease-out'; });
+    el.addEventListener('mousemove', (e)=>{
+      if(!rect) rect = el.getBoundingClientRect();
+      const px = (e.clientX - rect.left) / rect.width;
+      const py = (e.clientY - rect.top) / rect.height;
+      const rx = (py - .5) * -strength;
+      const ry = (px - .5) * strength;
+      el.style.transform = `perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-4px)`;
+      const glare = el.querySelector('.tilt-glare');
+      if(glare) glare.style.background = `radial-gradient(circle at ${px*100}% ${py*100}%, rgba(255,255,255,.10), transparent 55%)`;
+    });
+    el.addEventListener('mouseleave', ()=>{
+      el.style.transition = 'transform .5s var(--ease)';
+      el.style.transform = 'perspective(900px) rotateX(0) rotateY(0) translateY(0)';
+      const glare = el.querySelector('.tilt-glare');
+      if(glare) glare.style.background = 'transparent';
+    });
+  });
+}
+
 /* ---------- PRELOADER — SQL boot sequence ---------- */
 (function(){
   const pre = document.getElementById('preloader');
@@ -1084,7 +1198,9 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:44px clam
     <div class="skill-card reveal">
       <div class="skill-card-head"><span class="skill-card-icon">${g.icon}</span><span class="skill-card-title">${g.title}</span></div>
       <div class="skill-tag-list">${g.tags.map(t=>`<span class="skill-tag">${t}</span>`).join('')}</div>
+      <div class="tilt-glare"></div>
     </div>`).join('');
+  apply3DTilt('.skill-card', {strength:6});
 
   /* ---------- PROJECTS ---------- */
   const proj = data.projects;
@@ -1107,8 +1223,10 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:44px clam
       </div>
       <div class="project-tags">${(p.tags||[]).map(t=>`<span class="project-tag">#${t.replace(/\s+/g,'')}</span>`).join('')}</div>
       <div class="project-card-foot">${(p.links||[]).map(l=>`<a href="${l.url}" target="_blank" rel="noopener">${l.label}</a>`).join('')}</div>
+      <div class="tilt-glare"></div>
     </div>`;
   }).join('');
+  apply3DTilt('.project-card', {strength:5});
 
   document.querySelectorAll('.project-readmore').forEach(btn=>{
     btn.addEventListener('click', ()=>{
@@ -1141,7 +1259,9 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:44px clam
       <span class="lab-status ${e.status.toLowerCase().replace(/\s+/g,'-')}">${e.status}</span>
       <div class="lab-card-title">${e.title}</div>
       <div class="lab-card-text">${e.detail}</div>
+      <div class="tilt-glare"></div>
     </div>`).join('');
+  apply3DTilt('.lab-card', {strength:6});
 
   /* ---------- EXPERIENCE ---------- */
   const exp = data.experience;
@@ -1279,95 +1399,95 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:44px clam
     });
   });
 
-  /* ---------- lightweight hero canvas: data → model → insight pipeline ---------- */
+  /* ---------- 3D hero centerpiece: wireframe model core + orbiting data/insight particles ---------- */
   (function(){
     const canvas = $('pipelineCanvas');
-    if(!canvas) return;
-    const ctx = canvas.getContext('2d');
+    if(!canvas || typeof THREE === 'undefined') return;
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    let w, h;
+    const isSmall = window.innerWidth < 700;
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
+    camera.position.set(0, 0, 5.4);
+
+    const renderer = new THREE.WebGLRenderer({canvas, alpha:true, antialias:true});
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, isSmall ? 1.5 : 2));
+
+    // central wireframe icosahedron — "the model"
+    const coreGeo = new THREE.IcosahedronGeometry(1.5, 1);
+    const coreEdges = new THREE.EdgesGeometry(coreGeo);
+    const coreMat = new THREE.LineBasicMaterial({color:0x4E8CFF, transparent:true, opacity:.55});
+    const core = new THREE.LineSegments(coreEdges, coreMat);
+    scene.add(core);
+    const coreDotsMat = new THREE.PointsMaterial({color:0x7BAAFF, size:.045, transparent:true, opacity:.85});
+    const coreDots = new THREE.Points(coreGeo, coreDotsMat);
+    scene.add(coreDots);
+
+    // orbiting particles: blue (incoming data) → green (processing) → yellow (insight out)
+    const orbitColors = [0x4E8CFF, 0x22D3A6, 0xF0C33C];
+    const orbitCount = isSmall ? 5 : 8;
+    const orbiters = [];
+    for(let i = 0; i < orbitCount; i++){
+      const colorIdx = i % 3;
+      const geo = new THREE.SphereGeometry(0.045, 8, 8);
+      const mat = new THREE.MeshBasicMaterial({color: orbitColors[colorIdx], transparent:true, opacity:.9});
+      const mesh = new THREE.Mesh(geo, mat);
+      const radius = 2.1 + (i % 3) * 0.35;
+      orbiters.push({
+        mesh,
+        radius,
+        speed: (reducedMotion ? 0.08 : 0.22) + Math.random()*0.12,
+        offset: Math.random()*Math.PI*2,
+        tilt: (Math.random()-0.5) * 1.1
+      });
+      scene.add(mesh);
+    }
+
+    let targetRotX = 0, targetRotY = 0;
+    const heroEl = document.getElementById('hero');
+    if(heroEl){
+      heroEl.addEventListener('mousemove', (e)=>{
+        const rect = heroEl.getBoundingClientRect();
+        const px = (e.clientX - rect.left) / rect.width - .5;
+        const py = (e.clientY - rect.top) / rect.height - .5;
+        targetRotY = px * .5;
+        targetRotX = py * .5;
+      });
+    }
+
     function resize(){
       const rect = canvas.parentElement.getBoundingClientRect();
-      w = canvas.width = rect.width;
-      h = canvas.height = rect.height;
+      const w = rect.width, h = rect.height;
+      if(!w || !h) return;
+      renderer.setSize(w, h, false);
+      camera.aspect = w/h;
+      camera.updateProjectionMatrix();
     }
     window.addEventListener('resize', resize);
     resize();
 
-    // fixed layer layout: input nodes -> hidden nodes -> output node
-    const layers = [3, 4, 2, 1];
-    const nodePositions = [];
-    layers.forEach((count, li) => {
-      const x = w * (0.12 + li * (0.76 / (layers.length - 1)));
-      const col = [];
-      for(let i = 0; i < count; i++){
-        const y = h * ((i + 1) / (count + 1));
-        col.push({x, y, phase: Math.random() * Math.PI * 2});
-      }
-      nodePositions.push(col);
-    });
+    let t = 0;
+    function animate(){
+      t += reducedMotion ? 0.0015 : 0.0045;
+      core.rotation.y += reducedMotion ? 0.0006 : 0.0022;
+      core.rotation.x += reducedMotion ? 0.0002 : 0.0009;
+      core.rotation.y += (targetRotY - core.rotation.y) * 0.02;
+      core.rotation.x += (targetRotX - core.rotation.x) * 0.02;
+      coreDots.rotation.copy(core.rotation);
 
-    function draw(t){
-      ctx.clearRect(0, 0, w, h);
-      const layerColors = ['#4E8CFF', '#22D3A6', '#22D3A6', '#F0C33C'];
-      const layerColor = li => layerColors[Math.min(li, layerColors.length-1)];
-      // recompute x in case of resize
-      layers.forEach((count, li) => {
-        const x = w * (0.12 + li * (0.76 / (layers.length - 1)));
-        nodePositions[li].forEach(n => n.x = x);
+      orbiters.forEach(o => {
+        const a = t * (o.speed*10) + o.offset;
+        o.mesh.position.set(
+          Math.cos(a) * o.radius,
+          Math.sin(a * 0.7) * o.radius * 0.4 + Math.sin(o.tilt)*0.3,
+          Math.sin(a) * o.radius * 0.5
+        );
       });
-      // connections — tinted by the source layer's color, gently blending blue → green → yellow
-      for(let li = 0; li < layers.length - 1; li++){
-        const c = layerColor(li);
-        nodePositions[li].forEach(a => {
-          nodePositions[li+1].forEach(b => {
-            ctx.strokeStyle = c + '24'; // ~14% alpha hex suffix
-            ctx.lineWidth = 1;
-            ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
-          });
-        });
-      }
-      // pulse traveling along one path (purely decorative, cheap) — picks up each layer's color as it travels
-      if(!reducedMotion){
-        const cycle = 2600;
-        const p = (t % cycle) / cycle;
-        for(let li = 0; li < layers.length - 1; li++){
-          const segStart = li / (layers.length - 1);
-          const segEnd = (li+1) / (layers.length - 1);
-          if(p >= segStart && p <= segEnd){
-            const localP = (p - segStart) / (segEnd - segStart);
-            const a = nodePositions[li][0];
-            const b = nodePositions[li+1][0];
-            const px = a.x + (b.x - a.x) * localP;
-            const py = a.y + (b.y - a.y) * localP;
-            const c = layerColor(li+1);
-            ctx.beginPath();
-            ctx.arc(px, py, 3, 0, Math.PI*2);
-            ctx.fillStyle = c;
-            ctx.shadowColor = c;
-            ctx.shadowBlur = 9;
-            ctx.fill();
-            ctx.shadowBlur = 0;
-          }
-        }
-      }
-      // nodes — each layer takes its place in the data → model → insight color story
-      nodePositions.forEach((col, li) => {
-        const c = layerColor(li);
-        col.forEach(n => {
-          const bob = reducedMotion ? 0 : Math.sin(t/1400 + n.phase) * 2;
-          ctx.beginPath();
-          ctx.arc(n.x, n.y + bob, li === layers.length-1 ? 7 : 5, 0, Math.PI*2);
-          ctx.fillStyle = li === layers.length-1 ? c : '#171B22';
-          ctx.strokeStyle = c;
-          ctx.lineWidth = 1.4;
-          ctx.fill();
-          ctx.stroke();
-        });
-      });
-      requestAnimationFrame(draw);
+
+      renderer.render(scene, camera);
+      requestAnimationFrame(animate);
     }
-    requestAnimationFrame(draw);
+    animate();
   })();
 })();
 </script>
