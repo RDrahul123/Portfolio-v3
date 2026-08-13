@@ -376,6 +376,7 @@ h1.hero-headline{
 /* ===== ABOUT ===== */
 #about{background-color:var(--bg);background-image:radial-gradient(560px circle at 90% 0%,var(--blue-soft),transparent 60%),radial-gradient(480px circle at 0% 100%,var(--green-soft),transparent 60%)}
 .about-layout{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start}
+.about-layout > div:last-child{display:flex;flex-direction:column;gap:28px}
 @media(max-width:900px){.about-layout{grid-template-columns:1fr;gap:40px}}
 .about-block{margin-bottom:30px}
 .about-block:last-child{margin-bottom:0}
@@ -385,6 +386,37 @@ h1.hero-headline{
 }
 .about-block p{color:var(--text-muted);font-size:16px;line-height:1.75}
 .about-block p strong{color:var(--text);font-weight:600}
+
+/* ===== ABOUT PHOTO CARD ===== */
+.photo-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:18px;position:relative;overflow:hidden;will-change:transform;
+}
+.photo-card::before{
+  content:'';position:absolute;inset:0;border-radius:inherit;padding:1px;
+  background:linear-gradient(135deg,var(--blue-soft-strong),transparent 30%,transparent 70%,var(--yellow-soft-strong));
+  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;
+}
+.photo-frame{position:relative;border-radius:calc(var(--radius) - 6px);overflow:hidden;aspect-ratio:1/1;background:#000}
+.photo-frame img{
+  width:100%;height:100%;object-fit:cover;filter:grayscale(.15) contrast(1.05);
+  transition:transform .6s var(--ease),filter .6s var(--ease);
+}
+.photo-card:hover .photo-frame img{transform:scale(1.035);filter:grayscale(0) contrast(1.08)}
+.photo-frame::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(180deg,transparent 55%,rgba(7,8,11,.75) 100%);
+  pointer-events:none;
+}
+.photo-corner{position:absolute;width:22px;height:22px;pointer-events:none}
+.photo-corner.tl{top:10px;left:10px;border-top:2px solid var(--blue);border-left:2px solid var(--blue)}
+.photo-corner.tr{top:10px;right:10px;border-top:2px solid var(--green);border-right:2px solid var(--green)}
+.photo-corner.bl{bottom:10px;left:10px;border-bottom:2px solid var(--yellow);border-left:2px solid var(--yellow)}
+.photo-corner.br{bottom:10px;right:10px;border-bottom:2px solid var(--blue);border-right:2px solid var(--blue)}
+.photo-caption{display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding:16px 6px 4px;flex-wrap:wrap}
+.photo-caption-name{font-weight:700;font-size:15.5px;color:var(--text)}
+.photo-caption-role{font-family:var(--mono);font-size:11.5px;color:var(--green-hi);letter-spacing:.03em}
 
 .lifecycle-strip{
   background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;
@@ -815,9 +847,25 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:44px clam
           <p id="aboutThink"></p>
         </div>
       </div>
-      <div class="lifecycle-strip reveal">
-        <div class="lifecycle-strip-title">Every project follows this lifecycle</div>
-        <div class="lifecycle-row" id="lifecycleRow"></div>
+      <div>
+        <div class="photo-card reveal">
+          <div class="photo-frame">
+            <img src="" alt="Rahul Dodke" id="aboutPhoto" loading="lazy">
+            <span class="photo-corner tl"></span>
+            <span class="photo-corner tr"></span>
+            <span class="photo-corner bl"></span>
+            <span class="photo-corner br"></span>
+          </div>
+          <div class="photo-caption">
+            <span class="photo-caption-name">Rahul Dodke</span>
+            <span class="photo-caption-role">// data_scientist.profile</span>
+          </div>
+          <div class="tilt-glare"></div>
+        </div>
+        <div class="lifecycle-strip reveal">
+          <div class="lifecycle-strip-title">Every project follows this lifecycle</div>
+          <div class="lifecycle-row" id="lifecycleRow"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -1164,6 +1212,8 @@ function apply3DTilt(selector, opts={}){
   $('aboutWho').innerHTML = paras[0] || '';
   $('aboutBuild').innerHTML = paras[1] || '';
   $('aboutThink').innerHTML = paras[2] || '';
+  if(hero.photoUrl) $('aboutPhoto').src = hero.photoUrl;
+  apply3DTilt('.photo-card', {strength:4});
   const lifecycleStages = ['Problem','Data','Experimentation','Model','Evaluation','Deployment','Monitoring'];
   $('lifecycleRow').innerHTML = lifecycleStages.map((s,i)=>
     `<span class="lifecycle-node">${s}</span>${i<lifecycleStages.length-1?'<span class="lifecycle-arrow">→</span>':''}`
