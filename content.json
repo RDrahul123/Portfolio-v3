@@ -563,7 +563,7 @@
     ]
   },
   "notes": {
-    "eyebrow": "Notes From The Lab",
+    "eyebrow": "Writing",
     "titleNormal": "Notes From The ",
     "titleHighlight": "Lab",
     "description": "Writing on machine learning, data science, and what I'm learning — coming soon.",
@@ -574,7 +574,32 @@
       "Python",
       "MLOps"
     ],
-    "articles": []
+    "articles": [
+      {
+        "title": "Feature Engineering: What Actually Matters?",
+        "description": "Most accuracy gains come from a handful of feature choices, not exotic models. A practical look at the transforms, encodings, and interaction terms that tend to move the needle.",
+        "category": "Machine Learning",
+        "readTime": "6 min read"
+      },
+      {
+        "title": "SQL Window Functions, Explained",
+        "description": "ROW_NUMBER, RANK, and running totals stop being confusing once you stop thinking of them as aggregates. A walkthrough with real query examples.",
+        "category": "Data Science",
+        "readTime": "5 min read"
+      },
+      {
+        "title": "From Notebook to Production: A Practical Checklist",
+        "description": "The gap between 'it works in Jupyter' and 'it works reliably for other people' is mostly about a few boring habits — here's the checklist I actually use.",
+        "category": "MLOps",
+        "readTime": "7 min read"
+      },
+      {
+        "title": "Understanding the Bias-Variance Tradeoff",
+        "description": "Why a more complex model isn't always a better one, with a simple visual intuition for when you're underfitting versus overfitting.",
+        "category": "Machine Learning",
+        "readTime": "4 min read"
+      }
+    ]
   },
   "github": {
     "eyebrow": "Built In Public",

@@ -321,8 +321,10 @@ html.intro-lock,html.intro-lock body{overflow:hidden;height:100%}
 
 .hero-role-rotator{
   font-family:var(--mono);font-size:13px;letter-spacing:.1em;color:var(--accent-hi);
-  margin-bottom:18px;height:20px;text-transform:uppercase;
+  margin-bottom:18px;height:20px;line-height:20px;text-transform:uppercase;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
+@media(max-width:420px){.hero-role-rotator{font-size:11px;letter-spacing:.06em}}
 
 h1.hero-headline{
   font-family:var(--sans);font-weight:800;font-size:clamp(38px,5.6vw,64px);line-height:1.08;
@@ -761,8 +763,18 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:44px clam
   .project-card-foot{padding:14px 20px}
   .skill-card,.lab-card{padding:20px}
   .marquee-item{padding:16px 22px;font-size:13px}
+
+  /* lifecycle card — proper vertical flow instead of orphaned rightward arrows */
+  .lifecycle-row{flex-direction:column;align-items:stretch;gap:0}
+  .lifecycle-node{width:100%;justify-content:flex-start;border-radius:10px;padding:13px 16px}
+  .lifecycle-node .num{width:22px;height:22px;font-size:10.5px}
+  .lifecycle-arrow{
+    display:flex;justify-content:center;align-items:center;height:22px;padding:0;
+    transform:rotate(90deg);font-size:12px;
+  }
 }
 </style>
+
 
 
 
@@ -987,10 +999,7 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:44px clam
       <h2 id="credHeading"></h2>
     </div>
     <div class="cred-grid">
-      <div>
-        <div class="cred-col-title">Certifications</div>
-        <div id="certList"></div>
-      </div>
+      <div id="certList"></div>
     </div>
   </div>
 </section>
@@ -1229,8 +1238,13 @@ function apply3DTilt(selector, opts={}){
   const roles = hero.roleRotator || [];
   let ri = 0;
   const rotatorEl = $('roleRotator');
-  function showRole(){
+  function showRole(fade){
     if(!roles.length) return;
+    if(!fade){
+      rotatorEl.textContent = roles[ri];
+      ri = (ri+1) % roles.length;
+      return;
+    }
     rotatorEl.style.opacity = 0;
     setTimeout(()=>{
       rotatorEl.textContent = roles[ri];
@@ -1239,8 +1253,8 @@ function apply3DTilt(selector, opts={}){
     }, 260);
   }
   rotatorEl.style.transition = 'opacity .3s ease';
-  showRole();
-  setInterval(showRole, 3200);
+  showRole(false);
+  setInterval(()=>showRole(true), 3200);
 
   /* ---------- TECH MARQUEE ---------- */
   const strip = data.techStrip || [];
