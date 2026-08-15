@@ -97,6 +97,37 @@
         "title": "Engineering Mindset",
         "text": "I bring software engineering discipline — version control, testing, automation — into every data science workflow."
       }
+    ],
+    "lifecycleTitle": "Every project follows this lifecycle",
+    "lifecycle": [
+      {
+        "icon": "🎯",
+        "label": "Problem"
+      },
+      {
+        "icon": "🗃️",
+        "label": "Data"
+      },
+      {
+        "icon": "🧪",
+        "label": "Experimentation"
+      },
+      {
+        "icon": "🤖",
+        "label": "Model"
+      },
+      {
+        "icon": "📐",
+        "label": "Evaluation"
+      },
+      {
+        "icon": "🚀",
+        "label": "Deployment"
+      },
+      {
+        "icon": "📡",
+        "label": "Monitoring"
+      }
     ]
   },
   "experience": {
@@ -404,6 +435,8 @@
     "badge": "Open to freelance & full-time roles"
   },
   "footer": {
+    "brand": "Rahul",
+    "role": "Data Scientist · ML Engineer · AI Engineer",
     "copyright": "© 2026 Prakrit Rahul. All rights reserved.",
     "stack": "HTML · CSS · Vanilla JS",
     "tagline": "Built with Python intuition and CSS stubbornness.",

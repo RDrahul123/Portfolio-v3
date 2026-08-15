@@ -1331,8 +1331,8 @@ footer{background:var(--footer-bg);border-top:1px solid var(--border);padding:48
           </div>
           <div class="tilt-glare"></div>
         </div>
-        <div class="lifecycle-strip reveal">
-          <div class="lifecycle-strip-title">Every project follows this lifecycle</div>
+          <div class="lifecycle-strip reveal">
+          <div class="lifecycle-strip-title" id="lifecycleTitle">Every project follows this lifecycle</div>
           <div class="lifecycle-row" id="lifecycleRow"></div>
         </div>
       </div>
@@ -1857,7 +1857,8 @@ if(canHover){
       </div>`).join('');
   }
 
-  const lifecycleStages = [
+  $('lifecycleTitle').textContent = data.about.lifecycleTitle || 'Every project follows this lifecycle';
+  const lifecycleStages = (data.about.lifecycle && data.about.lifecycle.length) ? data.about.lifecycle : [
     {icon:'🎯', label:'Problem'}, {icon:'🗃️', label:'Data'}, {icon:'🧪', label:'Experimentation'},
     {icon:'🤖', label:'Model'}, {icon:'📐', label:'Evaluation'}, {icon:'🚀', label:'Deployment'},
     {icon:'📡', label:'Monitoring'}

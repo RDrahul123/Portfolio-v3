@@ -408,6 +408,17 @@ a{color:var(--blue-hi)}
           <div id="list-pillars"></div>
           <button class="add-item-btn" onclick="addRepeaterItem('about.pillars',{icon:'⭐',title:'New Pillar',text:'Description...'},'list-pillars',renderPillarItem)">+ Add Pillar</button>
         </div>
+
+        <div class="field-group">
+          <label class="field-label">Lifecycle Strip Title</label>
+          <input class="field-input" data-bind="about.lifecycleTitle" placeholder="Every project follows this lifecycle">
+        </div>
+        <div class="field-group">
+          <label class="field-label">Lifecycle Stages</label>
+          <p class="field-hint">The "Problem → Data → … → Monitoring" strip under the About photo.</p>
+          <div id="list-lifecycle"></div>
+          <button class="add-item-btn" onclick="addRepeaterItem('about.lifecycle',{icon:'🧩',label:'New Stage'},'list-lifecycle',renderLifecycleItem)">+ Add Stage</button>
+        </div>
       </section>
 
       <!-- ===== EXPERIENCE PANEL ===== -->
@@ -1108,6 +1119,7 @@ function renderForm(){
   renderRepeaterList('about.stats','list-aboutStats',renderStatItem);
   renderBulletList('about.paragraphs','list-paragraphs');
   renderRepeaterList('about.pillars','list-pillars',renderPillarItem);
+  renderRepeaterList('about.lifecycle','list-lifecycle',renderLifecycleItem);
 
   renderExperienceList();
 
@@ -1277,6 +1289,16 @@ function renderPillarItem(item,i,arr,path,containerId){
     makeField('Title',item.title,v=>item.title=v)
   ));
   wrap.appendChild(makeField('Description',item.text,v=>item.text=v,true));
+  return wrap;
+}
+
+// ---- About lifecycle stage item ----
+function renderLifecycleItem(item,i,arr,path,containerId){
+  const wrap=makeRepeaterShell(item.label||'Stage',arr,i,path,containerId,renderLifecycleItem);
+  wrap.appendChild(makeFieldRow(
+    makeField('Icon (emoji)',item.icon,v=>item.icon=v),
+    makeField('Label',item.label,v=>{item.label=v;wrap.querySelector('.repeater-item-header span').textContent=item.label||'Stage';})
+  ));
   return wrap;
 }
 
