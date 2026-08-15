@@ -361,6 +361,12 @@ a{color:var(--blue-hi)}
           <label class="field-label">Meta Description</label>
           <textarea class="field-textarea" data-bind="site.description" placeholder="Used in search results and link previews."></textarea>
         </div>
+        <div class="field-group">
+          <label class="field-label">Tech Strip (scrolling marquee)</label>
+          <p class="field-hint">Technologies shown in the marquee near the top of the page.</p>
+          <div class="bullet-list" id="list-techStrip"></div>
+          <button class="add-item-btn" onclick="addBullet('techStrip','list-techStrip')">+ Add Technology</button>
+        </div>
       </section>
 
       <!-- ===== ABOUT PANEL ===== -->
@@ -1131,6 +1137,7 @@ function renderForm(){
 // =====================================================================
 function renderBulletList(path,containerId){
   const container=document.getElementById(containerId);
+  if(!container) return;
   const arr=getPath(DATA,path)||[];
   container.innerHTML='';
   arr.forEach((val,i)=>{
@@ -1162,6 +1169,7 @@ function addBullet(path,containerId){
 // =====================================================================
 function renderRepeaterList(path,containerId,renderFn){
   const container=document.getElementById(containerId);
+  if(!container) return;
   const arr=getPath(DATA,path)||[];
   container.innerHTML='';
   arr.forEach((item,i)=>{
