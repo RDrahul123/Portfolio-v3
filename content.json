@@ -450,6 +450,14 @@
       {
         "label": "Statistics",
         "value": 80
+      },
+      {
+        "label": "DL",
+        "value": 50
+      },
+      {
+        "label": "Gen AI",
+        "value": 50
       }
     ]
   },
