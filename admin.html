@@ -120,6 +120,19 @@ a{color:var(--blue-hi)}
 .login-form .field-inner.u::before{background:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="%238B98AD" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>') center/contain no-repeat}
 .login-form .field-inner.p::before{background:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="%238B98AD" stroke-width="2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>') center/contain no-repeat}
 .login-form input:focus{border-color:var(--blue);box-shadow:0 0 0 4px rgba(91,140,255,.14),0 0 24px -8px rgba(91,140,255,.5);background:#0C1420}
+.pw-toggle{
+  position:absolute;right:8px;top:50%;transform:translateY(-50%);
+  width:34px;height:34px;border:1px solid var(--border-strong);background:rgba(18,27,43,.8);border-radius:9px;
+  color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:1;
+  transition:all .25s var(--ease);
+}
+.pw-toggle svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.pw-toggle .eye-close{display:none}
+.pw-toggle.visible .eye-open{display:none}
+.pw-toggle.visible .eye-close{display:block}
+.pw-toggle:hover{border-color:var(--blue);color:var(--blue-hi);box-shadow:0 6px 16px -6px rgba(91,140,255,.5)}
+.pw-toggle.visible{border-color:rgba(91,140,255,.6);color:var(--blue-hi);background:rgba(91,140,255,.14);box-shadow:0 0 0 3px rgba(91,140,255,.12)}
+.field-inner.p input{padding-right:52px}
 .login-error{color:var(--red);font-size:13px;font-family:var(--mono);min-height:20px;text-align:left}
 .login-btn{
   position:relative;overflow:hidden;background:var(--grad);color:#05070B;border:none;border-radius:100px;
@@ -414,6 +427,10 @@ a{color:var(--blue-hi)}
       </div>
       <div class="field-inner p">
         <input type="password" id="loginPass" placeholder="Password" autocomplete="current-password" required>
+        <button type="button" class="pw-toggle" id="pwToggle" aria-label="Show password" aria-pressed="false" title="Show password">
+          <svg class="eye-open" viewBox="0 0 24 24" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          <svg class="eye-close" viewBox="0 0 24 24" aria-hidden="true"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+        </button>
       </div>
       <div class="login-error" id="loginError"></div>
       <button type="submit" class="login-btn" id="loginBtn">Sign In</button>
@@ -1887,6 +1904,21 @@ function showToast(type,msg){
     };
     window.addEventListener('resize',placeInd);
     requestAnimationFrame(placeInd);
+  }
+
+  /* --- show / hide password --- */
+  const pwToggle=document.getElementById('pwToggle');
+  const pwInput=document.getElementById('loginPass');
+  if(pwToggle && pwInput){
+    pwToggle.addEventListener('click',()=>{
+      const show=pwInput.type==='password';
+      pwInput.type=show?'text':'password';
+      pwToggle.classList.toggle('visible',show);
+      pwToggle.setAttribute('aria-pressed',String(show));
+      pwToggle.setAttribute('aria-label',show?'Hide password':'Show password');
+      pwToggle.title=show?'Hide password':'Show password';
+      pwInput.focus();
+    });
   }
 
   /* --- cursor-follow glow + subtle magnetic pull (desktop only) --- */
