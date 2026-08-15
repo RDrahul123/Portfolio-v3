@@ -369,6 +369,61 @@
           "Linux",
           "Jupyter"
         ]
+      },
+      {
+        "icon": "🧠",
+        "title": "Deep Learning",
+        "tags": [
+          "PyTorch",
+          "TensorFlow/Keras",
+          "CNNs",
+          "RNNs",
+          "LSTMs/GRUs",
+          "Transformers",
+          "Attention mechanisms"
+        ]
+      },
+      {
+        "icon": "🤖",
+        "title": "LLMs",
+        "tags": [
+          "Tokenization",
+          "Embeddings",
+          "Prompt engineering",
+          "LLM inference",
+          "Fine-tuning",
+          "Quantization"
+        ]
+      },
+      {
+        "icon": "📈",
+        "title": "Statistics",
+        "tags": [
+          "Probability",
+          "Descriptive statistics",
+          "Inferential statistics",
+          "Hypothesis testing",
+          "Confidence intervals",
+          "ANOVA",
+          "Correlation",
+          "Regression",
+          "Bayesian statistics",
+          "A/B testing"
+        ]
+      },
+      {
+        "icon": "⚙️",
+        "title": "Gen AI",
+        "tags": [
+          "RAG",
+          "Vector databases",
+          "Function/tool calling",
+          "Agents",
+          "Multimodal AI",
+          "AI workflows",
+          "Structured outputs",
+          "Evaluation"
+        ]
       }
     ],
     "radar": [
