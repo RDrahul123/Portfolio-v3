@@ -621,12 +621,6 @@
         "readTime": "5 min read"
       },
       {
-        "title": "From Notebook to Production: A Practical Checklist",
-        "description": "The gap between 'it works in Jupyter' and 'it works reliably for other people' is mostly about a few boring habits — here's the checklist I actually use.",
-        "category": "MLOps",
-        "readTime": "7 min read"
-      },
-      {
         "title": "Understanding the Bias-Variance Tradeoff",
         "description": "Why a more complex model isn't always a better one, with a simple visual intuition for when you're underfitting versus overfitting.",
         "category": "Machine Learning",
