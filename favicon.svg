@@ -1,9 +1,21 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="14" fill="#F3EEE0"/>
-  <circle cx="32" cy="32" r="24" fill="#FBF8EE" stroke="#20241F" stroke-width="2.2"/>
-  <path d="M32 32 L32 15 M32 32 L17 40 M32 32 L47 40" stroke="#BE4F2C" stroke-width="2.4" stroke-linecap="round"/>
-  <circle cx="32" cy="15" r="4" fill="#20241F"/>
-  <circle cx="17" cy="40" r="4" fill="#20241F"/>
-  <circle cx="47" cy="40" r="4" fill="#20241F"/>
-  <circle cx="32" cy="32" r="5" fill="#BE4F2C"/>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0C111A"/>
+      <stop offset="100%" stop-color="#05070B"/>
+    </linearGradient>
+    <linearGradient id="acc" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#5B8CFF"/>
+      <stop offset="50%" stop-color="#2FD9A8"/>
+      <stop offset="100%" stop-color="#F6BE3C"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="url(#bg)"/>
+  <rect width="64" height="64" rx="14" fill="none" stroke="#1C2737" stroke-width="1.5"/>
+  <circle cx="32" cy="32" r="23" fill="none" stroke="url(#acc)" stroke-width="2.2" opacity="0.9"/>
+  <path d="M32 32 L32 17 M32 32 L19.5 39 M32 32 L44.5 39" stroke="url(#acc)" stroke-width="2.4" stroke-linecap="round"/>
+  <circle cx="32" cy="17" r="4" fill="#8FB6FF"/>
+  <circle cx="19.5" cy="39" r="4" fill="#6CF0C4"/>
+  <circle cx="44.5" cy="39" r="4" fill="#FFD973"/>
+  <circle cx="32" cy="32" r="5" fill="#2FD9A8"/>
 </svg>
