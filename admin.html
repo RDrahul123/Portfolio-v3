@@ -255,12 +255,19 @@ a{color:var(--blue-hi)}
   <div class="admin-layout">
     <nav class="admin-sidebar" id="sidebar">
       <button class="sidebar-link active" onclick="showPanel('hero')"><span class="sidebar-icon">🏠</span>Hero</button>
+      <button class="sidebar-link" onclick="showPanel('site')"><span class="sidebar-icon">🌐</span>Site</button>
       <button class="sidebar-link" onclick="showPanel('about')"><span class="sidebar-icon">👤</span>About</button>
       <button class="sidebar-link" onclick="showPanel('experience')"><span class="sidebar-icon">💼</span>Experience</button>
       <button class="sidebar-link" onclick="showPanel('projects')"><span class="sidebar-icon">🚀</span>Projects</button>
       <button class="sidebar-link" onclick="showPanel('skills')"><span class="sidebar-icon">🧠</span>Skills</button>
+      <button class="sidebar-link" onclick="showPanel('snapshot')"><span class="sidebar-icon">📊</span>Snapshot</button>
+      <button class="sidebar-link" onclick="showPanel('pipeline')"><span class="sidebar-icon">⚙️</span>ML Pipeline</button>
+      <button class="sidebar-link" onclick="showPanel('ailab')"><span class="sidebar-icon">🔬</span>AI Lab</button>
+      <button class="sidebar-link" onclick="showPanel('credentials')"><span class="sidebar-icon">🎓</span>Credentials</button>
+      <button class="sidebar-link" onclick="showPanel('notes')"><span class="sidebar-icon">📝</span>Notes</button>
       <button class="sidebar-link" onclick="showPanel('resume')"><span class="sidebar-icon">📄</span>Resume</button>
       <button class="sidebar-link" onclick="showPanel('contact')"><span class="sidebar-icon">✉️</span>Contact</button>
+      <button class="sidebar-link" onclick="showPanel('github')"><span class="sidebar-icon">🐙</span>GitHub Feed</button>
       <button class="sidebar-link" onclick="showPanel('footer')"><span class="sidebar-icon">🔻</span>Footer</button>
       <button class="sidebar-link" onclick="showPanel('settings')"><span class="sidebar-icon">⚙️</span>GitHub Settings</button>
     </nav>
@@ -288,6 +295,16 @@ a{color:var(--blue-hi)}
         </div>
 
         <div class="field-group">
+          <label class="field-label">Headline</label>
+          <input class="field-input" data-bind="hero.headline" placeholder="Turning raw data into real, measurable impact">
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Supporting Text</label>
+          <textarea class="field-textarea" data-bind="hero.supporting" placeholder="A short paragraph about what you do and how you build."></textarea>
+        </div>
+
+        <div class="field-group">
           <label class="field-label">Eyebrow Badge Text</label>
           <input class="field-input" data-bind="hero.eyebrow" placeholder="Available for opportunities">
         </div>
@@ -302,6 +319,12 @@ a{color:var(--blue-hi)}
           <label class="field-label">Typewriter Phrases</label>
           <div class="bullet-list" id="list-typewriter"></div>
           <button class="add-item-btn" onclick="addBullet('hero.typewriterPhrases','list-typewriter')">+ Add Phrase</button>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Static Role Rotator (fallback if no typewriter phrases)</label>
+          <div class="bullet-list" id="list-roleRotator"></div>
+          <button class="add-item-btn" onclick="addBullet('hero.roleRotator','list-roleRotator')">+ Add Role</button>
         </div>
 
         <div class="field-group">
@@ -323,6 +346,20 @@ a{color:var(--blue-hi)}
           <label class="field-label">Social Links</label>
           <div id="list-socials"></div>
           <button class="add-item-btn" onclick="addRepeaterItem('hero.socials',{label:'🔗 Label',url:'https://'},'list-socials',renderSocialItem)">+ Add Social Link</button>
+        </div>
+      </section>
+
+      <!-- ===== SITE PANEL ===== -->
+      <section class="admin-panel" id="panel-site">
+        <div class="panel-header"><h2>Site</h2><p>Global browser-tab title and search/social description.</p></div>
+
+        <div class="field-group">
+          <label class="field-label">Browser Tab Title</label>
+          <input class="field-input" data-bind="site.title" placeholder="Rahul Dodke — Data Scientist">
+        </div>
+        <div class="field-group">
+          <label class="field-label">Meta Description</label>
+          <textarea class="field-textarea" data-bind="site.description" placeholder="Used in search results and link previews."></textarea>
         </div>
       </section>
 
@@ -476,6 +513,165 @@ a{color:var(--blue-hi)}
         </div>
       </section>
 
+      <!-- ===== SNAPSHOT PANEL ===== -->
+      <section class="admin-panel" id="panel-snapshot">
+        <div class="panel-header"><h2>Snapshot</h2><p>The "snapshot of me" stats strip.</p></div>
+
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label">Eyebrow</label>
+            <input class="field-input" data-bind="snapshot.eyebrow">
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label">Title (normal part)</label>
+            <input class="field-input" data-bind="snapshot.titleNormal">
+          </div>
+          <div class="field-group">
+            <label class="field-label">Title (highlighted part)</label>
+            <input class="field-input" data-bind="snapshot.titleHighlight">
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Stats</label>
+          <div id="list-snapshotStats"></div>
+          <button class="add-item-btn" onclick="addRepeaterItem('snapshot.stats',{num:'0',label:'Label'},'list-snapshotStats',renderStatItem)">+ Add Stat</button>
+        </div>
+      </section>
+
+      <!-- ===== ML PIPELINE PANEL ===== -->
+      <section class="admin-panel" id="panel-pipeline">
+        <div class="panel-header"><h2>ML Pipeline</h2><p>The scroll-highlighted machine-learning workflow steps.</p></div>
+
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label">Eyebrow</label>
+            <input class="field-input" data-bind="mlPipeline.eyebrow">
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label">Title (normal part)</label>
+            <input class="field-input" data-bind="mlPipeline.titleNormal">
+          </div>
+          <div class="field-group">
+            <label class="field-label">Title (highlighted part)</label>
+            <input class="field-input" data-bind="mlPipeline.titleHighlight">
+          </div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Description</label>
+          <input class="field-input" data-bind="mlPipeline.description">
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Stages</label>
+          <div id="list-pipelineStages"></div>
+          <button class="add-item-btn" onclick="addPipelineStage()">+ Add Stage</button>
+        </div>
+      </section>
+
+      <!-- ===== AI LAB PANEL ===== -->
+      <section class="admin-panel" id="panel-ailab">
+        <div class="panel-header"><h2>AI Lab</h2><p>Experiments and explorations you are studying or building.</p></div>
+
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label">Eyebrow</label>
+            <input class="field-input" data-bind="aiLab.eyebrow">
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label">Title (normal part)</label>
+            <input class="field-input" data-bind="aiLab.titleNormal">
+          </div>
+          <div class="field-group">
+            <label class="field-label">Title (highlighted part)</label>
+            <input class="field-input" data-bind="aiLab.titleHighlight">
+          </div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Description</label>
+          <input class="field-input" data-bind="aiLab.description">
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Lab Entries</label>
+          <div id="list-labEntries"></div>
+          <button class="add-item-btn" onclick="addRepeaterItem('aiLab.entries',{status:'LEARNING',title:'New Entry',detail:'Describe what you are exploring...'},'list-labEntries',renderLabEntryItem)">+ Add Entry</button>
+        </div>
+      </section>
+
+      <!-- ===== CREDENTIALS PANEL ===== -->
+      <section class="admin-panel" id="panel-credentials">
+        <div class="panel-header"><h2>Credentials</h2><p>Certifications and courses, with optional credential URLs.</p></div>
+
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label">Eyebrow</label>
+            <input class="field-input" data-bind="credentials.eyebrow">
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label">Title (normal part)</label>
+            <input class="field-input" data-bind="credentials.titleNormal">
+          </div>
+          <div class="field-group">
+            <label class="field-label">Title (highlighted part)</label>
+            <input class="field-input" data-bind="credentials.titleHighlight">
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Certifications</label>
+          <div id="list-certs"></div>
+          <button class="add-item-btn" onclick="addRepeaterItem('credentials.certifications',{name:'Certification',status:'In progress',url:''},'list-certs',renderCertItem)">+ Add Certification</button>
+        </div>
+      </section>
+
+      <!-- ===== NOTES PANEL ===== -->
+      <section class="admin-panel" id="panel-notes">
+        <div class="panel-header"><h2>Notes</h2><p>Short write-ups with categories and read-time filters.</p></div>
+
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label">Eyebrow</label>
+            <input class="field-input" data-bind="notes.eyebrow">
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label">Title (normal part)</label>
+            <input class="field-input" data-bind="notes.titleNormal">
+          </div>
+          <div class="field-group">
+            <label class="field-label">Title (highlighted part)</label>
+            <input class="field-input" data-bind="notes.titleHighlight">
+          </div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Description</label>
+          <input class="field-input" data-bind="notes.description">
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Filter Categories</label>
+          <p class="field-hint">These appear as the "All / ..." filter pills on the site.</p>
+          <div class="bullet-list" id="list-noteCats"></div>
+          <button class="add-item-btn" onclick="addBullet('notes.categories','list-noteCats')">+ Add Category</button>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Articles</label>
+          <div id="list-notesArticles"></div>
+          <button class="add-item-btn" onclick="addRepeaterItem('notes.articles',{title:'Note Title',description:'Description...',category:'Machine Learning',readTime:'5 min read'},'list-notesArticles',renderArticleItem)">+ Add Article</button>
+        </div>
+      </section>
+
       <!-- ===== RESUME PANEL ===== -->
       <section class="admin-panel" id="panel-resume">
         <div class="panel-header"><h2>Resume</h2><p>The download-resume call to action.</p></div>
@@ -553,10 +749,50 @@ a{color:var(--blue-hi)}
         </div>
       </section>
 
+      <!-- ===== GITHUB PANEL ===== -->
+      <section class="admin-panel" id="panel-github">
+        <div class="panel-header"><h2>GitHub Feed</h2><p>Live repository feed on the site.</p></div>
+
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label">Eyebrow</label>
+            <input class="field-input" data-bind="github.eyebrow">
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label">Title (normal part)</label>
+            <input class="field-input" data-bind="github.titleNormal">
+          </div>
+          <div class="field-group">
+            <label class="field-label">Title (highlighted part)</label>
+            <input class="field-input" data-bind="github.titleHighlight">
+          </div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Description</label>
+          <input class="field-input" data-bind="github.description">
+        </div>
+        <div class="field-group">
+          <label class="field-label">GitHub Username</label>
+          <input class="field-input" data-bind="github.username" placeholder="e.g. RDrahul123">
+        </div>
+      </section>
+
       <!-- ===== FOOTER PANEL ===== -->
       <section class="admin-panel" id="panel-footer">
-        <div class="panel-header"><h2>Footer</h2><p>Copyright, tagline, and footer social icons.</p></div>
+        <div class="panel-header"><h2>Footer</h2><p>Brand, role, copyright, tagline, and footer social icons.</p></div>
 
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label">Brand Name</label>
+            <input class="field-input" data-bind="footer.brand" placeholder="Rahul">
+          </div>
+          <div class="field-group">
+            <label class="field-label">Role Line</label>
+            <input class="field-input" data-bind="footer.role" placeholder="Data Scientist · ML Engineer · AI Engineer">
+          </div>
+        </div>
         <div class="field-row">
           <div class="field-group">
             <label class="field-label">Copyright Text</label>
@@ -625,7 +861,7 @@ a{color:var(--blue-hi)}
 
   <div class="savebar">
     <span class="save-status" id="saveStatus"></span>
-    <button class="btn" onclick="reloadFromGitHub()">↻ Reload from GitHub</button>
+    <button class="btn" onclick="hardReload()">↻ Reload from GitHub</button>
     <button class="btn btn-primary" onclick="publishChanges()" id="publishBtn">🚀 Save &amp; Publish</button>
   </div>
 </div>
@@ -753,6 +989,33 @@ async function testConnection(){
 let DATA=null;       // working copy of content.json
 let REMOTE_SHA=null; // sha of the file on GitHub (needed to update)
 const LOCAL_DRAFT_KEY='portfolioAdminDraft';
+const DRAFT_KEY='portfolioAdminDraft_v2';
+let draftTimer=null;
+
+function saveDraft(){
+  if(!DATA) return;
+  clearTimeout(draftTimer);
+  draftTimer=setTimeout(()=>{
+    try{ localStorage.setItem(DRAFT_KEY,JSON.stringify(DATA)); }catch(e){}
+  },800);
+}
+function loadDraft(){
+  try{
+    const raw=localStorage.getItem(DRAFT_KEY);
+    return raw?JSON.parse(raw):null;
+  }catch(e){ return null; }
+}
+function clearDraft(){
+  try{ localStorage.removeItem(DRAFT_KEY); }catch(e){}
+}
+// Autosave any edit or add/move/remove inside the admin shell.
+document.addEventListener('input',e=>{
+  if(DATA && e.target.closest && e.target.closest('#adminShell')) saveDraft();
+});
+document.addEventListener('click',e=>{
+  if(!DATA||!e.target.closest) return;
+  if(e.target.closest('#adminShell') && (e.target.matches('.add-item-btn,.icon-btn,.mm-add'))) saveDraft();
+});
 
 function getPath(obj,path){
   return path.split('.').reduce((o,k)=>(o&&o[k]!==undefined)?o[k]:undefined,obj);
@@ -799,6 +1062,14 @@ async function reloadFromGitHub(){
       statusEl.textContent='Loaded local content.json (set up GitHub Settings to publish)';
       statusEl.className='save-status';
     }
+    if(DATA){
+      const draft=loadDraft();
+      if(draft){
+        DATA=draft;
+        statusEl.textContent='Restored your unsaved draft — click "Save &amp; Publish" to push it live.';
+        statusEl.className='save-status';
+      }
+    }
     renderForm();
     setTimeout(()=>{ if(statusEl.textContent.indexOf('Loaded')===0) statusEl.textContent=''; },4000);
   }catch(err){
@@ -823,7 +1094,10 @@ function renderForm(){
   });
 
   renderBulletList('hero.typewriterPhrases','list-typewriter');
+  renderBulletList('hero.roleRotator','list-roleRotator');
   renderRepeaterList('hero.socials','list-socials',renderSocialItem);
+
+  renderBulletList('techStrip','list-techStrip');
 
   renderRepeaterList('about.stats','list-aboutStats',renderStatItem);
   renderBulletList('about.paragraphs','list-paragraphs');
@@ -836,6 +1110,17 @@ function renderForm(){
 
   renderSkillGroupsList();
   renderRepeaterList('skills.radar','list-radar',renderRadarItem);
+
+  renderRepeaterList('snapshot.stats','list-snapshotStats',renderStatItem);
+
+  renderRepeaterList('mlPipeline.stages','list-pipelineStages',renderStageItem);
+
+  renderRepeaterList('aiLab.entries','list-labEntries',renderLabEntryItem);
+
+  renderRepeaterList('credentials.certifications','list-certs',renderCertItem);
+
+  renderBulletList('notes.categories','list-noteCats');
+  renderRepeaterList('notes.articles','list-notesArticles',renderArticleItem);
 
   renderRepeaterList('contact.methods','list-contactMethods',renderContactMethodItem);
   renderRepeaterList('footer.socials','list-footerSocials',renderFooterSocialItem);
@@ -1026,6 +1311,73 @@ function renderContactMethodItem(item,i,arr,path,containerId){
 }
 
 // =====================================================================
+// NEW PANELS — pipeline stages, lab entries, certs, notes
+// =====================================================================
+function makeSelectField(labelText,options,value,onChange){
+  const group=document.createElement('div');
+  group.className='field-group';group.style.marginBottom='10px';
+  const label=document.createElement('label');label.className='field-label';label.textContent=labelText;
+  const select=document.createElement('select');select.className='field-select';
+  options.forEach(o=>{
+    const opt=document.createElement('option');opt.value=o;opt.textContent=o;
+    if((value||options[0])===o) opt.selected=true;
+    select.appendChild(opt);
+  });
+  select.onchange=()=>onChange(select.value);
+  group.appendChild(label);group.appendChild(select);
+  return group;
+}
+
+// ---- ML pipeline stage item ----
+function renderStageItem(item,i,arr,path,containerId){
+  const wrap=makeRepeaterShell((item.n||'')+' · '+(item.title||'Stage'),arr,i,path,containerId,renderStageItem);
+  wrap.appendChild(makeFieldRow(
+    makeField('Number (e.g. 01)',item.n,v=>{item.n=v;wrap.querySelector('.repeater-item-header span').textContent=(item.n||'')+' · '+(item.title||'Stage');}),
+    makeField('Stage Title',item.title,v=>{item.title=v;wrap.querySelector('.repeater-item-header span').textContent=(item.n||'')+' · '+(item.title||'Stage');})
+  ));
+  wrap.appendChild(makeField('Description',item.text,v=>item.text=v,true));
+  return wrap;
+}
+function addPipelineStage(){
+  DATA.mlPipeline.stages=DATA.mlPipeline.stages||[];
+  const n=String(DATA.mlPipeline.stages.length+1).padStart(2,'0');
+  DATA.mlPipeline.stages.push({n:n,title:'New Stage',text:'Describe this step of the workflow...'});
+  renderRepeaterList('mlPipeline.stages','list-pipelineStages',renderStageItem);
+}
+
+// ---- AI Lab entry item ----
+function renderLabEntryItem(item,i,arr,path,containerId){
+  const wrap=makeRepeaterShell(item.title||'Lab Entry',arr,i,path,containerId,renderLabEntryItem);
+  wrap.appendChild(makeSelectField('Status',['IN PROGRESS','STUDIED','EXPLORING','LEARNING','QUEUED'],item.status,v=>item.status=v));
+  wrap.appendChild(makeField('Title',item.title,v=>{item.title=v;wrap.querySelector('.repeater-item-header span').textContent=item.title||'Lab Entry';}));
+  wrap.appendChild(makeField('Detail',item.detail,v=>item.detail=v,true));
+  return wrap;
+}
+
+// ---- Credential item ----
+function renderCertItem(item,i,arr,path,containerId){
+  const wrap=makeRepeaterShell(item.name||'Certification',arr,i,path,containerId,renderCertItem);
+  wrap.appendChild(makeFieldRow(
+    makeField('Certification Name',item.name,v=>{item.name=v;wrap.querySelector('.repeater-item-header span').textContent=item.name||'Certification';}),
+    makeField('Status',item.status,v=>item.status=v)
+  ));
+  wrap.appendChild(makeField('Credential URL (optional)',item.url,v=>item.url=v));
+  return wrap;
+}
+
+// ---- Notes article item ----
+function renderArticleItem(item,i,arr,path,containerId){
+  const wrap=makeRepeaterShell(item.title||'Note',arr,i,path,containerId,renderArticleItem);
+  wrap.appendChild(makeFieldRow(
+    makeField('Category',item.category,v=>item.category=v),
+    makeField('Read Time',item.readTime,v=>item.readTime=v)
+  ));
+  wrap.appendChild(makeField('Title',item.title,v=>{item.title=v;wrap.querySelector('.repeater-item-header span').textContent=item.title||'Note';}));
+  wrap.appendChild(makeField('Description',item.description,v=>item.description=v,true));
+  return wrap;
+}
+
+// =====================================================================
 // EXPERIENCE (timeline) — bullets within each item
 // =====================================================================
 function renderExperienceList(){
@@ -1202,13 +1554,18 @@ function addSkillGroup(){
 // =====================================================================
 // SIDEBAR NAVIGATION
 // =====================================================================
+function hardReload(){
+  clearDraft();
+  reloadFromGitHub();
+}
+
 function showPanel(name){
   document.querySelectorAll('.admin-panel').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.sidebar-link').forEach(l=>l.classList.remove('active'));
   const panel=document.getElementById('panel-'+name);
   if(panel) panel.classList.add('active');
   const links=[...document.querySelectorAll('.sidebar-link')];
-  const idx=['hero','about','experience','projects','skills','resume','contact','footer','settings'].indexOf(name);
+  const idx=['hero','site','about','experience','projects','skills','snapshot','pipeline','ailab','credentials','notes','resume','contact','github','footer','settings'].indexOf(name);
   if(links[idx]) links[idx].classList.add('active');
   document.querySelector('.admin-main').scrollTo({top:0,behavior:'smooth'});
   window.scrollTo({top:0,behavior:'smooth'});
@@ -1260,6 +1617,7 @@ async function publishChanges(){
     }
     const result=await res.json();
     REMOTE_SHA=result.content.sha;
+    clearDraft();
     statusEl.textContent='✓ Published successfully';
     statusEl.className='save-status ok';
     showToast('ok','Changes published! Your live site will update in a few moments (GitHub Pages may take 1-2 minutes to rebuild).');
