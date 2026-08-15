@@ -406,12 +406,14 @@ html[data-theme="light"] .icon-sun{display:none}
 html[data-theme="dark"] .icon-moon{display:none}
 
 /* full-screen mobile drawer */
+body.menu-open{overflow:hidden}
 .mobile-menu{
   position:fixed;inset:0;z-index:999;background:var(--menu-bg);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);
-  display:flex;flex-direction:column;justify-content:center;padding:44px 34px;overflow-y:auto;
+  display:flex;flex-direction:column;padding:0 34px;overflow-y:auto;
   transform:translateY(-100%);transition:transform .5s var(--ease);
 }
 .mobile-menu.open{transform:translateY(0)}
+.mm-inner{width:100%;margin:auto 0;padding-top:102px;padding-bottom:48px}
 .mm-links{display:flex;flex-direction:column}
 .mm-links a{
   font-family:var(--display);font-size:clamp(24px,7vw,32px);font-weight:700;padding:13px 4px;
@@ -1218,6 +1220,7 @@ footer{background:var(--footer-bg);border-top:1px solid var(--border);padding:48
 </nav>
 
 <div class="mobile-menu" id="mobileMenu">
+  <div class="mm-inner">
   <div class="mm-links">
     <a href="#about" style="--d:.04s">About</a>
     <a href="#experience" style="--d:.08s">Experience</a>
@@ -1234,6 +1237,7 @@ footer{background:var(--footer-bg);border-top:1px solid var(--border);padding:48
       <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
     </button>
     <a href="admin.html" class="btn btn-ghost">⚙ Admin</a>
+  </div>
   </div>
 </div>
 
@@ -2135,10 +2139,12 @@ if(canHover){
   hamburger.addEventListener('click', ()=>{
     const open = hamburger.classList.toggle('open');
     mobileMenu.classList.toggle('open');
+    document.body.classList.toggle('menu-open', open);
     hamburger.setAttribute('aria-expanded', open);
   });
   mobileMenu.querySelectorAll('a').forEach(a=>a.addEventListener('click', ()=>{
     hamburger.classList.remove('open'); mobileMenu.classList.remove('open');
+    document.body.classList.remove('menu-open');
     hamburger.setAttribute('aria-expanded', 'false');
   }));
 
