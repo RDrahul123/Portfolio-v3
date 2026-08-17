@@ -194,6 +194,10 @@
       {
         "key": "web",
         "label": "Web / Full-Stack"
+      },
+      {
+        "key": "dl",
+        "label": "Deep Learning"
       }
     ],
     "items": [
@@ -314,6 +318,31 @@
           {
             "label": "Kaggle →",
             "url": "https://www.kaggle.com/prakrit0566"
+          }
+        ]
+      },
+      {
+        "color": "cyan",
+        "category": "ml,dl,data",
+        "categoryLabel": "Time Series",
+        "title": "Sales Forecasting — Time-Series Analysis",
+        "description": "A web application for forecasting Rossmann store sales using SARIMA, LightGBM, and LSTM models. Features an interactive dashboard with day-of-week patterns, promo impact analysis, and model comparison, plus on-demand forecasting with configurable horizons, promo scenarios, and confidence bands. Users can upload custom CSV datasets and retrain models via a background training pipeline with live progress tracking.",
+        "tags": [
+          "Python",
+          "Time Series",
+          "Deep Learning",
+          "Machine Learning",
+          "Data Analysis",
+          "EDA",
+          "Docker"
+        ],
+        "metrics": [
+          "Metric"
+        ],
+        "links": [
+          {
+            "label": "GitHub →",
+            "url": "https://github.com/RDrahul123/Sales-Forecasting"
           }
         ]
       }
