@@ -1466,12 +1466,29 @@ footer{border-top:1px solid var(--line);padding:32px 0;background:var(--bg)}
 .pipeline-progress{position:sticky;top:56px;height:1px;background:var(--line);margin-bottom:32px}
 .pipeline-progress-fill{height:100%;width:0%;background:var(--accent);transition:width .1s linear}
 
+/* command palette + back-to-top */
+#cmdk-btn{font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--text-muted);border:1px solid var(--line);background:var(--surface);padding:8px 10px;display:inline-flex;gap:8px;align-items:center}
+#cmdk-btn:hover{color:var(--text);border-color:var(--text)}
+#cmdk-btn kbd{font-family:var(--mono);font-size:10px;border:1px solid var(--line);padding:1px 5px;color:var(--text-faint)}
+#cmdk-overlay{position:fixed;inset:0;z-index:10002;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);display:none;align-items:flex-start;justify-content:center;padding-top:14vh}
+#cmdk-overlay.open{display:flex}
+#cmdk{background:var(--surface);border:1px solid var(--border-strong);width:min(560px,92vw);max-height:60vh;overflow:auto}
+#cmdk input{width:100%;background:transparent;border:none;border-bottom:1px solid var(--line);color:var(--text);font-family:var(--mono);font-size:14px;padding:14px 16px;outline:none}
+#cmdk-list{list-style:none;padding:8px}
+#cmdk-list a{display:flex;justify-content:space-between;gap:12px;padding:10px 12px;font-size:14px;color:var(--text-muted)}
+#cmdk-list a small{font-family:var(--mono);font-size:10px;color:var(--text-faint);letter-spacing:.06em}
+#cmdk-list a.active,#cmdk-list a:hover{background:var(--surface-hi);color:var(--text)}
+#to-top{position:fixed;right:18px;bottom:18px;z-index:1000;width:42px;height:42px;border:1px solid var(--line);background:var(--surface);color:var(--text);font-size:18px;display:none;place-items:center}
+#to-top.show{display:grid}
+#to-top:hover{border-color:var(--accent);color:var(--accent)}
+
 </style>
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.27/bundled/lenis.min.js"></script>
+<noscript><style>.reveal{opacity:1!important;transform:none!important}#preloader{display:none!important}.lifecycle-node{opacity:1!important;transform:none!important}.pipeline-stage{opacity:1!important}</style></noscript>
 </head>
 <body>
 
@@ -1530,6 +1547,7 @@ footer{border-top:1px solid var(--line);padding:32px 0;background:var(--bg)}
   </ul>
   <div class="nav-cta">
     <a href="#resume" class="btn btn-ghost" style="padding:9px 18px;font-size:13px">Resume</a>
+    <button id="cmdk-btn" aria-label="Quick navigation (Ctrl+K)">Navigate <kbd>Ctrl K</kbd></button>
     <button class="theme-toggle" id="themeToggle" aria-label="Toggle light / dark theme" title="Toggle theme">
       <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
       <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
@@ -1827,6 +1845,14 @@ footer{border-top:1px solid var(--line);padding:32px 0;background:var(--bg)}
     <a href="admin.html" class="footer-admin">⚙ admin</a>
   </div>
 </footer>
+
+<div id="cmdk-overlay" role="dialog" aria-modal="true" aria-label="Quick navigation">
+  <div id="cmdk">
+    <input id="cmdk-input" type="text" placeholder="Jump to a section…" aria-label="Jump to a section" autocomplete="off">
+    <ul id="cmdk-list"></ul>
+  </div>
+</div>
+<button id="to-top" aria-label="Back to top">↑</button>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
@@ -2286,41 +2312,44 @@ if(canHover){
       el.style.setProperty('--sy', ((e.clientY - r.top)/r.height*100)+'%');
     }, {passive:true});
   }
-  // Lenis + GSAP ScrollTrigger
-  if(window.Lenis && window.gsap){
+  // Lenis + GSAP ScrollTrigger (isolated: animation libs must never break content)
+  try{
+  if(window.Lenis && window.gsap && window.ScrollTrigger){
     const lenis = new Lenis({ duration: 1.1, easing: (t)=>Math.min(1,1.001-Math.pow(2,-10*t)) });
-    function raf(t){ lenis.raf(t); requestAnimationFrame(raf); }
-    requestAnimationFrame(raf);
+    window.__lenis = lenis;
+    lenis.on('scroll', ()=>{ if(window.ScrollTrigger) window.ScrollTrigger.update(); });
     gsap.registerPlugin(ScrollTrigger);
-    // Hero pin
+    gsap.ticker.add((time)=>{ lenis.raf(time*1000); });
+    gsap.ticker.lagSmoothing(0);
+    // Hero parallax (no pin — never hijacks layout)
     gsap.to('.hero-visual', { yPercent: 12, ease:'none', scrollTrigger:{trigger:'#hero', start:'top top', end:'bottom top', scrub:0.6 }});
-    // Section reveals
+    // Section reveals (play once — never hide content on scroll-up)
     gsap.utils.toArray('section').forEach(sec=>{
       const head = sec.querySelector('.section-head');
       if(head){
-        gsap.from(head.querySelectorAll('.eyebrow, h2, p'), { y:24, opacity:0, duration:.8, stagger:.08, ease:'power3.out', scrollTrigger:{trigger:sec, start:'top 82%', toggleActions:'play none none reverse'} });
+        gsap.from(head.querySelectorAll('.eyebrow, h2, p'), { y:24, opacity:0, duration:.8, stagger:.08, ease:'power3.out', scrollTrigger:{trigger:sec, start:'top 82%', once:true} });
       }
     });
-    // Pipeline scrub
+    // Pipeline entrance (play once)
     gsap.utils.toArray('.pipeline-stage').forEach((st,i)=>{
-      gsap.from(st, { x:-24, opacity:0, duration:.6, scrollTrigger:{trigger:st, start:'top 88%', toggleActions:'play none none reverse'}});
+      gsap.from(st, { x:-24, opacity:0, duration:.6, scrollTrigger:{trigger:st, start:'top 88%', once:true}});
     });
-    // Projects horizontal scrub
-    let projGrid = document.querySelector('.project-grid');
-    if(projGrid){
-      gsap.to(projGrid, { x: ()=> -(projGrid.scrollWidth - window.innerWidth + 40), ease:'none', scrollTrigger:{trigger:'#projects', start:'top top', end:'+=120%', pin:true, scrub:0.8, anticipatePin:1 }});
-    }
-    // Observatory scroll morph (unified 3D)
+    // Projects: native horizontal scroll + snap (no pin — pin broke layout below)
+    // subtle parallax on cards instead
+    gsap.utils.toArray('.project-card').forEach((card,i)=>{
+      gsap.from(card, { y:28, opacity:0, duration:.6, ease:'power3.out', scrollTrigger:{trigger:card, start:'top 92%', once:true}});
+    });
+    // Observatory fade (unified 3D)
     const obs = document.getElementById('observatory');
     if(obs){
       obs.classList.add('active');
       ScrollTrigger.create({ trigger:'body', start:'top top', end:'bottom bottom', onUpdate:self=>{
         const p = self.progress;
         obs.style.opacity = p<0.08? '0' : p>0.92? String(1-(p-0.92)*12) : '0.55';
-        // Could drive Three.js uniform here
       }});
     }
   }
+  }catch(e){ console.warn('scroll fx skipped', e); }
 
   /* ---------- SKILLS ---------- */
   const sk = data.skills;
@@ -2593,10 +2622,16 @@ if(canHover){
   }, {rootMargin:'-40% 0px -55% 0px'});
   document.querySelectorAll('section[id]').forEach(s=>spy.observe(s));
 
-  const io = new IntersectionObserver((entries)=>{
+  const io = ('IntersectionObserver' in window) ? new IntersectionObserver((entries)=>{
     entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in-view'); io.unobserve(e.target); } });
-  }, {threshold:.15, rootMargin:'0px 0px -60px 0px'});
-  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+  }, {threshold:.15, rootMargin:'0px 0px -60px 0px'}) : null;
+  if(io){ document.querySelectorAll('.reveal').forEach(el=>io.observe(el)); }
+  else { document.querySelectorAll('.reveal').forEach(el=>el.classList.add('in-view')); }
+  // safety net: never leave reveal-hidden content stuck (e.g. observer quirks)
+  setTimeout(()=>{ document.querySelectorAll('.reveal:not(.in-view)').forEach(el=>{
+    const r = el.getBoundingClientRect();
+    if(r.top < window.innerHeight && r.bottom > 0) el.classList.add('in-view');
+  }); }, 2500);
 
   const pio = new IntersectionObserver((entries)=>{
     entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('active'); } });
@@ -2626,9 +2661,68 @@ if(canHover){
     a.addEventListener('click', (e)=>{
       const id = a.getAttribute('href').slice(1);
       const target = document.getElementById(id);
-      if(target){ e.preventDefault(); target.scrollIntoView({behavior:'smooth', block:'start'}); }
+      if(target){
+        e.preventDefault();
+        if(window.__lenis && window.__lenis.scrollTo){ window.__lenis.scrollTo(target, {offset:-70}); }
+        else { target.scrollIntoView({behavior:'smooth', block:'start'}); }
+      }
     });
   });
+
+  /* ---------- COMMAND PALETTE (Ctrl+K) + BACK-TO-TOP ---------- */
+  try{
+    const cmdkBtn = document.getElementById('cmdk-btn');
+    const cmdkOverlay = document.getElementById('cmdk-overlay');
+    const cmdkInput = document.getElementById('cmdk-input');
+    const cmdkList = document.getElementById('cmdk-list');
+    const toTop = document.getElementById('to-top');
+    const SECTIONS = [
+      ['hero','Top','Index 00'],['about','About','Index 01'],['snapshot','Snapshot','Index 02'],
+      ['ml-pipeline','ML Pipeline','Index 03'],['skills','Skills','Index 04'],['projects','Projects','Index 05'],
+      ['ai-lab','AI Lab','Index 06'],['experience','Experience','Index 07'],['credentials','Credentials','Index 08'],
+      ['notes','Notes','Index 09'],['github','GitHub','Index 10'],['resume','Resume','Index 11'],['contact','Contact','Index 12']
+    ];
+    function scrollToId(id){
+      const t = document.getElementById(id);
+      if(!t) return;
+      if(window.__lenis && window.__lenis.scrollTo){ window.__lenis.scrollTo(t, {offset:-64}); }
+      else { t.scrollIntoView({behavior:'smooth', block:'start'}); }
+    }
+    function renderPalette(filter){
+      if(!cmdkList) return;
+      const q = (filter||'').toLowerCase();
+      const hits = SECTIONS.filter(s=> s[1].toLowerCase().includes(q) || s[0].includes(q));
+      cmdkList.innerHTML = hits.length
+        ? hits.map((s,i)=>`<li><a href="#${s[0]}" data-target="${s[0]}" class="${i===0?'active':''}"><span>${s[1]}</span><small>${s[2]}</small></a></li>`).join('')
+        : `<li><span style="display:block;padding:10px 12px;color:var(--text-faint);font-size:13px">No matches</span></li>`;
+    }
+    function openPalette(){ if(!cmdkOverlay) return; renderPalette(''); cmdkOverlay.classList.add('open'); if(cmdkInput){ cmdkInput.value=''; setTimeout(()=>cmdkInput.focus(), 30); } }
+    function closePalette(){ if(cmdkOverlay) cmdkOverlay.classList.remove('open'); }
+    if(cmdkBtn) cmdkBtn.addEventListener('click', openPalette);
+    document.addEventListener('keydown', (e)=>{
+      if((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k'){ e.preventDefault(); cmdkOverlay && cmdkOverlay.classList.contains('open') ? closePalette() : openPalette(); }
+      else if(e.key === 'Escape'){ closePalette(); }
+      else if(cmdkOverlay && cmdkOverlay.classList.contains('open') && e.key === 'Enter'){
+        const first = cmdkList && cmdkList.querySelector('a');
+        if(first){ e.preventDefault(); closePalette(); scrollToId(first.dataset.target); }
+      }
+    });
+    if(cmdkOverlay) cmdkOverlay.addEventListener('click', (e)=>{ if(e.target === cmdkOverlay) closePalette(); });
+    if(cmdkInput) cmdkInput.addEventListener('input', ()=>renderPalette(cmdkInput.value));
+    if(cmdkList) cmdkList.addEventListener('click', (e)=>{
+      const a = e.target.closest('a[data-target]');
+      if(a){ e.preventDefault(); closePalette(); scrollToId(a.dataset.target); }
+    });
+    if(toTop){
+      window.addEventListener('scroll', ()=>{
+        toTop.classList.toggle('show', window.scrollY > 700);
+      }, {passive:true});
+      toTop.addEventListener('click', ()=>{
+        if(window.__lenis && window.__lenis.scrollTo){ window.__lenis.scrollTo(0); }
+        else { window.scrollTo({top:0, behavior:'smooth'}); }
+      });
+    }
+  }catch(e){ console.warn('palette skipped', e); }
 
   /* ---------- 3D HERO — NEURAL NETWORK (Data -> Hidden -> Output) ---------- */
   (function(){
