@@ -1482,6 +1482,32 @@ footer{border-top:1px solid var(--line);padding:32px 0;background:var(--bg)}
 #to-top.show{display:grid}
 #to-top:hover{border-color:var(--accent);color:var(--accent)}
 
+/* READABILITY — calm background noise, lift text contrast */
+:root{--text-muted:#B8B2AC;--text-faint:#8E8880}
+html[data-theme="light"]{--text-muted:#57534E;--text-faint:#7A756F}
+#bgCanvas{opacity:.22!important}
+.aurora-blob{opacity:.07!important}
+.aurora-blob.a3{opacity:.05!important}
+body::before{opacity:.32}
+body::after{opacity:.02}
+.deco svg{opacity:.2!important}
+.dot-field{opacity:.28}
+#observatory{opacity:0}
+section{position:relative}
+section .container::before{
+  content:'';position:absolute;inset:-24px -32px;pointer-events:none;z-index:-1;
+  background:radial-gradient(60% 50% at 50% 0%,rgba(7,7,8,.55),transparent 100%);
+}
+html[data-theme="light"] section .container::before{
+  background:radial-gradient(60% 50% at 50% 0%,rgba(255,252,245,.7),transparent 100%);
+}
+.hero-support,.about-block p,.xp-bullets li,.project-desc,.lab-card-text,.note-desc,.gh-card-desc,.section-head p,.contact-layout > div:first-child p,.resume-panel p,.pipeline-stage-text{
+  text-shadow:0 1px 12px rgba(0,0,0,.45);
+}
+html[data-theme="light"] .hero-support,html[data-theme="light"] .about-block p,html[data-theme="light"] .xp-bullets li,html[data-theme="light"] .project-desc,html[data-theme="light"] .lab-card-text,html[data-theme="light"] .note-desc,html[data-theme="light"] .gh-card-desc,html[data-theme="light"] .section-head p,html[data-theme="light"] .contact-layout > div:first-child p,html[data-theme="light"] .resume-panel p,html[data-theme="light"] .pipeline-stage-text{
+  text-shadow:none;
+}
+
 </style>
 
 
@@ -2345,7 +2371,7 @@ if(canHover){
       obs.classList.add('active');
       ScrollTrigger.create({ trigger:'body', start:'top top', end:'bottom bottom', onUpdate:self=>{
         const p = self.progress;
-        obs.style.opacity = p<0.08? '0' : p>0.92? String(1-(p-0.92)*12) : '0.55';
+        obs.style.opacity = p<0.08? '0' : p>0.92? String(1-(p-0.92)*12) : '0.32';
       }});
     }
   }
