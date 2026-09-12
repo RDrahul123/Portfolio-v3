@@ -943,10 +943,10 @@ if(canHover){
     gsap.ticker.add((time)=>{ lenis.raf(time*1000); });
     gsap.ticker.lagSmoothing(0);
     gsap.to('.hero-visual', { yPercent: 12, ease:'none', scrollTrigger:{trigger:'#hero', start:'top top', end:'bottom top', scrub:0.6 }});
-    gsap.from('#heroHeadline', { clipPath:'inset(0 0 100% 0)', y:36, opacity:0, duration:1.15, ease:'power3.out', delay:.15 });
-    gsap.from('#hero h1, #heroSupport, #hero .hero-ctas, #hero .hero-socials, #heroBadge, #heroGreeting, #roleRotator', { y:24, opacity:0, duration:.8, stagger:.09, ease:'power3.out', delay:.35 });
-    gsap.to('#hero .hero-grid > div:first-child', { yPercent:-16, opacity:.12, ease:'none', scrollTrigger:{trigger:'#hero', start:'top top', end:'bottom top', scrub:0.8} });
-    gsap.to('#hero .hero-visual', { scale:1.06, opacity:.9, ease:'none', scrollTrigger:{trigger:'#hero', start:'top top', end:'bottom top', scrub:0.8} });
+    gsap.from('.hero-grid > div:first-child', { clipPath:'inset(0 0 100% 0)', y:36, duration:1.15, ease:'power3.out', delay:.15 });
+    gsap.from('#heroBadge, #heroGreeting, #roleRotator, #heroHeadline, #heroSupport, #hero .hero-ctas, #hero .hero-socials', { y:24, opacity:0, duration:.8, stagger:.09, ease:'power3.out', delay:.45 });
+    gsap.to('.hero-grid > div:first-child', { yPercent:-16, opacity:.9, ease:'none', scrollTrigger:{trigger:'#hero', start:'top top', end:'bottom top', scrub:0.8} });
+    gsap.to('.hero-visual', { scale:1.06, opacity:.9, ease:'none', scrollTrigger:{trigger:'#hero', start:'top top', end:'bottom top', scrub:0.8} });
     gsap.utils.toArray('section').forEach(sec=>{
       const head = sec.querySelector('.section-head');
       if(head){
@@ -1234,6 +1234,13 @@ if(canHover){
     const r = el.getBoundingClientRect();
     if(r.top < window.innerHeight && r.bottom > 0) el.classList.add('in-view');
   }); }, 2500);
+  if(!(window.gsap && window.ScrollTrigger && window.__lenis)){
+    setTimeout(()=>{
+      document.querySelectorAll('.section-head, .hero-grid > div:first-child, .pipeline-stage, .project-card, .skill-card, .lab-card, .xp-entry').forEach(el=>{
+        if(getComputedStyle(el).opacity === '0'){ el.style.opacity = '1'; el.style.transform = 'none'; el.style.clipPath = 'none'; }
+      });
+    }, 300);
+  }
 
   const pio = new IntersectionObserver((entries)=>{
     entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('active'); } });
