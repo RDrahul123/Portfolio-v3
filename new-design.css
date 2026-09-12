@@ -1051,27 +1051,6 @@ footer{background:var(--footer-bg);border-top:1px solid var(--border);padding:48
   .nav-mark span{max-width:96px}
 }
 /* ============================================================
-   HIGH-END DESIGN — Double-Bezel Cards
-   ============================================================ */
-.project-card,.skill-card,.lab-card,.gh-card,.contact-method{
-  background:transparent!important;border:none!important;padding:0!important;
-}
-.project-card-inner,.skill-card-inner,.lab-card-inner,.gh-card-inner,.contact-method-inner{
-  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
-  padding:28px;height:100%;position:relative;overflow:hidden;
-  box-shadow:inset 0 1px 0 var(--border),0 8px 32px -12px var(--shadow-hi);
-  transition:all .5s var(--ease);
-}
-.project-card:hover .project-card-inner,
-.skill-card:hover .skill-card-inner,
-.lab-card:hover .lab-card-inner,
-.gh-card:hover .gh-card-inner,
-.contact-method:hover .contact-method-inner{
-  border-color:var(--border-strong);
-  box-shadow:inset 0 1px 0 var(--border-strong),0 16px 48px -16px var(--shadow-lo);
-  transform:translateY(-2px);
-}
-/* ============================================================
    HIGH-END DESIGN — Button-in-Button Pattern
    ============================================================ */
 .btn{
