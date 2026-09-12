@@ -59,7 +59,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="new-design.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
@@ -414,6 +414,11 @@ function esc(s){
   return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 function stripEmoji(s){ return String(s||'').replace(/^[\u{1F000}-\u{1FFFF}\u{2600}-\u{27BF}\u{FE0F}\u{2702}-\u{27B0}\s]+/u,''); }
+function splitEmoji(s){
+  var m = String(s||'').match(/^[\u{1F000}-\u{1FFFF}\u{2600}-\u{27BF}\u{FE0F}\u{2702}-\u{27B0}\s]+/u);
+  if(!m || !m[0]) return ['●', String(s||'')];
+  return [m[0].replace(/\s+$/,''), String(s||'').slice(m[0].length)];
+}
 
 /* ---------- theme ---------- */
 window.setThemeHooks = window.setThemeHooks || [];
@@ -702,10 +707,11 @@ function render(data){
   var soc = $('heroSocials');
   soc.innerHTML = '';
   (hero.socials||[]).forEach(function(s){
+    var ic = splitEmoji(s.label);
     var a = document.createElement('a');
     a.className = 'soc-chip';
     a.href = s.url; a.target = '_blank'; a.rel = 'noopener';
-    a.innerHTML = '<span class="soc-dot">●</span>' + esc(stripEmoji(s.label));
+    a.innerHTML = '<span class="soc-ic">' + esc(ic[0]) + '</span>' + esc(ic[1].trim() || s.label);
     soc.appendChild(a);
   });
 
@@ -740,7 +746,7 @@ function render(data){
   (about.pillars||[]).forEach(function(p){
     pg.insertAdjacentHTML('beforeend',
       '<div class="pillar tilt-card" data-tilt="3">' +
-      '<span class="pillar-ic">' + esc(stripEmoji(p.icon||'')) + '</span>' +
+      '<span class="pillar-ic">' + esc(p.icon||'') + '</span>' +
       '<h4>' + esc(p.title) + '</h4><p>' + esc(p.text) + '</p><div class="tilt-sheen"></div></div>');
   });
 
@@ -776,6 +782,7 @@ function render(data){
     pr.insertAdjacentHTML('beforeend',
       '<div class="pipe-stage">' +
       '<span class="pipe-num">' + esc(st.n) + '</span>' +
+      '<span class="pipe-ic">' + esc(st.icon||'') + '</span>' +
       '<div class="pipe-body"><h3>' + esc(st.title) + '</h3><p>' + esc(st.text) + '</p></div>' +
       '</div>');
   });
@@ -790,7 +797,7 @@ function render(data){
     var wide = i % 3 === 0 || i === 5;
     sgrid.insertAdjacentHTML('beforeend',
       '<div class="skill-card tilt-card ' + (wide ? 'wide' : '') + '" data-tilt="4">' +
-      '<div class="skill-head"><span class="skill-ic">' + esc(stripEmoji(g.icon||'')) + '</span><span class="skill-title">' + esc(g.title) + '</span><span class="skill-num">0' + (i+1) + '</span></div>' +
+      '<div class="skill-head"><span class="skill-ic">' + esc(g.icon||'') + '</span><span class="skill-title">' + esc(g.title) + '</span><span class="skill-num">0' + (i+1) + '</span></div>' +
       '<div class="skill-tags">' + (g.tags||[]).map(function(t){ return '<span class="skill-tag">' + esc(t) + '</span>'; }).join('') + '</div>' +
       '<div class="tilt-sheen"></div></div>');
   });
@@ -816,7 +823,7 @@ function render(data){
     var full = (p.description||'').indexOf('\n\n') !== -1 ? p.description : '';
     track.insertAdjacentHTML('beforeend',
       '<article class="proj-card tilt-card" data-tilt="3" data-cat="' + esc(p.category) + '">' +
-      '<div class="proj-card-top"><span class="proj-idx">0' + (i+1) + '</span><span class="proj-cat-tag">' + esc(p.categoryLabel||'') + '</span></div>' +
+      '<div class="proj-card-top"><span class="proj-idx">0' + (i+1) + '</span><span class="proj-ic">' + esc(p.icon||'') + '</span><span class="proj-cat-tag">' + esc(p.categoryLabel||'') + '</span></div>' +
       '<h3 class="proj-title">' + esc(p.title) + '</h3>' +
       '<p class="proj-desc">' + esc(short) + '</p>' +
       (full ? '<p class="proj-desc proj-full">' + esc(full) + '</p><button class="proj-more" data-idx="' + i + '">read more →</button>' : '') +
@@ -971,7 +978,7 @@ function render(data){
   (ct.methods||[]).forEach(function(m){
     cm.insertAdjacentHTML('beforeend',
       '<a class="contact-method tilt-card" data-tilt="3" href="' + esc(m.url) + '" target="_blank" rel="noopener">' +
-      '<span class="cm-ic">' + esc(stripEmoji(m.icon||'')) + '</span>' +
+      '<span class="cm-ic">' + esc(m.icon||'') + '</span>' +
       '<div><span class="cm-label">' + esc(m.label) + '</span>' +
       '<span class="cm-value">' + esc(m.value) + '</span></div>' +
       '<span class="cm-arrow">→</span><div class="tilt-sheen"></div></a>');
@@ -983,7 +990,8 @@ function render(data){
   $('footerBrand').title = ft.role || '';
   var fl = $('footerLinks'); fl.innerHTML = '';
   (ft.socials||[]).forEach(function(s){
-    fl.insertAdjacentHTML('beforeend','<a href="' + esc(s.url) + '" target="_blank" rel="noopener">' + esc(stripEmoji(s.label)) + '</a>');
+    var ic = splitEmoji(s.icon || s.label);
+    fl.insertAdjacentHTML('beforeend','<a href="' + esc(s.url) + '" target="_blank" rel="noopener"><span class="soc-ic">' + esc(ic[0]) + '</span>' + esc(stripEmoji(s.label)) + '</a>');
   });
   $('footerCopy').textContent = ft.copyright || '© ' + new Date().getFullYear() + ' Rahul Dodke. All rights reserved.';
   $('footerStack').textContent = ft.stack || '';
@@ -1034,7 +1042,7 @@ function initFX(data){
   /* smooth scroll */
   var lenis = null;
   if(window.Lenis && !reduceMotion){
-    lenis = new Lenis({ duration: 0.95, smoothWheel: true, easing: function(t){ return Math.min(1, 1.001 - Math.pow(2, -10*t)); } });
+    lenis = new Lenis({ duration: 0.7, smoothWheel: true, syncTouch: true, easing: function(t){ return Math.min(1, 1.001 - Math.pow(2, -10*t)); } });
     window.__lenis = lenis;
     lenis.on('scroll', function(){ ScrollTrigger.update(); });
     gsap.ticker.add(function(time){ lenis.raf(time * 1000); });
@@ -1296,7 +1304,7 @@ function renderMobile(open){
   var hero = DATA.hero || {};
   var navLinks = [['About','#about'],['Method','#pipeline'],['Work','#projects'],['Lab','#ai-lab'],['Journey','#experience'],['Contact','#contact'],['Resume','#resume']];
   var rows = navLinks.map(function(l){ return '<a href="' + l[1] + '"><span class="mm-num">' + String(navLinks.indexOf(l)+1).padStart(2,'0') + '</span>' + l[0] + '</a>'; }).join('');
-  var soc = (hero.socials||[]).map(function(s){ return '<a href="' + esc(s.url) + '" target="_blank" rel="noopener">' + esc(stripEmoji(s.label)) + '</a>'; }).join('');
+  var soc = (hero.socials||[]).map(function(s){ var ic = splitEmoji(s.label); return '<a href="' + esc(s.url) + '" target="_blank" rel="noopener"><span class="soc-ic">' + esc(ic[0]) + '</span>' + esc(ic[1].trim() || s.label) + '</a>'; }).join('');
   mm.innerHTML = '<div class="mm-inner">' +
     '<div class="mm-links">' + rows + '</div>' +
     (soc ? '<div class="mm-soc">' + soc + '</div>' : '') +

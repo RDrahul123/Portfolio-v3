@@ -203,6 +203,7 @@
     "items": [
       {
         "color": "ember",
+        "icon": "🧠",
         "category": "ml",
         "categoryLabel": "Deep Learning",
         "title": "Sentiment Analysis Studio",
@@ -225,6 +226,7 @@
       },
       {
         "color": "cyan",
+        "icon": "📊",
         "category": "ml,dl,data",
         "categoryLabel": "Time Series",
         "title": "Sales Forecasting — Time-Series Analysis",
@@ -253,6 +255,7 @@
       },
       {
         "color": "cyan",
+        "icon": "📈",
         "category": "data",
         "categoryLabel": "Data Analysis",
         "title": "Sales Analysis Dashboard",
@@ -276,6 +279,7 @@
       },
       {
         "color": "purple",
+        "icon": "💹",
         "category": "ml",
         "categoryLabel": "Machine Learning",
         "title": "Financial Market Trend Predictor",
@@ -299,6 +303,7 @@
         ]
       },
       {
+        "icon": "💼",
         "category": "web",
         "categoryLabel": "Web / Full-Stack",
         "title": "Personal Portfolio (GitHub Pages)",
@@ -326,6 +331,7 @@
       },
       {
         "color": "cyan",
+        "icon": "⚡",
         "category": "ml",
         "categoryLabel": "Machine Learning",
         "title": "Competitive ML & DSA Practice",
@@ -600,41 +606,49 @@
     "stages": [
       {
         "n": "01",
+        "icon": "🗃️",
         "title": "Data Collection",
         "text": "Pulling from SQL databases, APIs, and raw files — understanding what the data actually represents before touching it."
       },
       {
         "n": "02",
+        "icon": "🧹",
         "title": "Data Cleaning",
         "text": "Standardized preprocessing with Python and Pandas — handling nulls, duplicates, and inconsistencies."
       },
       {
         "n": "03",
+        "icon": "🔍",
         "title": "EDA",
         "text": "Exploratory analysis to find patterns, outliers, and relationships before choosing an approach."
       },
       {
         "n": "04",
+        "icon": "🛠️",
         "title": "Feature Engineering",
         "text": "Shaping raw fields into signals a model can actually learn from."
       },
       {
         "n": "05",
+        "icon": "🤖",
         "title": "Model Training",
         "text": "Scikit-learn and TensorFlow for classification, regression, and clustering tasks, iterated against a validation set."
       },
       {
         "n": "06",
+        "icon": "📈",
         "title": "Evaluation",
         "text": "Checking accuracy against the metric that actually matters for the business question — not just the easiest one to report."
       },
       {
         "n": "07",
+        "icon": "🚀",
         "title": "Deployment",
         "text": "Shipping via dashboards (Power BI/Tableau) or lightweight apps so non-technical stakeholders can use the output directly."
       },
       {
         "n": "08",
+        "icon": "🔄",
         "title": "Monitoring",
         "text": "Auditing data quality on an ongoing basis — in my current role this catches ~95% of data discrepancies before they become decisions."
       }
