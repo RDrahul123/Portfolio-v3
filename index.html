@@ -950,13 +950,19 @@ if(canHover){
       gsap.fromTo(sec, {perspective:800, rotateX:1.5}, {rotateX:0, ease:'power2.out', scrollTrigger:{trigger:sec, start:'top 90%', end:'top 30%', scrub:0.5}});
     });
     gsap.utils.toArray('.pipeline-stage').forEach((st,i)=>{
-      gsap.from(st, { x:-24, opacity:0, duration:.6, scrollTrigger:{trigger:st, start:'top 88%', once:true}});
+      gsap.from(st, { x:-24, opacity:0, duration:.6, ease:'power3.out', scrollTrigger:{trigger:st, start:'top 88%', once:true}});
     });
     gsap.utils.toArray('.project-card').forEach((card,i)=>{
-      gsap.from(card, { y:28, opacity:0, rotateY:4, duration:.6, ease:'power3.out', scrollTrigger:{trigger:card, start:'top 92%', once:true}});
+      gsap.from(card, { y:40, opacity:0, rotateY:6, scale:0.95, duration:.7, ease:'power3.out', scrollTrigger:{trigger:card, start:'top 92%', once:true}, delay:(i%3)*0.1});
     });
-    gsap.utils.toArray('.skill-card, .lab-card').forEach((card)=>{
-      gsap.from(card, { y:20, opacity:0, rotateY:-3, duration:.6, ease:'power3.out', scrollTrigger:{trigger:card, start:'top 92%', once:true}});
+    gsap.utils.toArray('.skill-card, .lab-card').forEach((card,i)=>{
+      gsap.from(card, { y:30, opacity:0, rotateY:-4, scale:0.96, duration:.65, ease:'power3.out', scrollTrigger:{trigger:card, start:'top 92%', once:true}, delay:(i%4)*0.08});
+    });
+    gsap.utils.toArray('.gh-card').forEach((card,i)=>{
+      gsap.from(card, { y:24, opacity:0, scale:0.97, duration:.6, ease:'power3.out', scrollTrigger:{trigger:card, start:'top 94%', once:true}, delay:i*0.06});
+    });
+    gsap.utils.toArray('.contact-method').forEach((el,i)=>{
+      gsap.from(el, { y:20, opacity:0, duration:.5, ease:'power3.out', scrollTrigger:{trigger:el, start:'top 95%', once:true}, delay:i*0.08});
     });
   }
   }catch(e){ console.warn('scroll fx skipped', e); }
@@ -967,9 +973,11 @@ if(canHover){
   $('skillsDesc').textContent = sk.description;
   $('skillsGrid').innerHTML = sk.groups.map(g=>`
     <div class="skill-card reveal">
-      <div class="skill-card-head"><span class="skill-card-icon">${g.icon}</span><span class="skill-card-title">${g.title}</span></div>
-      <div class="skill-tag-list">${g.tags.map(t=>`<span class="skill-tag">${t}</span>`).join('')}</div>
-      <div class="tilt-glare"></div>
+      <div class="skill-card-inner">
+        <div class="skill-card-head"><span class="skill-card-icon">${g.icon}</span><span class="skill-card-title">${g.title}</span></div>
+        <div class="skill-tag-list">${g.tags.map(t=>`<span class="skill-tag">${t}</span>`).join('')}</div>
+        <div class="tilt-glare"></div>
+      </div>
     </div>`).join('');
   apply3DTilt('.skill-card', {strength:6});
 
@@ -1024,17 +1032,19 @@ if(canHover){
     const hasMore = (p.description||'').includes('\n\n');
     return `
     <div class="project-card reveal show" data-category="${p.category}">
-      <div class="project-card-top">
-        <span class="project-num">0${i+1}</span>
-        <span class="project-cat">${p.categoryLabel}</span>
-        <div class="project-title">${p.title}</div>
-        <div class="project-desc">${shortDesc}</div>
-        ${hasMore ? `<div class="project-desc-full">${p.description}</div><button class="project-readmore" data-idx="${i}">Read full description →</button>` : ''}
-        <div class="project-metrics">${(p.metrics||[]).map(m=>`<span class="project-metric">${m}</span>`).join('')}</div>
+      <div class="project-card-inner">
+        <div class="project-card-top">
+          <span class="project-num">0${i+1}</span>
+          <span class="project-cat">${p.categoryLabel}</span>
+          <div class="project-title">${p.title}</div>
+          <div class="project-desc">${shortDesc}</div>
+          ${hasMore ? `<div class="project-desc-full">${p.description}</div><button class="project-readmore" data-idx="${i}">Read full description →</button>` : ''}
+          <div class="project-metrics">${(p.metrics||[]).map(m=>`<span class="project-metric">${m}</span>`).join('')}</div>
+        </div>
+        <div class="project-tags">${(p.tags||[]).map(t=>`<span class="project-tag">#${t.replace(/\s+/g,'')}</span>`).join('')}</div>
+        <div class="project-card-foot">${(p.links||[]).map(l=>`<a href="${l.url}" target="_blank" rel="noopener">${l.label}</a>`).join('')}</div>
+        <div class="tilt-glare"></div>
       </div>
-      <div class="project-tags">${(p.tags||[]).map(t=>`<span class="project-tag">#${t.replace(/\s+/g,'')}</span>`).join('')}</div>
-      <div class="project-card-foot">${(p.links||[]).map(l=>`<a href="${l.url}" target="_blank" rel="noopener">${l.label}</a>`).join('')}</div>
-      <div class="tilt-glare"></div>
     </div>`;
   }).join('');
   apply3DTilt('.project-card', {strength:5});
@@ -1066,10 +1076,12 @@ if(canHover){
   $('labDesc').textContent = lab.description;
   $('labGrid').innerHTML = lab.entries.map(e=>`
     <div class="lab-card reveal">
-      <span class="lab-status ${e.status.toLowerCase().replace(/\s+/g,'-')}">${e.status}</span>
-      <div class="lab-card-title">${e.title}</div>
-      <div class="lab-card-text">${e.detail}</div>
-      <div class="tilt-glare"></div>
+      <div class="lab-card-inner">
+        <span class="lab-status ${e.status.toLowerCase().replace(/\s+/g,'-')}">${e.status}</span>
+        <div class="lab-card-title">${e.title}</div>
+        <div class="lab-card-text">${e.detail}</div>
+        <div class="tilt-glare"></div>
+      </div>
     </div>`).join('');
   apply3DTilt('.lab-card', {strength:6});
 
@@ -1144,12 +1156,14 @@ if(canHover){
       if(!filtered.length){ $('ghGrid').innerHTML = '<div class="gh-loading">No public repositories found.</div>'; return; }
       $('ghGrid').innerHTML = filtered.map(r => `
         <a href="${r.html_url}" target="_blank" rel="noopener" class="gh-card" style="display:block">
-          <div class="gh-card-name">${r.name}</div>
-          <div class="gh-card-desc">${r.description ? r.description : 'No description provided.'}</div>
-          <div class="gh-card-meta">
-            ${r.language ? `<span>${r.language}</span>` : ''}
-            <span>★ ${r.stargazers_count}</span>
-            <span>Updated ${new Date(r.updated_at).toLocaleDateString('en-US', {month:'short', year:'numeric'})}</span>
+          <div class="gh-card-inner">
+            <div class="gh-card-name">${r.name}</div>
+            <div class="gh-card-desc">${r.description ? r.description : 'No description provided.'}</div>
+            <div class="gh-card-meta">
+              ${r.language ? `<span>${r.language}</span>` : ''}
+              <span>★ ${r.stargazers_count}</span>
+              <span>Updated ${new Date(r.updated_at).toLocaleDateString('en-US', {month:'short', year:'numeric'})}</span>
+            </div>
           </div>
         </a>`).join('');
     })
@@ -1174,8 +1188,10 @@ if(canHover){
   badgeEl.style.display = ct.badge ? '' : 'none';
   $('contactMethods').innerHTML = ct.methods.map(m=>`
     <a class="contact-method" href="${m.url}" target="_blank" rel="noopener">
-      <div class="contact-method-icon">${m.icon}</div>
-      <div><div class="contact-method-label">${m.label}</div><div class="contact-method-value">${m.value}</div></div>
+      <div class="contact-method-inner">
+        <div class="contact-method-icon">${m.icon}</div>
+        <div><div class="contact-method-label">${m.label}</div><div class="contact-method-value">${m.value}</div></div>
+      </div>
     </a>`).join('');
 
   const ft = data.footer;
