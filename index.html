@@ -256,7 +256,7 @@
   </div>
 </section>
 
-<!-- ═══════════ PROJECTS (HORIZONTAL) ═══════════ -->
+<!-- ═══════════ PROJECTS (HORIZONTAL RAIL) ═══════════ -->
 <section id="projects" class="sec proj-sec">
   <div class="proj-head container">
     <div class="proj-head-left">
@@ -269,10 +269,13 @@
     </div>
   </div>
 
-  <div class="proj-viewport" id="projViewport">
-    <div class="proj-track" id="projTrack"></div>
+  <div class="proj-rack" id="projRack">
+    <div class="proj-sticky">
+      <div class="proj-glide" id="projGlide"></div>
+      <div class="proj-bar" aria-hidden="true"><i id="projBarFill"></i></div>
+      <div class="proj-hint"><span>scroll to explore →</span></div>
+    </div>
   </div>
-  <div class="proj-hint"><span>drag / scroll →</span></div>
 </section>
 
 <!-- ═══════════ AI LAB ═══════════ -->
@@ -817,12 +820,12 @@ function render(data){
     pf.appendChild(b);
   });
 
-  var track = $('projTrack'); track.innerHTML = '';
+  var track = $('projGlide'); track.innerHTML = '';
   (proj.items||[]).forEach(function(p, i){
     var short = (p.description||'').split('\n\n')[0];
     var full = (p.description||'').indexOf('\n\n') !== -1 ? p.description : '';
     track.insertAdjacentHTML('beforeend',
-      '<article class="proj-card tilt-card" data-tilt="3" data-cat="' + esc(p.category) + '">' +
+      '<article class="proj-card tilt-card" data-tilt="3" data-c="' + ((p.color||'cyan').toLowerCase()) + '" data-cat="' + esc(p.category) + '">' +
       '<div class="proj-card-top"><span class="proj-idx">0' + (i+1) + '</span><span class="proj-ic">' + esc(p.icon||'') + '</span><span class="proj-cat-tag">' + esc(p.categoryLabel||'') + '</span></div>' +
       '<h3 class="proj-title">' + esc(p.title) + '</h3>' +
       '<p class="proj-desc">' + esc(short) + '</p>' +
@@ -854,7 +857,10 @@ function render(data){
       $$('.proj-card').forEach(function(c){
         c.style.display = (key === 'all' || (c.dataset.cat||'').split(',').indexOf(key) !== -1) ? '' : 'none';
       });
-      setTimeout(function(){ ScrollTrigger.refresh(); }, 60);
+      setTimeout(function(){
+        if(typeof projRailRefresh === 'function') projRailRefresh();
+        ScrollTrigger.refresh();
+      }, 60);
     });
   });
 
@@ -1245,41 +1251,60 @@ function initFX(data){
     if(reduceMotion) draw(1);
   })();
 
-  /* projects horizontal scroll */
-  var viewport = $('projViewport');
-  if(viewport && !isMobile && !reduceMotion){
-    var trackEl = $('projTrack');
-    var done = false;
-    function computeDistance(){
-      return Math.max(0, trackEl.scrollWidth - window.innerWidth + 40);
+  /* projects horizontal rail (sticky scrub — no pin-spacer) */
+  var railGlide = $('projGlide');
+  var railRack = $('projRack');
+  if(railGlide && railRack && !isMobile){
+    var railTween = null, railDist = 0;
+
+    function measureRail(){
+      var edge = Math.max(20, Math.round(window.innerWidth * 0.07));
+      railDist = Math.max(0, railGlide.scrollWidth - window.innerWidth + edge);
+      var screens = Math.max(2, Math.ceil((railGlide.scrollWidth + 80) / Math.max(720, window.innerWidth)));
+      railRack.style.height = screens + '00vh';
+      return railDist;
     }
-    var tl = gsap.to(trackEl, {
-      x: function(){ return -computeDistance(); },
-      ease: 'none',
-      scrollTrigger: {
-        trigger: '.proj-sec', start: 'top top', end: function(){ return '+=' + computeDistance(); },
-        pin: true, scrub: 1, anticipatePin: 1, invalidateOnRefresh: true,
-        onLeave: function(){ done = true; }, onEnterBack: function(){ done = false; }
-      }
-    });
-    window.addEventListener('resize', function(){ if(tl && tl.scrollTrigger) tl.scrollTrigger.refresh(); });
+
+    function projRailRefresh(){
+      measureRail();
+      if(railTween && railTween.scrollTrigger) railTween.scrollTrigger.refresh();
+    }
+    window.projRailRefresh = projRailRefresh;
+
+    if(!reduceMotion){
+      measureRail();
+      railTween = gsap.to(railGlide, {
+        x: function(){ return -railDist; },
+        ease: 'none',
+        scrollTrigger: {
+          trigger: railRack, start: 'top top', end: 'bottom bottom',
+          scrub: 0.7, invalidateOnRefresh: true,
+          onUpdate: function(self){
+            var fill = $('projBarFill');
+            if(fill) fill.style.transform = 'scaleX(' + self.progress.toFixed(3) + ')';
+          }
+        }
+      });
+      window.addEventListener('resize', function(){ if(railTween && railTween.scrollTrigger) railTween.scrollTrigger.refresh(); });
+    } else {
+      document.body.classList.add('rm-rail');
+    }
   }
 
-  /* toggling light theme: re-tint radar via class */
-  setThemeHooks.push(function(){ ScrollTrigger.refresh(); });
-
-  /* scroll progress for pinned horizontal — kill hint when done */
-  var hint = document.querySelector('.proj-hint');
-  if(hint){
-    gsap.fromTo(hint, { opacity: 0 }, {
+  /* scroll progress for horizontal rail — fade hint on start & end */
+  var hintEl = document.querySelector('.proj-hint');
+  if(hintEl){
+    gsap.fromTo(hintEl, { opacity: 0 }, {
       opacity: 1, duration: 0.5,
-      scrollTrigger: { trigger: '.proj-sec', start: 'top 60%', end: 'top 20%', scrub: 0.5 }
+      scrollTrigger: { trigger: '.proj-sec', start: 'top center', end: 'top top', scrub: 0.5 }
     });
   }
+
+  /* toggling light theme: re-measure rail + refresh triggers */
+  setThemeHooks.push(function(){ if(typeof projRailRefresh === 'function') projRailRefresh(); ScrollTrigger.refresh(); });
 
   /* resume parallax */
-  if(!reduceMotion){
-    gsap.from('.resume-echo', { yPercent: 60, opacity: 0.15, ease: 'none',
+  if(!reduceMotion){    gsap.from('.resume-echo', { yPercent: 60, opacity: 0.15, ease: 'none',
       scrollTrigger: { trigger: '#resume', start: 'top bottom', end: 'center center', scrub: 0.5 } });
     gsap.fromTo('.resume-panel', { scale: 0.94 }, { scale: 1, ease: 'none',
       scrollTrigger: { trigger: '#resume', start: 'top 85%', end: 'top 30%', scrub: 0.6 } });
