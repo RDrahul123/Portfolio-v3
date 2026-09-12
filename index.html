@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#050510">
+<meta name="theme-color" content="#050506">
 <title>Rahul | Data Scientist & AI Engineer</title>
 <meta name="description" content="Rahul is a Data Scientist, Machine Learning Engineer and AI Engineer building intelligent systems using machine learning, NLP, Generative AI and data.">
 <link rel="canonical" href="https://rdrahul123.github.io/Portfolio-v3/">
@@ -30,7 +30,7 @@
     var t = localStorage.getItem('theme') || (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
     document.documentElement.setAttribute('data-theme', t);
     var m = document.querySelector('meta[name="theme-color"]');
-    if(m) m.setAttribute('content', t === 'light' ? '#f8f9fc' : '#050510');
+    if(m) m.setAttribute('content', t === 'light' ? '#f6f7f9' : '#050506');
   }catch(e){
     document.documentElement.setAttribute('data-theme','dark');
   }
@@ -81,6 +81,8 @@
 <noscript><style>.reveal{opacity:1!important;transform:none!important}#preloader{display:none!important}.lifecycle-node{opacity:1!important;transform:none!important}.pipeline-stage{opacity:1!important}</style></noscript>
 </head>
 <body>
+
+<a class="skip-link" href="#hero">Skip to content</a>
 
 <canvas id="bgCanvas" aria-hidden="true"></canvas>
 
@@ -208,9 +210,9 @@
   <svg viewBox="0 0 1200 60" preserveAspectRatio="none">
     <defs>
       <linearGradient id="circuitGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="#5B8CFF"/>
-        <stop offset="50%" stop-color="#2FD9A8"/>
-        <stop offset="100%" stop-color="#F6BE3C"/>
+        <stop offset="0%" stop-color="#22d3ee"/>
+        <stop offset="50%" stop-color="#5eead4"/>
+        <stop offset="100%" stop-color="#7dd3fc"/>
       </linearGradient>
     </defs>
     <path id="circuitPath" d="M0,30 L180,30 L210,10 L260,10 L290,30 L520,30 L550,50 L610,50 L640,30 L900,30 L930,12 L980,12 L1010,30 L1200,30"/>
@@ -278,7 +280,7 @@
 <section id="snapshot">
   <div class="container">
     <div class="section-head reveal" style="margin-bottom:36px">
-      <div class="eyebrow c-green" id="snapshotEyebrow">Snapshot</div>
+      <div class="eyebrow c-green eye-hide" id="snapshotEyebrow">Snapshot</div>
       <h2 id="snapshotHeading"></h2>
     </div>
   </div>
@@ -288,7 +290,7 @@
 <section id="ml-pipeline">
   <div class="container">
     <div class="section-head reveal">
-      <div class="eyebrow c-yellow" id="pipelineEyebrow">Methodology</div>
+      <div class="eyebrow c-yellow eye-hide" id="pipelineEyebrow">Methodology</div>
       <h2 id="pipelineHeading"></h2>
       <p id="pipelineDesc"></p>
     </div>
@@ -300,7 +302,7 @@
 <section id="skills">
   <div class="container">
     <div class="section-head reveal">
-      <div class="eyebrow c-blue" id="skillsEyebrow">Expertise</div>
+      <div class="eyebrow c-blue eye-hide" id="skillsEyebrow">Expertise</div>
       <h2 id="skillsHeading"></h2>
       <p id="skillsDesc"></p>
     </div>
@@ -334,7 +336,7 @@
 <section id="ai-lab">
   <div class="container">
     <div class="section-head reveal">
-      <div class="eyebrow c-yellow" id="labEyebrow">AI Lab</div>
+      <div class="eyebrow c-yellow eye-hide" id="labEyebrow">AI Lab</div>
       <h2 id="labHeading"></h2>
       <p id="labDesc"></p>
     </div>
@@ -345,7 +347,7 @@
 <section id="experience">
   <div class="container">
     <div class="section-head reveal">
-      <div class="eyebrow c-blue" id="expEyebrow">Career</div>
+      <div class="eyebrow c-blue eye-hide" id="expEyebrow">Career</div>
       <h2 id="expHeading"></h2>
       <p id="expDesc"></p>
     </div>
@@ -356,7 +358,7 @@
 <section id="credentials">
   <div class="container">
     <div class="section-head reveal">
-      <div class="eyebrow c-green" id="credEyebrow">Credentials</div>
+      <div class="eyebrow c-green eye-hide" id="credEyebrow">Credentials</div>
       <h2 id="credHeading"></h2>
     </div>
     <div class="cred-grid">
@@ -368,7 +370,7 @@
 <section id="notes">
   <div class="container">
     <div class="section-head reveal">
-      <div class="eyebrow c-yellow" id="notesEyebrow">Notes</div>
+      <div class="eyebrow c-yellow eye-hide" id="notesEyebrow">Notes</div>
       <h2 id="notesHeading"></h2>
       <p id="notesDesc"></p>
     </div>
@@ -383,7 +385,7 @@
 <section id="github">
   <div class="container">
     <div class="section-head reveal">
-      <div class="eyebrow c-blue" id="ghEyebrow">Built In Public</div>
+      <div class="eyebrow c-blue eye-hide" id="ghEyebrow">Built In Public</div>
       <h2 id="ghHeading"></h2>
       <p id="ghDesc"></p>
     </div>
@@ -479,7 +481,7 @@ const rootEl = document.documentElement;
 const metaTheme = document.querySelector('meta[name="theme-color"]');
 function setTheme(t, persist){
   rootEl.setAttribute('data-theme', t);
-  if(metaTheme) metaTheme.setAttribute('content', t === 'light' ? '#f8f9fc' : '#050510');
+  if(metaTheme) metaTheme.setAttribute('content', t === 'light' ? '#f6f7f9' : '#050506');
   if(persist !== false){ try{ localStorage.setItem('theme', t); }catch(e){} }
   (window.setThemeHooks || []).forEach(fn => { try{ fn(t); }catch(e){} });
 }
@@ -526,8 +528,8 @@ if(canHover){
     new THREE.TorusGeometry(0.7, 0.25, 8, 12),
     new THREE.DodecahedronGeometry(0.8, 0)
   ];
-  const paletteD = [0x7c3aed, 0x38bdf8, 0xf59e0b, 0xec4899, 0x10b981];
-  const paletteL = [0x6d28d9, 0x0284c7, 0xd97706, 0xdb2777, 0x059669];
+  const paletteD = [0x22d3ee, 0x7dd3fc, 0x5eead4, 0xbae6fd, 0x67e8f9];
+  const paletteL = [0x0891b2, 0x0284c7, 0x0d9488, 0x0369a1, 0x0e7490];
 
   for(let i = 0; i < 12; i++){
     const geo = geometries[i % geometries.length];
@@ -561,7 +563,7 @@ if(canHover){
     });
   }
 
-  const lineMat = new THREE.LineBasicMaterial({color: 0x7c3aed, transparent: true, opacity: 0.03});
+  const lineMat = new THREE.LineBasicMaterial({color: 0x22d3ee, transparent: true, opacity: 0.03});
   const lineGeo = new THREE.BufferGeometry();
   const linePos = new Float32Array(200 * 6);
   lineGeo.setAttribute('position', new THREE.BufferAttribute(linePos, 3));
@@ -622,7 +624,7 @@ if(canHover){
     shapes.forEach((s, i) => {
       s.mat.color.setHex(pal[i % pal.length]);
     });
-    lineMat.color.setHex(light ? 0x6d28d9 : 0x7c3aed);
+    lineMat.color.setHex(light ? 0x0891b2 : 0x22d3ee);
   });
 })();
 
@@ -941,28 +943,26 @@ if(canHover){
     gsap.ticker.add((time)=>{ lenis.raf(time*1000); });
     gsap.ticker.lagSmoothing(0);
     gsap.to('.hero-visual', { yPercent: 12, ease:'none', scrollTrigger:{trigger:'#hero', start:'top top', end:'bottom top', scrub:0.6 }});
-    gsap.from('#heroHeadline', { rotateX:60, opacity:0, duration:1.2, ease:'power3.out', transformOrigin:'top center', delay:0.3});
+    gsap.from('#heroHeadline', { clipPath:'inset(0 0 100% 0)', y:36, opacity:0, duration:1.15, ease:'power3.out', delay:.15 });
+    gsap.from('#hero h1, #heroSupport, #hero .hero-ctas, #hero .hero-socials, #heroBadge, #heroGreeting, #roleRotator', { y:24, opacity:0, duration:.8, stagger:.09, ease:'power3.out', delay:.35 });
+    gsap.to('#hero .hero-grid > div:first-child', { yPercent:-16, opacity:.12, ease:'none', scrollTrigger:{trigger:'#hero', start:'top top', end:'bottom top', scrub:0.8} });
+    gsap.to('#hero .hero-visual', { scale:1.06, opacity:.9, ease:'none', scrollTrigger:{trigger:'#hero', start:'top top', end:'bottom top', scrub:0.8} });
     gsap.utils.toArray('section').forEach(sec=>{
       const head = sec.querySelector('.section-head');
       if(head){
-        gsap.from(head.querySelectorAll('.eyebrow, h2, p'), { y:24, opacity:0, duration:.8, stagger:.08, ease:'power3.out', scrollTrigger:{trigger:sec, start:'top 82%', once:true} });
+        gsap.from(head, { y:44, opacity:0, duration:1, ease:'power4.out', scrollTrigger:{trigger:sec, start:'top 82%', once:true} });
+        gsap.from(head.querySelectorAll(':scope > *'), { y:22, opacity:0, duration:.7, stagger:.09, ease:'power3.out', scrollTrigger:{trigger:head, start:'top 84%', once:true} });
       }
-      gsap.fromTo(sec, {perspective:800, rotateX:1.5}, {rotateX:0, ease:'power2.out', scrollTrigger:{trigger:sec, start:'top 90%', end:'top 30%', scrub:0.5}});
+      gsap.fromTo(sec, {perspective:800, rotateX:1.2}, {rotateX:0, ease:'power2.out', scrollTrigger:{trigger:sec, start:'top 90%', end:'top 30%', scrub:0.5}});
     });
     gsap.utils.toArray('.pipeline-stage').forEach((st,i)=>{
-      gsap.from(st, { x:-24, opacity:0, duration:.6, ease:'power3.out', scrollTrigger:{trigger:st, start:'top 88%', once:true}});
+      gsap.from(st, { x:-24, opacity:0, duration:.6, scrollTrigger:{trigger:st, start:'top 88%', once:true}});
     });
     gsap.utils.toArray('.project-card').forEach((card,i)=>{
-      gsap.from(card, { y:40, opacity:0, rotateY:6, scale:0.95, duration:.7, ease:'power3.out', scrollTrigger:{trigger:card, start:'top 92%', once:true}, delay:(i%3)*0.1});
+      gsap.from(card, { y:28, opacity:0, rotateY:4, duration:.6, ease:'power3.out', scrollTrigger:{trigger:card, start:'top 92%', once:true}});
     });
-    gsap.utils.toArray('.skill-card, .lab-card').forEach((card,i)=>{
-      gsap.from(card, { y:30, opacity:0, rotateY:-4, scale:0.96, duration:.65, ease:'power3.out', scrollTrigger:{trigger:card, start:'top 92%', once:true}, delay:(i%4)*0.08});
-    });
-    gsap.utils.toArray('.gh-card').forEach((card,i)=>{
-      gsap.from(card, { y:24, opacity:0, scale:0.97, duration:.6, ease:'power3.out', scrollTrigger:{trigger:card, start:'top 94%', once:true}, delay:i*0.06});
-    });
-    gsap.utils.toArray('.contact-method').forEach((el,i)=>{
-      gsap.from(el, { y:20, opacity:0, duration:.5, ease:'power3.out', scrollTrigger:{trigger:el, start:'top 95%', once:true}, delay:i*0.08});
+    gsap.utils.toArray('.skill-card, .lab-card').forEach((card)=>{
+      gsap.from(card, { y:20, opacity:0, rotateY:-3, duration:.6, ease:'power3.out', scrollTrigger:{trigger:card, start:'top 92%', once:true}});
     });
   }
   }catch(e){ console.warn('scroll fx skipped', e); }
@@ -1332,7 +1332,7 @@ if(canHover){
     const isSmall = window.innerWidth < 700;
 
     const scene = new THREE.Scene();
-    scene.fog = new THREE.Fog(0x050510, 8, 18);
+    scene.fog = new THREE.Fog(0x050506, 8, 18);
     const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
     camera.position.set(0, 0, 5.5);
 
@@ -1343,7 +1343,7 @@ if(canHover){
 
     const knotGeo = new THREE.TorusKnotGeometry(1.1, 0.35, 128, 24, 2, 3);
     const knotMat = new THREE.MeshBasicMaterial({
-      color: 0x7c3aed,
+      color: 0x22d3ee,
       wireframe: true,
       transparent: true,
       opacity: 0.35
@@ -1353,7 +1353,7 @@ if(canHover){
 
     const innerGeo = new THREE.IcosahedronGeometry(0.5, 2);
     const innerMat = new THREE.MeshBasicMaterial({
-      color: 0x7c3aed,
+      color: 0x22d3ee,
       wireframe: true,
       transparent: true,
       opacity: 0.2
@@ -1361,7 +1361,7 @@ if(canHover){
     const inner = new THREE.Mesh(innerGeo, innerMat);
     scene.add(inner);
 
-    const ringColors = [0x7c3aed, 0xf59e0b, 0x38bdf8];
+    const ringColors = [0x22d3ee, 0x5eead4, 0x7dd3fc];
     const orbitRings = [];
     ringColors.forEach((color, ri) => {
       const count = 30 + ri * 10;
@@ -1483,9 +1483,9 @@ if(canHover){
 
     function applyHeroTheme(theme){
       const light = theme === 'light';
-      const violet = light ? 0x6d28d9 : 0x7c3aed;
-      const amber = light ? 0xd97706 : 0xf59e0b;
-      const sky = light ? 0x0284c7 : 0x38bdf8;
+      const violet = light ? 0x0891b2 : 0x22d3ee;
+      const amber = light ? 0x0d9488 : 0x5eead4;
+      const sky = light ? 0x0284c7 : 0x7dd3fc;
       const cols = [violet, amber, sky];
       knotMat.color.setHex(violet);
       innerMat.color.setHex(violet);
@@ -1498,7 +1498,7 @@ if(canHover){
         tc[i*3] = c.r; tc[i*3+1] = c.g; tc[i*3+2] = c.b;
       }
       trailGeo.attributes.color.needsUpdate = true;
-      scene.fog = new THREE.Fog(light ? 0xf8f9fc : 0x050510, 8, 18);
+      scene.fog = new THREE.Fog(light ? 0xf6f7f9 : 0x050506, 8, 18);
     }
     applyHeroTheme(rootEl.getAttribute('data-theme'));
     window.setThemeHooks.push(applyHeroTheme);
