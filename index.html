@@ -210,7 +210,7 @@
   </div>
 </section>
 
-<!-- ═══════════ PIPELINE ═══════════ -->
+<!-- ═══════════ PIPELINE — METHODOLOGY ═══════════ -->
 <section id="pipeline" class="sec">
   <div class="container">
     <div class="sec-head-row">
@@ -221,10 +221,35 @@
       <p class="sec-desc reveal-y" id="pipeDesc"></p>
     </div>
 
-    <div class="pipe-wrap">
-      <div class="pipe-line"><span id="pipeFill"></span></div>
-      <div class="pipe-node-static" id="pipeNodeStatic">▲</div>
-      <div class="pipe-rail" id="pipeRail"></div>
+    <div class="method">
+      <div class="method-rail">
+        <div class="pipe-line"><span id="pipeFill"></span></div>
+        <div class="pipe-node-static" id="pipeNodeStatic">◆</div>
+        <div class="method-stages" id="methodStages"></div>
+      </div>
+
+      <div class="method-view">
+        <div class="pipe-line method-view-line"><span id="viewFill"></span></div>
+        <div class="method-panel">
+          <div class="mv-top">
+            <span class="mv-ic" id="mvIcon"></span>
+            <span class="mv-num" id="mvNum"></span>
+            <span class="mv-progress" id="mvProgress"></span>
+          </div>
+          <h3 class="mv-title" id="mvTitle"></h3>
+          <p class="mv-text" id="mvText"></p>
+          <div class="mv-tele" aria-hidden="true">
+            <span class="mv-tele-label" id="mvTeleLabel"></span>
+            <span class="mv-bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+          </div>
+          <div class="mv-dots" id="mvDots"></div>
+          <div class="mv-nav">
+            <button class="mv-btn" id="mvPrev" aria-label="Previous stage">← prev</button>
+            <button class="mv-btn mv-play" id="mvPlay" aria-label="Auto-run stages">▶ auto-run</button>
+            <button class="mv-btn" id="mvNext" aria-label="Next stage">next →</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -256,7 +281,7 @@
   </div>
 </section>
 
-<!-- ═══════════ PROJECTS (HORIZONTAL RAIL) ═══════════ -->
+<!-- ═══════════ PROJECTS ═══════════ -->
 <section id="projects" class="sec proj-sec">
   <div class="proj-head container">
     <div class="proj-head-left">
@@ -268,13 +293,8 @@
       <div class="proj-filters" id="projFilters"></div>
     </div>
   </div>
-
-  <div class="proj-rack" id="projRack">
-    <div class="proj-sticky">
-      <div class="proj-glide" id="projGlide"></div>
-      <div class="proj-bar" aria-hidden="true"><i id="projBarFill"></i></div>
-      <div class="proj-hint"><span>scroll to explore →</span></div>
-    </div>
+  <div class="container">
+    <div class="proj-grid" id="projGrid"></div>
   </div>
 </section>
 
@@ -780,14 +800,16 @@ function render(data){
   if(pipe.eyebrow) qs('#pipeline .eyebrow').textContent = '03 — ' + pipe.eyebrow;
   $('pipeHeading').innerHTML = esc(pipe.titleNormal||'') + '<span class="txt-grad">' + esc(pipe.titleHighlight||'') + '</span>';
   $('pipeDesc').textContent = pipe.description || '';
-  var pr = $('pipeRail'); pr.innerHTML = '';
-  (pipe.stages||[]).forEach(function(st){
+  var pr = $('methodStages'); pr.innerHTML = '';
+  window.__pipeStages = pipe.stages || [];
+  (pipe.stages||[]).forEach(function(st, i){
     pr.insertAdjacentHTML('beforeend',
-      '<div class="pipe-stage">' +
+      '<button type="button" class="method-stage" data-i="' + i + '" aria-pressed="false">' +
       '<span class="pipe-num">' + esc(st.n) + '</span>' +
       '<span class="pipe-ic">' + esc(st.icon||'') + '</span>' +
-      '<div class="pipe-body"><h3>' + esc(st.title) + '</h3><p>' + esc(st.text) + '</p></div>' +
-      '</div>');
+      '<span class="pipe-body"><b>' + esc(st.title) + '</b><small>' + esc(st.tagline||'') + '</small></span>' +
+      '<span class="pipe-arrow">→</span>' +
+      '</button>');
   });
 
   /* skills */
@@ -820,7 +842,7 @@ function render(data){
     pf.appendChild(b);
   });
 
-  var track = $('projGlide'); track.innerHTML = '';
+  var track = $('projGrid'); track.innerHTML = '';
   (proj.items||[]).forEach(function(p, i){
     var short = (p.description||'').split('\n\n')[0];
     var full = (p.description||'').indexOf('\n\n') !== -1 ? p.description : '';
@@ -853,14 +875,11 @@ function render(data){
     btn.addEventListener('click', function(){
       $$('.proj-filter').forEach(function(b){ b.classList.remove('active'); });
       btn.classList.add('active');
-      var key = btn.dataset.key;
+      var cat = btn.dataset.key;
       $$('.proj-card').forEach(function(c){
-        c.style.display = (key === 'all' || (c.dataset.cat||'').split(',').indexOf(key) !== -1) ? '' : 'none';
+        c.style.display = (cat === 'all' || (c.dataset.cat||'').split(',').indexOf(cat) !== -1) ? '' : 'none';
       });
-      setTimeout(function(){
-        if(typeof projRailRefresh === 'function') projRailRefresh();
-        ScrollTrigger.refresh();
-      }, 60);
+      setTimeout(function(){ ScrollTrigger.refresh(); }, 60);
     });
   });
 
@@ -1047,7 +1066,7 @@ function initFX(data){
 
   /* smooth scroll */
   var lenis = null;
-  if(window.Lenis && !reduceMotion){
+  if(window.Lenis && !reduceMotion && !isMobile){
     lenis = new Lenis({ duration: 0.7, smoothWheel: true, syncTouch: true, easing: function(t){ return Math.min(1, 1.001 - Math.pow(2, -10*t)); } });
     window.__lenis = lenis;
     lenis.on('scroll', function(){ ScrollTrigger.update(); });
@@ -1153,36 +1172,137 @@ function initFX(data){
         scrollTrigger: { trigger: '#snapshot', start: 'top 70%', end: 'top 18%', scrub: 0.6 } });
   }
 
-  /* pipeline progress */
-  var pipeWrap = document.querySelector('.pipe-wrap');
-  if(pipeWrap && !reduceMotion){
-    var pipeStages = $$('.pipe-stage');
-    var fill = $('pipeFill');
-    gsap.to(fill, {
-      scaleY: 1, ease: 'none',
-      transformOrigin: 'top center',
-      scrollTrigger: {
-        trigger: '.pipe-wrap', start: 'top 75%', end: 'bottom 60%', scrub: 0.6,
-        onUpdate: function(self){
-          var prog = self.progress;
-          pipeStages.forEach(function(st, i){
-            var on = prog >= (i / Math.max(pipeStages.length - 1, 1));
-            st.classList.toggle('lit', on);
-            if(i === Math.floor(prog * (pipeStages.length - 1))) st.classList.add('current');
-            else st.classList.remove('current');
-          });
+  /* pipeline — interactive stage viewer
+     scroll drives the spine + syncs which stage is live
+     click / prev / next / dots / auto-run all drive the viewer + smooth scroll */
+  var stages = window.__pipeStages || [];
+  var stageEls = $$('.method-stage');
+  var mvTitle = $('mvTitle'), mvText = $('mvText'), mvIcon = $('mvIcon'),
+      mvNum = $('mvNum'), mvProg = $('mvProgress'), mvDots = $('mvDots'),
+      mvTele = $('mvTeleLabel'), mvPlay = $('mvPlay');
+  var activeIdx = -1, running = false, runTimer = null, typer = null;
+
+  if(stageEls.length && mvDots){
+    mvDots.innerHTML = stages.map(function(st, i){
+      return '<button type="button" class="mv-dot" data-i="' + i + '" aria-label="Stage ' + (st.n||(i+1)) + '"></button>';
+    }).join('');
+
+    function setActiveUI(i){
+      activeIdx = i;
+      stageEls.forEach(function(b, k){
+        b.classList.toggle('current', k === i);
+        b.setAttribute('aria-pressed', k === i ? 'true' : 'false');
+      });
+      Array.prototype.slice.call(mvDots.children).forEach(function(d, k){
+        d.classList.toggle('on', k === i);
+        d.classList.toggle('done', k < i);
+      });
+      var st = stages[i] || {};
+      mvIcon.innerHTML = esc(st.icon || '');
+      mvNum.textContent = 'STAGE ' + (st.n || ('0' + (i + 1)));
+      mvProg.textContent = Math.round((i / Math.max(stages.length - 1, 1)) * 100) + '% THROUGH · ' + (i + 1) + '/' + stages.length;
+      mvTele.textContent = (st.title || 'processing').toUpperCase() + ' · RUNNING';
+    }
+
+    function stopType(){
+      if(typer){ clearInterval(typer); typer = null; }
+    }
+    function typeText(text, fast){
+      stopType();
+      mvText.textContent = '';
+      if(reduceMotion){ mvText.textContent = text; return; }
+      var i = 0, step = fast ? 4 : 2;
+      typer = setInterval(function(){
+        i += step;
+        mvText.textContent = text.slice(0, i);
+        if(i >= text.length){ clearInterval(typer); typer = null; }
+      }, fast ? 12 : 18);
+    }
+
+    function flashPanel(){
+      var pan = document.querySelector('.method-panel');
+      if(!pan) return;
+      pan.classList.remove('mv-flash');
+      void pan.offsetWidth;
+      pan.classList.add('mv-flash');
+    }
+
+    function selectStage(i, opts){
+      opts = opts || {};
+      i = Math.max(0, Math.min(stages.length - 1, i));
+      if(i === activeIdx && !opts.type){ if(opts.scroll) scrollToStage(i); return; }
+      var st = stages[i] || {};
+      setActiveUI(i);
+      if(opts.type || opts.flash) flashPanel();
+      var titleDelay = 0;
+      if(opts.type){ typeText(esc(st.text || ''), false); titleDelay = 160; }
+      else { stopType(); mvText.textContent = esc(st.text || ''); }
+      mvTitle.style.opacity = 0;
+      setTimeout(function(){ mvTitle.textContent = esc(st.title || ''); mvTitle.style.opacity = 1; }, titleDelay);
+      if(opts.scroll) scrollToStage(i);
+    }
+
+    function scrollToStage(i){
+      var target = stageEls[i];
+      if(!target) return;
+      var rect = target.getBoundingClientRect();
+      var recenter = rect.top < 60 || rect.top > window.innerHeight * 0.75;
+      if(!recenter) return;
+      var y = rect.top + window.pageYOffset - 130;
+      var lenis = window.__lenis;
+      if(lenis) lenis.scrollTo(y, { offset: -130 });
+      else window.scrollTo({ top: y, behavior: 'smooth' });
+    }
+
+    function stopRun(){
+      running = false;
+      if(runTimer){ clearInterval(runTimer); runTimer = null; }
+      if(mvPlay) mvPlay.textContent = '▶ auto-run';
+      mvPlay && mvPlay.classList.remove('running');
+    }
+    function startRun(){
+      running = true;
+      mvPlay && (mvPlay.textContent = '⏸ stop');
+      mvPlay && mvPlay.classList.add('running');
+      runTimer = setInterval(function(){
+        var nxt = activeIdx >= stages.length - 1 ? 0 : activeIdx + 1;
+        selectStage(nxt, { type: true, scroll: true });
+      }, 3400);
+    }
+
+    stageEls.forEach(function(b, i){
+      b.addEventListener('click', function(){ stopRun(); selectStage(i, { type: true, scroll: true }); });
+    });
+    Array.prototype.slice.call(mvDots.children).forEach(function(d){
+      d.addEventListener('click', function(){ stopRun(); selectStage(parseInt(d.dataset.i, 10), { type: true, scroll: true }); });
+    });
+    if($('mvPrev')) $('mvPrev').addEventListener('click', function(){ stopRun(); var was = activeIdx; selectStage(activeIdx - 1, { type: true, scroll: true }); if(activeIdx === was) stopRun(); });
+    if($('mvNext')) $('mvNext').addEventListener('click', function(){ stopRun(); selectStage(activeIdx + 1, { type: true, scroll: true }); });
+    if(mvPlay) mvPlay.addEventListener('click', function(){ if(running) stopRun(); else startRun(); });
+
+    selectStage(0, { type: reduceMotion, scroll: false });
+
+    if(!reduceMotion){
+      gsap.to([$('pipeFill'), $('viewFill')], {
+        scaleY: 1, ease: 'none', transformOrigin: 'top center',
+        scrollTrigger: {
+          trigger: '.method', start: 'top 70%', end: 'bottom 55%', scrub: 0.6,
+          onUpdate: function(self){
+            var prog = self.progress;
+            var idx = Math.round(prog * Math.max(stages.length - 1, 1));
+            if(idx !== activeIdx && !running && mvText) selectStage(idx, { type: false, scroll: false });
+            var node = $('pipeNodeStatic');
+            if(node) node.style.top = (8 + prog * 84) + '%';
+          }
         }
-      }
-    });
-    gsap.from('.pipe-node-static', {
-      ease: 'none',
-      scrollTrigger: { trigger: '.pipe-wrap', start: 'top 75%', end: 'bottom 60%', scrub: 0.6,
-        onUpdate: function(self){ $('pipeNodeStatic').style.top = (12 + self.progress*88) + '%'; } }
-    });
-    pipeStages.forEach(function(st){
-      gsap.from(st, { y: 60, opacity: 0, duration: 0.9, ease: 'power3.out',
-        scrollTrigger: { trigger: st, start: 'top 90%', once: true } });
-    });
+      });
+      stageEls.forEach(function(st){
+        gsap.from(st, { y: 40, opacity: 0, duration: 0.8, ease: 'power3.out',
+          scrollTrigger: { trigger: st, start: 'top 92%', once: true } });
+      });
+      gsap.from('.method-view', { y: 60, opacity: 0, duration: 1, ease: 'power3.out',
+        scrollTrigger: { trigger: '.method-view', start: 'top 85%', once: true } });
+    }
   }
 
   /* radar chart draw */
@@ -1251,57 +1371,8 @@ function initFX(data){
     if(reduceMotion) draw(1);
   })();
 
-  /* projects horizontal rail (sticky scrub — no pin-spacer) */
-  var railGlide = $('projGlide');
-  var railRack = $('projRack');
-  if(railGlide && railRack && !isMobile){
-    var railTween = null, railDist = 0;
-
-    function measureRail(){
-      var edge = Math.max(20, Math.round(window.innerWidth * 0.07));
-      railDist = Math.max(0, railGlide.scrollWidth - window.innerWidth + edge);
-      var screens = Math.max(2, Math.ceil((railGlide.scrollWidth + 80) / Math.max(720, window.innerWidth)));
-      railRack.style.height = screens + '00vh';
-      return railDist;
-    }
-
-    function projRailRefresh(){
-      measureRail();
-      if(railTween && railTween.scrollTrigger) railTween.scrollTrigger.refresh();
-    }
-    window.projRailRefresh = projRailRefresh;
-
-    if(!reduceMotion){
-      measureRail();
-      railTween = gsap.to(railGlide, {
-        x: function(){ return -railDist; },
-        ease: 'none',
-        scrollTrigger: {
-          trigger: railRack, start: 'top top', end: 'bottom bottom',
-          scrub: 0.7, invalidateOnRefresh: true,
-          onUpdate: function(self){
-            var fill = $('projBarFill');
-            if(fill) fill.style.transform = 'scaleX(' + self.progress.toFixed(3) + ')';
-          }
-        }
-      });
-      window.addEventListener('resize', function(){ if(railTween && railTween.scrollTrigger) railTween.scrollTrigger.refresh(); });
-    } else {
-      document.body.classList.add('rm-rail');
-    }
-  }
-
-  /* scroll progress for horizontal rail — fade hint on start & end */
-  var hintEl = document.querySelector('.proj-hint');
-  if(hintEl){
-    gsap.fromTo(hintEl, { opacity: 0 }, {
-      opacity: 1, duration: 0.5,
-      scrollTrigger: { trigger: '.proj-sec', start: 'top center', end: 'top top', scrub: 0.5 }
-    });
-  }
-
-  /* toggling light theme: re-measure rail + refresh triggers */
-  setThemeHooks.push(function(){ if(typeof projRailRefresh === 'function') projRailRefresh(); ScrollTrigger.refresh(); });
+  /* toggling light theme: refresh triggers */
+  setThemeHooks.push(function(){ ScrollTrigger.refresh(); });
 
   /* resume parallax */
   if(!reduceMotion){    gsap.from('.resume-echo', { yPercent: 60, opacity: 0.15, ease: 'none',
