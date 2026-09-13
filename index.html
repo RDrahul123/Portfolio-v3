@@ -188,9 +188,11 @@
       </div>
 
       <div class="about-stats" id="aboutStats"></div>
-
-      <div class="pillars" id="pillarsGrid"></div>
     </div>
+  </div>
+
+  <div class="container about-pillars">
+    <div class="pillars" id="pillarsGrid"></div>
   </div>
 </section>
 
@@ -244,6 +246,7 @@
           </div>
           <div class="mv-dots" id="mvDots"></div>
           <div class="mv-nav">
+            <span class="mv-swipe" aria-hidden="true">‹ swipe ›</span>
             <button class="mv-btn" id="mvPrev" aria-label="Previous stage">← prev</button>
             <button class="mv-btn mv-play" id="mvPlay" aria-label="Auto-run stages">▶ auto-run</button>
             <button class="mv-btn" id="mvNext" aria-label="Next stage">next →</button>
@@ -411,6 +414,7 @@
   </div>
   <div class="container footer-bottom">
     <span id="footerCopy"></span>
+    <a href="admin.html" class="footer-admin" title="Open content editor">⚙ admin</a>
     <span class="footer-stack" id="footerStack"></span>
   </div>
 </footer>
@@ -1154,14 +1158,14 @@ function initFX(data){
   /* About narrative blocks (3) — staggered slide with a draw-in line, visible at center-screen */
   var ab = $$('.a-block');
   if(ab.length && !reduceMotion){
-    gsap.from(ab, { y: 46, opacity: 0, duration: 1, ease: 'power4.out', stagger: 0.15,
+    gsap.from(ab, { y: 46, opacity: 0, duration: 1, ease: 'power4.out', stagger: 0.15, clearProps: 'transform',
       scrollTrigger: { trigger: '.about-blocks', start: 'top 76%', once: true } });
   }
 
   /* About pillars (3) — staggered entrance */
   var pl = $$('.pillar');
   if(pl.length && !reduceMotion){
-    gsap.from(pl, { y: 54, opacity: 0, duration: 1, ease: 'power3.out', stagger: 0.12,
+    gsap.from(pl, { y: 54, opacity: 0, duration: 1, ease: 'power3.out', stagger: 0.12, clearProps: 'transform',
       scrollTrigger: { trigger: '.pillars', start: 'top 74%', once: true } });
   }
 
@@ -1202,8 +1206,8 @@ function initFX(data){
     });
   });
 
-  /* snapshot pin + 3D reveal */
-  if(!reduceMotion && !isMobile){
+  /* snapshot 3D reveal */
+  if(!reduceMotion){
     gsap.fromTo('.snap-visor',
       { rotateX: 34, scale: 0.92, y: 80, opacity: 0.6 },
       { rotateX: 0, scale: 1, y: 0, opacity: 1, ease: 'none',
@@ -1318,6 +1322,27 @@ function initFX(data){
     if($('mvNext')) $('mvNext').addEventListener('click', function(){ stopRun(); selectStage(activeIdx + 1, { type: true, scroll: true }); });
     if(mvPlay) mvPlay.addEventListener('click', function(){ if(running) stopRun(); else startRun(); });
 
+    /* touch swipe on the viewer card — mobile friendly stage navigation */
+    (function(){
+      var pan = document.querySelector('.method-panel');
+      if(!pan) return;
+      var sx = 0, sy = 0, sw = false;
+      pan.addEventListener('touchstart', function(e){
+        sx = e.changedTouches[0].clientX; sy = e.changedTouches[0].clientY; sw = true;
+      }, { passive: true });
+      pan.addEventListener('touchmove', function(e){
+        if(!sw) return;
+        var dx = e.changedTouches[0].clientX - sx;
+        var dy = e.changedTouches[0].clientY - sy;
+        if(Math.abs(dx) > 64 && Math.abs(dx) > Math.abs(dy) * 1.4){
+          sw = false;
+          var nb = $('mvNext'), pb = $('mvPrev');
+          if(dx < 0){ if(nb) nb.click(); } else if(pb) pb.click();
+        }
+      }, { passive: true });
+      pan.addEventListener('touchend', function(){ sw = false; }, { passive: true });
+    })();
+
     selectStage(0, { type: reduceMotion, scroll: false });
 
     if(!reduceMotion){
@@ -1335,7 +1360,7 @@ function initFX(data){
         }
       });
       stageEls.forEach(function(st){
-        gsap.from(st, { y: 40, opacity: 0, duration: 0.8, ease: 'power3.out',
+        gsap.from(st, { y: 40, opacity: 0, duration: 0.8, ease: 'power3.out', clearProps: 'transform',
           scrollTrigger: { trigger: st, start: 'top 92%', once: true } });
       });
       gsap.from('.method-view', { y: 60, opacity: 0, duration: 1, ease: 'power3.out',
