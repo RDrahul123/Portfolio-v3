@@ -506,19 +506,78 @@ var tt = $('themeToggle'); if(tt) tt.addEventListener('click', onToggle);
 
   var coreColors = [0x7dddfc, 0x8be9fd, 0xbfa2ff, 0xffd38a];
 
-  /* central knot */
-  var knot = new THREE.Mesh(
-    new THREE.TorusKnotGeometry(4.6, 1.35, 96, 14),
-    new THREE.MeshBasicMaterial({ color: 0x7dddfc, wireframe: true, transparent: true, opacity: 0.2 })
-  );
-  knot.rotation.x = 0.6;
-  group.add(knot);
+  /* ---- neural network core (AI / ML / data science) ---- */
+  var knot = new THREE.Group();
+  group.add(knotonge);
 
+  function nnNode(x, y, z, c, s){
+    var m = new THREE.Mesh(
+      new THREE.OctahedronGeometry(s || 0.5, 0),
+      new THREE.MeshBasicMaterial({ color: c, wireframe: true, transparent: true, opacity: 0.85 })
+    );
+    m.position.set(x, y, z);
+    knot.add(m);
+    return m;
+  }
+  var layersCfg = [ { z: -8.5, n: 6 }, { z: 0, n: 5 }, { z: 8.5, n: 3 } ];
+  var nnLayers = [], nnEdges = [];
+  var layerColors = [coreColors[1], coreColors[2], coreColors[3]];
+
+  layersCfg.forEach(function(L, li){
+    var row = [];
+    for(var i = 0; i < L.n; i++){
+      var y = (i - (L.n - 1) / 2) * 2.2;
+      row.push(nnNode(0, y, L.z, layerColors[li], 0.45));
+    }
+    nnLayers.push(row);
+  });
+
+  /* fully-connected edges between adjacent layers (the classic ML graph) */
+  function linkLayers(A, B){
+    A.forEach(function(na){
+      B.forEach(function(nb){
+        nnEdges.push(na.position, nb.position);
+      });
+    });
+  }
+  linkLayers(nnLayers[0], nnLayers[1]);
+  linkLayers(nnLayers[1], nnLayers[2]);
+
+  var edgePos = [];
+  nnEdges.forEach(function(p){ edgePos.push(p.x, p.y, p.z); });
+  var eGeo = new THREE.BufferGeometry();
+  eGeo.setAttribute('position', new THREE.Float32BufferAttribute(edgePos, 3));
+  var eMat = new THREE.LineBasicMaterial({ color: 0x7dddfc, transparent: true, opacity: 0.32 });
+  var edges = new THREE.LineSegments(eGeo, eMat);
+  knot.add(edges);
+
+  /* travelling data pulses along connections */
+  var edgePairs = [];
+  nnLayers.forEach(function(row){ nnLayers.forEach(function(){ /*noop*/ }); });
+  for(var li0 = 0; li0 < nnLayers.length - 1; li0++){
+    nnLayers[li0].forEach(function(na){
+      nnLayers[li0 + 1].forEach(function(nb){ edgePairs.push([na, nb]); });
+    });
+  }
+  var pulses = [];
+  for(var pi = 0; pi < 6; pi++){
+    var pm = new THREE.Mesh(
+      new THREE.OctahedronGeometry(0.26, 0),
+      new THREE.MeshBasicMaterial({ color: coreColors[pi % coreColors.length], transparent: true, opacity: 0.95 })
+    );
+    var pr = edgePairs[Math.floor(Math.random() * edgePairs.length)];
+    pm.userData = { a: pr[0], b: pr[1], t: Math.random(), spd: 0.5 + Math.random() * 0.8 };
+    pm.position.copy(pr[0].position);
+    knot.add(pm);
+    pulses.push(pm);
+  }
+
+  /* central model core */
   var coreInner = new THREE.Mesh(
-    new THREE.IcosahedronGeometry(2.1, 0),
-    new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true, transparent: true, opacity: 0.12 })
+    new THREE.IcosahedronGeometry(2.0, 0),
+    new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true, transparent: true, opacity: 0.1 })
   );
-  group.add(coreInner);
+  knot.add(coreInner);
 
   /* orbiting shells */
   var shells = [];
@@ -634,7 +693,7 @@ var tt = $('themeToggle'); if(tt) tt.addEventListener('click', onToggle);
 
   window.setThemeHooks.push(function(theme){
     var light = theme === 'light';
-    knot.material.color.setHex(light ? 0x0b7285 : 0x7dddfc);
+    knot.traverse(function(o){ if(o.isMesh) o.material.color.setHex(light ? 0x0b7285 : 0x7dddfc); });
     coreInner.material.opacity = light ? 0.14 : 0.12;
     groups_tint(shells, light);
     function groups_tint(arr){ arr.forEach(function(s){ s.mesh.material.color.setHex(light ? 0x0b7285 : 0x7dddfc); }); }
