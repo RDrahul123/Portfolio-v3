@@ -904,6 +904,8 @@ button, a, .touchable{ -webkit-tap-highlight-color:transparent; touch-action:man
   .nav-island{ max-width:100%; }
   .nav-links, .nav-resume{ display:none; }
   .burger{ display:block; }
+  .theme-toggle, .burger{ width:44px; height:44px; }
+  .theme-toggle{ font-size:16px; }
 
   .hero-inner{ padding:0 clamp(18px,5vw,40px); }
   .hero-title{ font-size:clamp(34px,10.5vw,58px); margin-bottom:20px; }
