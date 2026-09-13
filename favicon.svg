@@ -1,21 +1,43 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 64 64">
   <defs>
-    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+    <linearGradient id="gBg" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#0C111A"/>
       <stop offset="100%" stop-color="#05070B"/>
     </linearGradient>
-    <linearGradient id="acc" x1="0%" y1="0%" x2="100%" y2="100%">
+    <linearGradient id="gAcc" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#5B8CFF"/>
       <stop offset="50%" stop-color="#2FD9A8"/>
       <stop offset="100%" stop-color="#F6BE3C"/>
     </linearGradient>
+    <path id="orbit"
+      d="M32 9 a23 23 0 1 1 -0.01 0"
+      fill="none"/>
   </defs>
-  <rect width="64" height="64" rx="14" fill="url(#bg)"/>
-  <rect width="64" height="64" rx="14" fill="none" stroke="#1C2737" stroke-width="1.5"/>
-  <circle cx="32" cy="32" r="23" fill="none" stroke="url(#acc)" stroke-width="2.2" opacity="0.9"/>
-  <path d="M32 32 L32 17 M32 32 L19.5 39 M32 32 L44.5 39" stroke="url(#acc)" stroke-width="2.4" stroke-linecap="round"/>
-  <circle cx="32" cy="17" r="4" fill="#8FB6FF"/>
-  <circle cx="19.5" cy="39" r="4" fill="#6CF0C4"/>
-  <circle cx="44.5" cy="39" r="4" fill="#FFD973"/>
-  <circle cx="32" cy="32" r="5" fill="#2FD9A8"/>
+
+  <rect width="64" height="64" rx="15" fill="url(#gBg)"/>
+  <rect width="64" height="64" rx="15" fill="none" stroke="#1C2737" stroke-width="1.5"/>
+  <circle cx="32" cy="32" r="23" fill="none" stroke="url(#gAcc)" stroke-width="2" opacity="0.9"/>
+
+  <circle cx="32" cy="32" r="8" fill="none" stroke="#2FD9A8" stroke-width="2" opacity="0">
+    <animate attributeName="r" values="7;23" dur="1.8s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.8;0" dur="1.8s" repeatCount="indefinite"/>
+  </circle>
+
+  <path d="M32 32 L32 17 M32 32 L19.5 39 M32 32 L44.5 39" stroke="url(#gAcc)" stroke-width="2.2" stroke-linecap="round"/>
+  <g fill="#FFFFFF">
+    <circle cx="32" cy="17" r="4"/>
+    <circle cx="19.5" cy="39" r="4"/>
+    <circle cx="44.5" cy="39" r="4"/>
+  </g>
+
+  <circle cx="32" cy="32" r="5" fill="#2FD9A8">
+    <animate attributeName="r" values="5;2.6;5" dur="1.8s" repeatCount="indefinite" begin="0.2s"/>
+    <animate attributeName="opacity" values="1;0.75;1" dur="1.8s" repeatCount="indefinite"/>
+  </circle>
+
+  <circle r="3" fill="#8FB6FF">
+    <animateMotion dur="3.2s" repeatCount="indefinite">
+      <mpath xlink:href="#orbit"/>
+    </animateMotion>
+  </circle>
 </svg>
