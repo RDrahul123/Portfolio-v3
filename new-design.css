@@ -173,12 +173,12 @@ main{ position:relative; z-index:2; }
 [data-theme="light"] .theme-toggle .icon-moon{ display:block; }
 
 /* burger */
-.burger{ display:none; width:36px; height:36px; border-radius:50%; border:1px solid var(--line); background:var(--glass); position:relative; }
-.burger span{ position:absolute; left:11px; right:11px; height:1.6px; background:var(--ink); transition:.4s var(--ease); }
-.burger span:nth-child(1){ top:13px; }
-.burger span:nth-child(2){ top:20px; }
-.burger.active span:nth-child(1){ top:16.5px; transform:rotate(45deg); }
-.burger.active span:nth-child(2){ top:16.5px; transform:rotate(-45deg); }
+.burger{ display:none; width:44px; height:44px; border-radius:50%; border:1px solid var(--line); background:var(--glass); position:relative; flex:none; }
+.burger span{ position:absolute; left:12px; right:12px; height:1.8px; background:var(--ink); transition:.4s var(--ease); }
+.burger span:nth-child(1){ top:17px; }
+.burger span:nth-child(2){ top:25px; }
+.burger.active span:nth-child(1){ top:21.3px; transform:rotate(45deg); }
+.burger.active span:nth-child(2){ top:21.3px; transform:rotate(-45deg); }
 
 /* ═══════════ BUTTONS ═══════════ */
 .btn{
