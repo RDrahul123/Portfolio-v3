@@ -935,6 +935,7 @@ function render(data){
       } else {
         sh.style.display = ''; btn.textContent = 'read more →';
       }
+      if(window.__refreshScroll) window.__refreshScroll();
     });
   });
 
@@ -946,7 +947,7 @@ function render(data){
       $$('.proj-card').forEach(function(c){
         c.style.display = (cat === 'all' || (c.dataset.cat||'').split(',').indexOf(cat) !== -1) ? '' : 'none';
       });
-      setTimeout(function(){ ScrollTrigger.refresh(); }, 60);
+      setTimeout(function(){ if(window.__refreshScroll) window.__refreshScroll(); else ScrollTrigger.refresh(); }, 60);
     });
   });
 
@@ -1134,25 +1135,49 @@ function initFX(data){
   /* smooth scroll */
   var lenis = null;
   if(window.Lenis && !reduceMotion && !isMobile){
-    lenis = new Lenis({ duration: 0.7, smoothWheel: true, syncTouch: true, easing: function(t){ return Math.min(1, 1.001 - Math.pow(2, -10*t)); } });
+    lenis = new Lenis({
+      smoothWheel: true,
+      syncTouch: false,
+      lerp: 0.1,
+      wheelMultiplier: 1,
+      touchMultiplier: 1.5,
+      autoResize: true
+    });
     window.__lenis = lenis;
-    lenis.on('scroll', function(){ ScrollTrigger.update(); });
+    lenis.on('scroll', function(){ ScrollTrigger.update(); onScrollTick(); });
     gsap.ticker.add(function(time){ lenis.raf(time * 1000); });
     gsap.ticker.lagSmoothing(0);
+    document.documentElement.classList.add('lenis-active');
   }
+
+  function refreshScroll(){
+    if(lenis) lenis.resize();
+    ScrollTrigger.refresh();
+    onScrollTick();
+  }
+  window.__refreshScroll = refreshScroll;
 
   /* nav state */
   var nav = $('nav');
   var scrollbar = $('scrollbarFill');
   function onScrollTick(){
-    var max = document.documentElement.scrollHeight - window.innerHeight;
-    var p = max > 0 ? (window.pageYOffset/max)*100 : 0;
-    scrollbar.style.width = p + '%';
-    nav.classList.toggle('scrolled', window.pageYOffset > 30);
+    var doc = document.documentElement;
+    var max = doc.scrollHeight - window.innerHeight;
+    var y = window.pageYOffset || doc.scrollTop || 0;
+    var p = max > 0 ? Math.max(0, Math.min(100, (y / max) * 100)) : 0;
+    if(scrollbar) scrollbar.style.width = p + '%';
+    if(nav) nav.classList.toggle('scrolled', y > 30);
     var top = $('toTop');
-    if(top) top.hidden = window.pageYOffset < 700;
+    if(top) top.hidden = y < 700;
   }
   window.addEventListener('scroll', onScrollTick, {passive:true});
+  window.addEventListener('resize', function(){ onScrollTick(); if(lenis) lenis.resize(); }, {passive:true});
+  if(window.ResizeObserver){
+    new ResizeObserver(function(){
+      onScrollTick();
+      if(lenis) lenis.resize();
+    }).observe(document.body);
+  }
   onScrollTick();
 
   /* anchor smooth scroll */
@@ -1164,9 +1189,10 @@ function initFX(data){
     if(t){
       e.preventDefault();
       var y = t.getBoundingClientRect().top + window.pageYOffset - 70;
-      if(lenis) lenis.scrollTo(y, { offset: -70 });
+      if(lenis) lenis.scrollTo(y, { duration: 0.9 });
       else window.scrollTo({ top: y, behavior: 'smooth' });
       closeMobile();
+      refreshScroll();
     }
   });
 
@@ -1343,15 +1369,20 @@ function initFX(data){
       if(opts.scroll) scrollToStage(i);
     }
 
+    var lastUserScroll = 0;
+    window.addEventListener('wheel', function(){ lastUserScroll = Date.now(); }, {passive:true});
+    window.addEventListener('touchstart', function(){ lastUserScroll = Date.now(); }, {passive:true});
+
     function scrollToStage(i){
       var target = stageEls[i];
       if(!target) return;
+      if(Date.now() - lastUserScroll < 1400) return;
       var rect = target.getBoundingClientRect();
       var recenter = rect.top < 60 || rect.top > window.innerHeight * 0.75;
       if(!recenter) return;
       var y = rect.top + window.pageYOffset - 130;
-      var lenis = window.__lenis;
-      if(lenis) lenis.scrollTo(y, { offset: -130 });
+      var l = window.__lenis;
+      if(l) l.scrollTo(y, { duration: 0.8 });
       else window.scrollTo({ top: y, behavior: 'smooth' });
     }
 
@@ -1521,7 +1552,7 @@ function initFX(data){
 function renderMobile(open){
   var mm = $('mobileMenu');
   if(!mm || !DATA) return;
-  if(!open){ mm.classList.remove('open'); return; }
+  if(!open){ mm.classList.remove('open'); if(window.__refreshScroll) window.__refreshScroll(); return; }
   var hero = DATA.hero || {};
   var navLinks = [['About','#about'],['Method','#pipeline'],['Work','#projects'],['Lab','#ai-lab'],['Journey','#experience'],['Contact','#contact'],['Resume','#resume']];
   var rows = navLinks.map(function(l){ return '<a href="' + l[1] + '"><span class="mm-num">' + String(navLinks.indexOf(l)+1).padStart(2,'0') + '</span>' + l[0] + '</a>'; }).join('');
@@ -1531,6 +1562,7 @@ function renderMobile(open){
     (soc ? '<div class="mm-soc">' + soc + '</div>' : '') +
     '</div>';
   mm.classList.add('open');
+  if(window.__refreshScroll) window.__refreshScroll();
 }
 function closeMobile(){
   document.body.classList.remove('menu-open');
