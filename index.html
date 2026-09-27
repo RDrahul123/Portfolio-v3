@@ -70,6 +70,7 @@
 
 <a class="skip-link" href="#hero">Skip to content</a>
 
+<div class="circuit-substrate" aria-hidden="true"></div>
 <canvas id="bgCanvas" aria-hidden="true"></canvas>
 
 <div id="preloader" aria-hidden="true">
@@ -531,6 +532,9 @@ var tt = $('themeToggle'); if(tt) tt.addEventListener('click', onToggle);
   var scene = new THREE.Scene();
   var camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 300);
   camera.position.set(0, 0, 34);
+  /* aerial perspective: far geometry dissolves into the page background */
+  var FOG_DARK = 0x050506, FOG_LIGHT = 0xf4f5f7;
+  scene.fog = new THREE.Fog(FOG_DARK, 46, 205);
   var renderer = new THREE.WebGLRenderer({canvas: canvas, alpha: true, antialias: true});
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, compact ? 1 : 1.25));
   renderer.setSize(window.innerWidth, window.innerHeight);
@@ -653,6 +657,152 @@ var tt = $('themeToggle'); if(tt) tt.addEventListener('click', onToggle);
   var points = new THREE.Points(pGeo, pMat);
   scene.add(points);
 
+  /* ══════════ VOLUMETRIC DEPTH LAYERS ══════════ */
+
+  /* --- seamless circuit-board substrate (seamless via wrapped redraw) --- */
+  function circuitTexture(size, cell, color, alphaScale){
+    var c = document.createElement('canvas');
+    c.width = c.height = size;
+    var g = c.getContext('2d');
+    var step = size / cell;
+    var lw = Math.max(1, size / 820);
+    g.strokeStyle = color;
+    g.fillStyle = color;
+    var offs = [[0,0],[-size,0],[size,0],[0,-size],[0,size]];
+    function trace(pts, alpha){
+      g.globalAlpha = alpha;
+      g.lineWidth = lw;
+      g.lineCap = 'butt';
+      for(var k=0;k<offs.length;k++){
+        g.beginPath();
+        g.moveTo(pts[0][0] + offs[k][0], pts[0][1] + offs[k][1]);
+        for(var i=1;i<pts.length;i++) g.lineTo(pts[i][0] + offs[k][0], pts[i][1] + offs[k][1]);
+        g.stroke();
+      }
+    }
+    var routes = Math.round(cell * 2.4);
+    for(var r=0;r<routes;r++){
+      var x = Math.random()*size, y = Math.random()*size;
+      var pts = [[x,y]];
+      var horiz = Math.random() < 0.5;
+      var segs = 1 + Math.floor(Math.random()*4);
+      for(var s2=0;s2<segs;s2++){
+        var span = step * (1 + Math.floor(Math.random()*3));
+        if(horiz) x += (Math.random()<0.5?1:-1)*span; else y += (Math.random()<0.5?1:-1)*span;
+        x = Math.max(0, Math.min(size, x));
+        y = Math.max(0, Math.min(size, y));
+        pts.push([x,y]);
+        horiz = !horiz;
+      }
+      trace(pts, (0.10 + Math.random()*0.24) * alphaScale);
+      g.fillStyle = color;
+      for(var q=0;q<pts.length;q++){
+        if(Math.random() < 0.28){
+          g.globalAlpha = (0.16 + Math.random()*0.28) * alphaScale;
+          g.beginPath();
+          g.arc(pts[q][0], pts[q][1], lw*2.1, 0, Math.PI*2);
+          g.fill();
+        }
+      }
+    }
+    return c;
+  }
+
+  function threeTex(canvasEl){
+    var t = new THREE.CanvasTexture(canvasEl);
+    t.wrapS = t.wrapT = THREE.RepeatWrapping;
+    t.anisotropy = 1;
+    return t;
+  }
+
+  /* far substrate ships as a static CSS background (cached, zero per-frame
+     fill cost); only the near plate stays in the WebGL loop so it can drift */
+  var farCanvas = circuitTexture(1024, 18, '#93a7bd', 0.85);
+  try{
+    document.documentElement.style.setProperty('--circuit-far', 'url(' + farCanvas.toDataURL('image/png') + ')');
+  }catch(e){}
+
+  var circMidTex = threeTex(circuitTexture(1024, 12, '#7dddfc', 1.0));
+  circMidTex.repeat.set(1.7, 1.7);
+
+  var circuitLayers = [];
+  function radialMask(size, inner){
+    var c = document.createElement('canvas'); c.width = c.height = size;
+    var g = c.getContext('2d');
+    var grd = g.createRadialGradient(size/2, size/2, size*inner, size/2, size/2, size/2);
+    grd.addColorStop(0, 'rgba(255,255,255,1)');
+    grd.addColorStop(0.62, 'rgba(255,255,255,0.55)');
+    grd.addColorStop(1, 'rgba(255,255,255,0)');
+    g.fillStyle = grd; g.fillRect(0,0,size,size);
+    return new THREE.CanvasTexture(c);
+  }
+  var edgeMask = radialMask(256, 0.04);
+
+  function circuitPlane(tex, span, z, opacity, color, lightColor, cover, ox, oy){
+    var mat = new THREE.MeshBasicMaterial({ map: tex, color: color, transparent: true, opacity: opacity, depthWrite: false, fog: false });
+    if(cover < 1){ mat.alphaMap = edgeMask; }
+    var mesh = new THREE.Mesh(new THREE.PlaneGeometry(span, span), mat);
+    mesh.position.set(ox || 0, oy || 0, z);
+    scene.add(mesh);
+    circuitLayers.push({ mesh: mesh, tex: tex, drift: (Math.random() < 0.5 ? 1 : -1) * (0.002 + Math.random()*0.004), par: 0, baseOp: opacity, lightOp: opacity * 1.15, z: z, cover: cover == null ? 1 : cover, baseY: oy || 0, darkColor: color, lightColor: lightColor });
+    return mesh;
+  }
+  var circuitMid = circuitPlane(circMidTex, 220, -74, 0.34, 0xbfa2ff, 0x6d28d9, 0.70, -5, 2);
+  circuitLayers[0].par = -7;   /* near plate tracks scroll more than the CSS far layer */
+
+  /* scale each backdrop plate to fill only its slice of the frustum —
+     avoids paying fill-rate for pixels that sit off-screen */
+  function fitPlates(){
+    for(var i=0;i<circuitLayers.length;i++){
+      var cl = circuitLayers[i];
+      var h = 2 * Math.abs(camera.position.z - cl.z) * Math.tan(camera.fov * Math.PI / 360) * 1.05 * cl.cover;
+      cl.mesh.scale.set(h * camera.aspect / 300, h / 300, 1);
+    }
+  }
+
+  /* --- parallax dust bands --- */
+  function dustBand(count, sx, sy, sz, zc, size, opacity, color){
+    var geo = new THREE.BufferGeometry();
+    var pos = new Float32Array(count*3);
+    for(var i=0;i<count;i++){
+      pos[i*3]   = (Math.random()-0.5)*sx;
+      pos[i*3+1] = (Math.random()-0.5)*sy;
+      pos[i*3+2] = (Math.random()-0.5)*sz + zc;
+    }
+    geo.setAttribute('position', new THREE.BufferAttribute(pos,3));
+    var mat = new THREE.PointsMaterial({ color: color, size: size, transparent: true, opacity: opacity, depthWrite: false, fog: true });
+    var p = new THREE.Points(geo, mat);
+    scene.add(p);
+    return { points: p, geo: geo, mat: mat, n: count, rise: 0.004 + Math.random()*0.005, drift: (Math.random()<0.5?1:-1)*0.006, baseOp: opacity };
+  }
+  var dustFar  = dustBand(compact?44:84,  220, 150, 110, -84, 0.55, 0.20, 0x63cdf0);
+  var dustMid  = dustBand(compact?20:36,  150, 110, 80,  -30, 0.26, 0.24, 0x8fe3ff);
+  var dustNear = dustBand(compact?10:18,  110, 80,  60,   16, 0.17, 0.30, 0xbdf3ff);
+  var dustBands = [dustFar, dustMid, dustNear];
+
+  /* --- volumetric core glow (soft bloom behind the knot) --- */
+  function glowTexture(){
+    var s = 256;
+    var c = document.createElement('canvas'); c.width = c.height = s;
+    var g = c.getContext('2d');
+    var grd = g.createRadialGradient(s/2, s/2, 0, s/2, s/2, s/2);
+    grd.addColorStop(0,    'rgba(255,255,255,0.92)');
+    grd.addColorStop(0.18, 'rgba(160,226,255,0.52)');
+    grd.addColorStop(0.46, 'rgba(125,221,252,0.20)');
+    grd.addColorStop(0.74, 'rgba(150,140,255,0.07)');
+    grd.addColorStop(1,    'rgba(0,0,0,0)');
+    g.fillStyle = grd; g.fillRect(0,0,s,s);
+    return new THREE.CanvasTexture(c);
+  }
+  var coreGlow = new THREE.Mesh(
+    new THREE.PlaneGeometry(52, 52),
+    new THREE.MeshBasicMaterial({ map: glowTexture(), transparent: true, opacity: 0.5, depthWrite: false, blending: THREE.AdditiveBlending, fog: false })
+  );
+  coreGlow.position.z = -22;
+  coreGlow.renderOrder = -1;
+  group.add(coreGlow);
+
+
   var mouse = { x: 0, y: 0 };
   window.addEventListener('mousemove', function(e){
     mouse.x = (e.clientX / window.innerWidth) - 0.5;
@@ -667,6 +817,7 @@ var tt = $('themeToggle'); if(tt) tt.addEventListener('click', onToggle);
     if(w >= 1180){ group.position.x = 7.4; group.position.y = 0; group.scale.setScalar(1.1); }
     else if(w >= 900){ group.position.x = 3.6; group.position.y = 0; group.scale.setScalar(1); }
     else { group.position.x = 0; group.position.y = -2.6; group.scale.setScalar(0.86); }
+    fitPlates();
   }
   window.addEventListener('resize', onResize);
   onResize();
@@ -711,6 +862,35 @@ var tt = $('themeToggle'); if(tt) tt.addEventListener('click', onToggle);
       if(pp[i3*3+1] > 30) pp[i3*3+1] = -30;
     }
     pGeo.attributes.position.needsUpdate = true;
+
+    /* --- circuit substrate: slow data drift + depth parallax --- */
+    for(var ci=0; ci<circuitLayers.length; ci++){
+      var cl = circuitLayers[ci];
+      cl.tex.offset.x = t * cl.drift;
+      cl.tex.offset.y = t * cl.drift * 0.45;
+      cl.mesh.position.y = st * cl.par + cl.baseY;
+      cl.mesh.rotation.z = Math.sin(t*0.03 + ci) * 0.02;
+    }
+
+    /* --- dust: rise + lateral drift, wrapped --- */
+    for(var di=0; di<dustBands.length; di++){
+      var db = dustBands[di];
+      var dp = db.geo.attributes.position.array;
+      for(var dj=0; dj<db.n; dj++){
+        dp[dj*3+1] += db.rise;
+        dp[dj*3]   += db.drift;
+        if(dp[dj*3+1] > 55) dp[dj*3+1] = -55;
+        if(dp[dj*3] >  70) dp[dj*3]   = -70;
+        if(dp[dj*3] < -70) dp[dj*3]   =  70;
+      }
+      db.geo.attributes.position.needsUpdate = true;
+      db.points.position.y = st * (di === 2 ? -5 : -1.5);
+    }
+
+    /* --- core glow breathes with the knot --- */
+    coreGlow.material.opacity = 0.5 * (0.78 + Math.sin(t*0.6)*0.22);
+    var gs = 1 + Math.sin(t*0.4)*0.04;
+    coreGlow.scale.setScalar(gs);
 
     var targetX = mouse.x * 2.4 + st*2;
     var targetY = -mouse.y * 1.6 - st*0.8;
@@ -760,6 +940,21 @@ var tt = $('themeToggle'); if(tt) tt.addEventListener('click', onToggle);
     function groups_tint(arr){ arr.forEach(function(s){ s.mesh.material.color.setHex(light ? 0x0b7285 : 0x7dddfc); }); }
     pMat.color.setHex(light ? 0x0e7490 : 0x8fe3ff);
     pMat.opacity = light ? 0.5 : 0.7;
+
+    /* volumetric layers follow the theme */
+    scene.fog.color.setHex(light ? FOG_LIGHT : FOG_DARK);
+    circuitLayers.forEach(function(cl){
+      cl.mesh.material.color.setHex(light ? cl.lightColor : cl.darkColor);
+      cl.mesh.material.opacity = light ? cl.lightOp : cl.baseOp;
+    });
+    var dustTint = [light ? 0x0e7490 : 0x63cdf0, light ? 0x0c6f96 : 0x8fe3ff, light ? 0x155e75 : 0xbdf3ff];
+    dustBands.forEach(function(db, i){
+      db.mat.color.setHex(dustTint[i]);
+      db.mat.opacity = db.baseOp * (light ? 0.85 : 1);
+    });
+    /* additive bloom would vanish on a light page — switch to normal blend */
+    coreGlow.material.blending = light ? THREE.NormalBlending : THREE.AdditiveBlending;
+    coreGlow.material.color.setHex(light ? 0xbae6fd : 0xffffff);
   });
 })();
 

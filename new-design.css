@@ -77,11 +77,13 @@ body::after{
 body::before{
   content:""; position:fixed; inset:0; z-index:1; pointer-events:none;
   background:
+    linear-gradient(180deg, rgba(125,221,252,.055), transparent 26%),
     radial-gradient(120% 95% at 50% 6%, transparent 42%, rgba(0,0,0,.5) 100%),
     radial-gradient(95% 75% at 50% 45%, rgba(5,5,6,.82), transparent 72%);
 }
 [data-theme="light"] body::before{
   background:
+    linear-gradient(180deg, rgba(8,145,196,.05), transparent 26%),
     radial-gradient(120% 95% at 50% 6%, transparent 46%, rgba(15,23,32,.14) 100%),
     radial-gradient(95% 75% at 50% 45%, rgba(244,245,247,.78), transparent 72%);
 }
@@ -101,6 +103,19 @@ body::before{
 main{ position:relative; z-index:2; }
 
 /* ═══════════ 3D BACKDROP ═══════════ */
+/* far circuit substrate — static CSS layer, rasterised once by the compositor
+   (texture injected at runtime from the WebGL scene), so it costs no per-frame fill */
+.circuit-substrate{
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+  background-image: var(--circuit-far, none);
+  background-repeat: repeat;
+  background-size: 640px 640px;
+  opacity:.30;
+  -webkit-mask-image: radial-gradient(135% 105% at 50% 28%, #000 26%, rgba(0,0,0,.5) 58%, transparent 80%);
+  mask-image: radial-gradient(135% 105% at 50% 28%, #000 26%, rgba(0,0,0,.5) 58%, transparent 80%);
+}
+[data-theme="light"] .circuit-substrate{ opacity:.26; }
+
 #bgCanvas{ position:fixed; inset:0; z-index:0; width:100vw; height:100vh; pointer-events:none; opacity:.78; }
 [data-theme="light"] #bgCanvas{ opacity:.5; }
 
