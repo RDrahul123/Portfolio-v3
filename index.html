@@ -402,6 +402,39 @@
         <div class="contact-methods" id="contactMethods"></div>
       </div>
     </div>
+
+    <!-- ═══════════ CONTACT FORM ═══════════ -->
+    <div class="contact-form-wrap reveal-y">
+      <form id="contactForm" class="contact-form" novalidate autocomplete="on">
+        <div class="cf-row">
+          <div class="cf-field">
+            <label class="cf-label" for="cfName">Name</label>
+            <input class="cf-input" id="cfName" name="name" type="text" placeholder="Your name" required maxlength="80" autocomplete="name">
+          </div>
+          <div class="cf-field">
+            <label class="cf-label" for="cfEmail">Email</label>
+            <input class="cf-input" id="cfEmail" name="email" type="email" placeholder="you@company.com" required maxlength="120" autocomplete="email">
+          </div>
+        </div>
+        <div class="cf-field">
+          <label class="cf-label" for="cfSubject">Subject <span class="cf-opt">optional</span></label>
+          <input class="cf-input" id="cfSubject" name="subject" type="text" placeholder="Role, project or idea" maxlength="120">
+        </div>
+        <div class="cf-field">
+          <label class="cf-label" for="cfMessage">Message</label>
+          <textarea class="cf-input cf-textarea" id="cfMessage" name="message" rows="5" placeholder="A few lines about what you need…" required maxlength="4000"></textarea>
+          <div class="cf-meta"><span class="cf-count" id="cfCount">0 / 4000</span></div>
+        </div>
+        <input class="cf-hp" type="text" name="company" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <div class="cf-actions">
+          <button class="btn btn-solid cf-submit" id="cfSubmit" type="submit">
+            <span class="cf-btn-label">Send message</span>
+            <span class="cf-btn-spin" aria-hidden="true"></span>
+          </button>
+          <p class="cf-status" id="cfStatus" role="status" aria-live="polite"></p>
+        </div>
+      </form>
+    </div>
   </div>
 </section>
 
@@ -1559,6 +1592,9 @@ function initFX(data){
   /* favicon live ping — animates in the tab, pings on return/focus */
   initFavicon();
 
+  /* contact form -> google sheet */
+  initContactForm();
+
   /* resume parallax */
   if(!reduceMotion){    gsap.from('.resume-echo', { yPercent: 60, opacity: 0.15, ease: 'none',
       scrollTrigger: { trigger: '#resume', start: 'top bottom', end: 'center center', scrub: 0.5 } });
@@ -1597,6 +1633,100 @@ function closeMobile(){
   document.body.classList.remove('menu-open');
   var b = $('burger'); if(b) b.classList.remove('active');
   var mm = $('mobileMenu'); if(mm) mm.classList.remove('open');
+}
+
+/* ═══════════ CONTACT FORM → GOOGLE SHEET ═══════════════════════════
+   1) In your Google Sheet: Extensions > Apps Script, paste the script
+      from the setup steps and set SPREADSHEET_ID to your sheet id.
+   2) Deploy > New deployment > Web app
+        Execute as:  Me
+        Who has access:  Anyone        <-- required for cross-origin POST
+   3) Copy the .../exec URL and paste it into CONTACT_ENDPOINT below.      */
+var CONTACT_ENDPOINT = 'PASTE_APPS_SCRIPT_WEB_APP_URL_HERE';
+
+function contactEndpointReady(){
+  return typeof CONTACT_ENDPOINT === 'string' &&
+         CONTACT_ENDPOINT.indexOf('PASTE_') !== 0 &&
+         /^https:\/\/script\.google\.com\//.test(CONTACT_ENDPOINT);
+}
+
+function initContactForm(){
+  var form = $('contactForm');
+  if(!form) return;
+  var btn = $('cfSubmit'), status = $('cfStatus'),
+      name = $('cfName'), email = $('cfEmail'),
+      subject = $('cfSubject'), message = $('cfMessage'),
+      count = $('cfCount'), hp = form.querySelector('.cf-hp');
+
+  if(message && count){
+    var sync = function(){ count.textContent = message.value.length + ' / 4000'; };
+    message.addEventListener('input', sync); sync();
+  }
+
+  function say(text, kind){
+    if(!status) return;
+    status.textContent = text || '';
+    status.className = 'cf-status' + (kind ? ' ' + kind : '');
+  }
+  function mark(el, bad){ if(el) el.classList.toggle('is-bad', !!bad); }
+  function setBusy(on){
+    if(!btn) return;
+    btn.disabled = on;
+    btn.classList.toggle('is-sending', on);
+  }
+
+  if(!contactEndpointReady()){
+    say('Form is not connected yet — please email me directly using the links above.', 'warn');
+    if(btn) btn.disabled = true;
+    return;
+  }
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    if(hp && hp.value) return;
+
+    mark(name,false); mark(email,false); mark(message,false);
+
+    var n  = (name.value||'').trim();
+    var em = (email.value||'').trim();
+    var msg = (message.value||'').trim();
+
+    var bad = false;
+    if(!n){ mark(name,true); bad = true; }
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(em)){ mark(email,true); bad = true; }
+    if(msg.length < 10){ mark(message,true); bad = true; }
+    if(bad){
+      say('Please check the highlighted fields — name, a valid email, and a message of at least 10 characters.', 'err');
+      return;
+    }
+
+    setBusy(true);
+    say('Sending…');
+
+    fetch(CONTACT_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({
+        name: n,
+        email: em,
+        subject: (subject.value||'').trim(),
+        message: msg,
+        page: location.href,
+        submittedAt: new Date().toISOString()
+      })
+    })
+    .then(function(res){ if(!res.ok) throw new Error('HTTP ' + res.status); return res.text(); })
+    .then(function(){
+      form.reset();
+      if(count) count.textContent = '0 / 4000';
+      setBusy(false);
+      say('Thanks — your message is in. I usually reply within a day or two.', 'ok');
+    })
+    .catch(function(){
+      setBusy(false);
+      say('Could not send right now. Please email me directly using the links above.', 'err');
+    });
+  });
 }
 
 /* favicon live-ping engine */
