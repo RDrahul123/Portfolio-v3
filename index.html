@@ -490,15 +490,16 @@ var tt = $('themeToggle'); if(tt) tt.addEventListener('click', onToggle);
 (function(){
   var canvas = $('bgCanvas');
   if(!canvas || typeof THREE === 'undefined') return;
-  if(reduceMotion || window.innerWidth < 800){
+  if(reduceMotion || window.innerWidth < 360){
     canvas.style.display = 'none';
     return;
   }
+  var compact = window.innerWidth < 800;
   var scene = new THREE.Scene();
   var camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 300);
   camera.position.set(0, 0, 34);
   var renderer = new THREE.WebGLRenderer({canvas: canvas, alpha: true, antialias: true});
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.25));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, compact ? 1 : 1.25));
   renderer.setSize(window.innerWidth, window.innerHeight);
 
   var group = new THREE.Group();
@@ -513,8 +514,9 @@ var tt = $('themeToggle'); if(tt) tt.addEventListener('click', onToggle);
   function nnNode(x, y, z, c, s){
     var m = new THREE.Mesh(
       new THREE.OctahedronGeometry(s || 0.5, 0),
-      new THREE.MeshBasicMaterial({ color: c, wireframe: true, transparent: true, opacity: 0.85 })
+      new THREE.MeshBasicMaterial({ color: c, wireframe: true, transparent: true, opacity: 1 })
     );
+    m.userData.base = c;
     m.position.set(x, y, z);
     knot.add(m);
     return m;
@@ -547,7 +549,7 @@ var tt = $('themeToggle'); if(tt) tt.addEventListener('click', onToggle);
   nnEdges.forEach(function(p){ edgePos.push(p.x, p.y, p.z); });
   var eGeo = new THREE.BufferGeometry();
   eGeo.setAttribute('position', new THREE.Float32BufferAttribute(edgePos, 3));
-  var eMat = new THREE.LineBasicMaterial({ color: 0x7dddfc, transparent: true, opacity: 0.32 });
+  var eMat = new THREE.LineBasicMaterial({ color: 0x7dddfc, transparent: true, opacity: 0.6 });
   var edges = new THREE.LineSegments(eGeo, eMat);
   knot.add(edges);
 
@@ -561,12 +563,13 @@ var tt = $('themeToggle'); if(tt) tt.addEventListener('click', onToggle);
   }
   var pulses = [];
   for(var pi = 0; pi < 6; pi++){
+    var pcol = coreColors[pi % coreColors.length];
     var pm = new THREE.Mesh(
-      new THREE.OctahedronGeometry(0.26, 0),
-      new THREE.MeshBasicMaterial({ color: coreColors[pi % coreColors.length], transparent: true, opacity: 0.95 })
+      new THREE.OctahedronGeometry(0.32, 0),
+      new THREE.MeshBasicMaterial({ color: pcol, transparent: true, opacity: 1 })
     );
     var pr = edgePairs[Math.floor(Math.random() * edgePairs.length)];
-    pm.userData = { a: pr[0], b: pr[1], t: Math.random(), spd: 0.5 + Math.random() * 0.8 };
+    pm.userData = { a: pr[0], b: pr[1], t: Math.random(), spd: 0.5 + Math.random() * 0.8, base: pcol };
     pm.position.copy(pr[0].position);
     knot.add(pm);
     pulses.push(pm);
@@ -595,16 +598,16 @@ var tt = $('themeToggle'); if(tt) tt.addEventListener('click', onToggle);
   var sats = [];
   for(var i = 0; i < 10; i++){
     var geo = [new THREE.OctahedronGeometry(0.55,0), new THREE.TetrahedronGeometry(0.6,0), new THREE.IcosahedronGeometry(0.42,0)][i%3];
-    var m = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ color: coreColors[i%4], wireframe: true, transparent: true, opacity: 0.5 }));
+    var m = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ color: coreColors[i%4], wireframe: true, transparent: true, opacity: 0.7 }));
     var ang = Math.random()*Math.PI*2, rad = 12 + Math.random()*9, elev = (Math.random()-0.5)*12;
-    m.userData = { ang: ang, rad: rad, elev: elev, spd: 0.004 + Math.random()*0.008 };
+    m.userData = { ang: ang, rad: rad, elev: elev, spd: 0.004 + Math.random()*0.008, base: coreColors[i%4] };
     m.position.set(Math.cos(ang)*rad, elev, Math.sin(ang)*rad);
     group.add(m);
     sats.push(m);
   }
 
   /* particle field */
-  var pCount = 240;
+  var pCount = compact ? 110 : 240;
   var pGeo = new THREE.BufferGeometry();
   var pPos = new Float32Array(pCount*3);
   for(var i2=0;i2<pCount;i2++){
@@ -613,7 +616,7 @@ var tt = $('themeToggle'); if(tt) tt.addEventListener('click', onToggle);
     pPos[i2*3+2] = (Math.random()-0.5)*60 - 10;
   }
   pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
-  var pMat = new THREE.PointsMaterial({ color: 0x8fe3ff, size: 0.14, transparent: true, opacity: 0.55 });
+  var pMat = new THREE.PointsMaterial({ color: 0x8fe3ff, size: 0.18, transparent: true, opacity: 0.7 });
   var points = new THREE.Points(pGeo, pMat);
   scene.add(points);
 
@@ -627,8 +630,13 @@ var tt = $('themeToggle'); if(tt) tt.addEventListener('click', onToggle);
     camera.aspect = window.innerWidth/window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
+    var w = window.innerWidth;
+    if(w >= 1180){ group.position.x = 7.4; group.position.y = 0; group.scale.setScalar(1.1); }
+    else if(w >= 900){ group.position.x = 3.6; group.position.y = 0; group.scale.setScalar(1); }
+    else { group.position.x = 0; group.position.y = -2.6; group.scale.setScalar(0.86); }
   }
   window.addEventListener('resize', onResize);
+  onResize();
 
   var clock = new THREE.Clock();
   var scrollY = 0;
@@ -644,6 +652,13 @@ var tt = $('themeToggle'); if(tt) tt.addEventListener('click', onToggle);
     knot.rotation.x = 0.6 + Math.sin(t*0.2)*0.12;
     coreInner.rotation.x += 0.0025;
     coreInner.rotation.y += 0.003;
+
+    pulses.forEach(function(p){
+      var ud = p.userData;
+      ud.t += 0.006 * ud.spd;
+      if(ud.t > 1) ud.t -= 1;
+      p.position.lerpVectors(ud.a.position, ud.b.position, ud.t);
+    });
 
     shells.forEach(function(sl, i){
       sl.mesh.rotation.x += sl.rx;
@@ -691,13 +706,27 @@ var tt = $('themeToggle'); if(tt) tt.addEventListener('click', onToggle);
     if(document.hidden) stopLoop(); else startLoop();
   });
 
+  var lightMap = { 12569853: 0x0b7285, 13431935: 0x0e7490, 12566499: 0x4338ca, 12550026: 0x9a3412, 16754253: 0x5b21b6, 9408884: 0x7c3aed };
+
   window.setThemeHooks.push(function(theme){
     var light = theme === 'light';
-    knot.traverse(function(o){ if(o.isMesh) o.material.color.setHex(light ? 0x0b7285 : 0x7dddfc); });
-    coreInner.material.opacity = light ? 0.14 : 0.12;
+    knot.traverse(function(o){
+      if(o.isLineSegments){
+        o.material.color.setHex(light ? 0x0e7490 : 0x7dddfc);
+        o.material.opacity = light ? 0.5 : 0.6;
+      } else if(o.isMesh && o.userData && o.userData.base !== undefined){
+        o.material.color.setHex(light ? (lightMap[o.userData.base] || 0x0b7285) : o.userData.base);
+      }
+    });
+    coreInner.material.color.setHex(light ? 0x0b7285 : 0xffffff);
+    coreInner.material.opacity = light ? 0.2 : 0.16;
+    sats.forEach(function(s, i){
+      s.material.color.setHex(light ? (lightMap[s.userData.base] || 0x0b7285) : s.userData.base);
+    });
     groups_tint(shells, light);
     function groups_tint(arr){ arr.forEach(function(s){ s.mesh.material.color.setHex(light ? 0x0b7285 : 0x7dddfc); }); }
     pMat.color.setHex(light ? 0x0e7490 : 0x8fe3ff);
+    pMat.opacity = light ? 0.5 : 0.7;
   });
 })();
 
