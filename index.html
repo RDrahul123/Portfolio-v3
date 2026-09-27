@@ -1642,7 +1642,7 @@ function closeMobile(){
         Execute as:  Me
         Who has access:  Anyone        <-- required for cross-origin POST
    3) Copy the .../exec URL and paste it into CONTACT_ENDPOINT below.      */
-var CONTACT_ENDPOINT = 'PASTE_APPS_SCRIPT_WEB_APP_URL_HERE';
+var CONTACT_ENDPOINT = 'https://script.google.com/macros/s/AKfycbyI3UAH1iAruaF36pWaRpVIK0bpgzjBkAUXxWxY89httktggf_AnXrWEUz3dcAxr6K1/exec';
 
 function contactEndpointReady(){
   return typeof CONTACT_ENDPOINT === 'string' &&
@@ -1716,7 +1716,13 @@ function initContactForm(){
       })
     })
     .then(function(res){ if(!res.ok) throw new Error('HTTP ' + res.status); return res.text(); })
-    .then(function(){
+    .then(function(txt){
+      /* Apps Script returns HTTP 200 even when doPost caught an error,
+         so honour the JSON ok flag instead of trusting the status alone. */
+      if(txt){
+        try{ var j = JSON.parse(txt); if(j && j.ok === false) throw new Error(j.error || 'server rejected'); }
+        catch(ignore){ if(!(ignore instanceof SyntaxError)) throw ignore; }
+      }
       form.reset();
       if(count) count.textContent = '0 / 4000';
       setBusy(false);
