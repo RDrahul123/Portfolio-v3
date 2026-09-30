@@ -55,8 +55,8 @@
       "AI-CURIOUS ENGINEER",
       "BUILDING TOWARD GENAI"
     ],
-    "headline": "Turning Data Into Intelligent Systems.",
-    "supporting": "I build data pipelines, machine learning models, and dashboards that turn messy, real-world data into decisions teams actually trust — and I'm actively growing toward deeper ML/AI engineering work."
+    "headline": "Data, made useful.",
+    "supporting": "I turn messy datasets into dependable pipelines, clear analysis, and tools that help teams make better decisions."
   },
   "about": {
     "eyebrow": "About Me",
@@ -678,7 +678,7 @@
       {
         "status": "LEARNING",
         "title": "LLMs & Applied GenAI",
-        "detail": "[ADD SPECIFIC COURSE / PROJECT ONCE UNDERWAY — currently early-stage self-study]"
+        "detail": "Early self-study; looking for a first project that puts these ideas to a measurable test."
       },
       {
         "status": "QUEUED",
@@ -699,7 +699,7 @@
       },
       {
         "name": "Microsoft Azure AZ-900",
-        "status": "Studied — [ADD IF/WHEN CERTIFIED]",
+        "status": "Studied — certification not yet completed",
         "url": ""
       }
     ]
