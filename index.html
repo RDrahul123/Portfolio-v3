@@ -619,21 +619,21 @@ var tt = $('themeToggle'); if(tt) tt.addEventListener('click', onToggle);
   );
   knot.add(coreInner);
 
-  /* orbiting shells */
+  /* orbiting shells — one ring reads as designed, three read as clutter */
   var shells = [];
-  for(var s = 0; s < 3; s++){
+  for(var s = 0; s < 1; s++){
     var ring = new THREE.Mesh(
-      new THREE.TorusGeometry(8.5 + s*3.4, 0.06, 8, 90),
-      new THREE.MeshBasicMaterial({ color: 0x7dddfc, transparent: true, opacity: 0.28 - s*0.07 })
+      new THREE.TorusGeometry(9.2, 0.05, 8, 120),
+      new THREE.MeshBasicMaterial({ color: 0x7dddfc, transparent: true, opacity: 0.24 })
     );
-    ring.rotation.set(s*0.8 + 0.3, s*0.5, 0.4);
+    ring.rotation.set(0.3, 0.5, 0.4);
     group.add(ring);
-    shells.push({ mesh: ring, rx: 0.003 + s*0.0012, ry: -0.0022 });
+    shells.push({ mesh: ring, rx: 0.0026, ry: -0.0022 });
   }
 
   /* satellites */
   var sats = [];
-  for(var i = 0; i < 10; i++){
+  for(var i = 0; i < 5; i++){
     var geo = [new THREE.OctahedronGeometry(0.55,0), new THREE.TetrahedronGeometry(0.6,0), new THREE.IcosahedronGeometry(0.42,0)][i%3];
     var m = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ color: coreColors[i%4], wireframe: true, transparent: true, opacity: 0.7 }));
     var ang = Math.random()*Math.PI*2, rad = 12 + Math.random()*9, elev = (Math.random()-0.5)*12;
@@ -644,7 +644,7 @@ var tt = $('themeToggle'); if(tt) tt.addEventListener('click', onToggle);
   }
 
   /* particle field */
-  var pCount = compact ? 110 : 240;
+  var pCount = compact ? 70 : 130;
   var pGeo = new THREE.BufferGeometry();
   var pPos = new Float32Array(pCount*3);
   for(var i2=0;i2<pCount;i2++){
@@ -660,19 +660,25 @@ var tt = $('themeToggle'); if(tt) tt.addEventListener('click', onToggle);
   /* ══════════ VOLUMETRIC DEPTH LAYERS ══════════ */
 
   /* --- seamless circuit-board substrate (seamless via wrapped redraw) --- */
+  /* Schematic substrate: every trace snaps to a strict module with one uniform
+     hairline weight and pads only at endpoints. Random traces read as noise —
+     snapped traces read as engineering. */
   function circuitTexture(size, cell, color, alphaScale){
     var c = document.createElement('canvas');
     c.width = c.height = size;
     var g = c.getContext('2d');
     var step = size / cell;
-    var lw = Math.max(1, size / 820);
+    var lw = Math.max(1, Math.round(size / 900));
     g.strokeStyle = color;
     g.fillStyle = color;
-    var offs = [[0,0],[-size,0],[size,0],[0,-size],[0,size]];
-    function trace(pts, alpha){
-      g.globalAlpha = alpha;
+    g.lineCap = 'butt';
+    g.lineJoin = 'miter';
+    /* 3x3 wrap set keeps the tile seamless for traces that leave the tile */
+    var offs = [];
+    for(var ox=-1; ox<=1; ox++) for(var oy=-1; oy<=1; oy++) offs.push([ox*size, oy*size]);
+    function trace(pts, a){
+      g.globalAlpha = a;
       g.lineWidth = lw;
-      g.lineCap = 'butt';
       for(var k=0;k<offs.length;k++){
         g.beginPath();
         g.moveTo(pts[0][0] + offs[k][0], pts[0][1] + offs[k][1]);
@@ -680,30 +686,28 @@ var tt = $('themeToggle'); if(tt) tt.addEventListener('click', onToggle);
         g.stroke();
       }
     }
-    var routes = Math.round(cell * 2.4);
+    var routes = Math.round(cell * 0.85);
     for(var r=0;r<routes;r++){
-      var x = Math.random()*size, y = Math.random()*size;
-      var pts = [[x,y]];
+      var cx = Math.floor(Math.random()*(cell+2)) - 1;
+      var cy = Math.floor(Math.random()*(cell+2)) - 1;
+      var pts = [[cx*step, cy*step]];
       var horiz = Math.random() < 0.5;
-      var segs = 1 + Math.floor(Math.random()*4);
+      var segs = 2 + Math.floor(Math.random()*3);
       for(var s2=0;s2<segs;s2++){
-        var span = step * (1 + Math.floor(Math.random()*3));
-        if(horiz) x += (Math.random()<0.5?1:-1)*span; else y += (Math.random()<0.5?1:-1)*span;
-        x = Math.max(0, Math.min(size, x));
-        y = Math.max(0, Math.min(size, y));
-        pts.push([x,y]);
+        var span = 1 + Math.floor(Math.random()*4);
+        if(horiz) cx += (Math.random()<0.5?1:-1)*span; else cy += (Math.random()<0.5?1:-1)*span;
+        pts.push([cx*step, cy*step]);
         horiz = !horiz;
       }
-      trace(pts, (0.10 + Math.random()*0.24) * alphaScale);
-      g.fillStyle = color;
-      for(var q=0;q<pts.length;q++){
-        if(Math.random() < 0.28){
-          g.globalAlpha = (0.16 + Math.random()*0.28) * alphaScale;
-          g.beginPath();
-          g.arc(pts[q][0], pts[q][1], lw*2.1, 0, Math.PI*2);
-          g.fill();
-        }
-      }
+      trace(pts, (0.13 + Math.random()*0.19) * alphaScale);
+      g.globalAlpha = (0.20 + Math.random()*0.22) * alphaScale;
+      g.beginPath();
+      g.arc(pts[0][0], pts[0][1], lw*2.4, 0, Math.PI*2);
+      g.fill();
+      var end = pts[pts.length-1];
+      g.beginPath();
+      g.arc(end[0], end[1], lw*1.7, 0, Math.PI*2);
+      g.fill();
     }
     return c;
   }
@@ -775,10 +779,8 @@ var tt = $('themeToggle'); if(tt) tt.addEventListener('click', onToggle);
     scene.add(p);
     return { points: p, geo: geo, mat: mat, n: count, rise: 0.004 + Math.random()*0.005, drift: (Math.random()<0.5?1:-1)*0.006, baseOp: opacity };
   }
-  var dustFar  = dustBand(compact?44:84,  220, 150, 110, -84, 0.55, 0.20, 0x63cdf0);
-  var dustMid  = dustBand(compact?20:36,  150, 110, 80,  -30, 0.26, 0.24, 0x8fe3ff);
-  var dustNear = dustBand(compact?10:18,  110, 80,  60,   16, 0.17, 0.30, 0xbdf3ff);
-  var dustBands = [dustFar, dustMid, dustNear];
+  var dustFar  = dustBand(compact?26:48,  220, 150, 110, -84, 0.52, 0.17, 0x7fd8f2);
+  var dustBands = [dustFar];
 
   /* --- volumetric core glow (soft bloom behind the knot) --- */
   function glowTexture(){

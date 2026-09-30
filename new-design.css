@@ -107,14 +107,16 @@ main{ position:relative; z-index:2; }
    (texture injected at runtime from the WebGL scene), so it costs no per-frame fill */
 .circuit-substrate{
   position:fixed; inset:0; z-index:0; pointer-events:none;
-  background-image: var(--circuit-far, none);
-  background-repeat: repeat;
-  background-size: 640px 640px;
-  opacity:.30;
-  -webkit-mask-image: radial-gradient(135% 105% at 50% 28%, #000 26%, rgba(0,0,0,.5) 58%, transparent 80%);
-  mask-image: radial-gradient(135% 105% at 50% 28%, #000 26%, rgba(0,0,0,.5) 58%, transparent 80%);
+  background-image:
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px),
+    var(--circuit-far, none);
+  background-size: 104px 104px, 104px 104px, 700px 700px;
+  opacity:.34;
+  -webkit-mask-image: radial-gradient(140% 110% at 50% 24%, #000 22%, rgba(0,0,0,.45) 56%, transparent 78%);
+  mask-image: radial-gradient(140% 110% at 50% 24%, #000 22%, rgba(0,0,0,.45) 56%, transparent 78%);
 }
-[data-theme="light"] .circuit-substrate{ opacity:.26; }
+[data-theme="light"] .circuit-substrate{ opacity:.5; }
 
 #bgCanvas{ position:fixed; inset:0; z-index:0; width:100vw; height:100vh; pointer-events:none; opacity:.78; }
 [data-theme="light"] #bgCanvas{ opacity:.5; }
