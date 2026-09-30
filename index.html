@@ -854,6 +854,7 @@ var tt = $('themeToggle'); if(tt) tt.addEventListener('click', onToggle);
       ud.t += 0.006 * ud.spd;
       if(ud.t > 1) ud.t -= 1;
       p.position.lerpVectors(ud.a.position, ud.b.position, ud.t);
+      p.scale.setScalar(0.88 + Math.sin(t*2.2 + ud.t*6.28)*0.12);
     });
 
     shells.forEach(function(sl, i){
@@ -865,7 +866,7 @@ var tt = $('themeToggle'); if(tt) tt.addEventListener('click', onToggle);
       s.userData.ang += s.userData.spd;
       s.position.x = Math.cos(s.userData.ang)*s.userData.rad;
       s.position.z = Math.sin(s.userData.ang)*s.userData.rad;
-      s.rotation.x += 0.02; s.rotation.y += 0.03;
+      s.rotation.x += 0.006; s.rotation.y += 0.008;
     });
 
     var pp = pGeo.attributes.position.array;
@@ -906,11 +907,12 @@ var tt = $('themeToggle'); if(tt) tt.addEventListener('click', onToggle);
 
     var targetX = mouse.x * 2.4 + st*2;
     var targetY = -mouse.y * 1.6 - st*0.8;
-    camera.position.x += (targetX - camera.position.x) * 0.03;
-    camera.position.y += (targetY - camera.position.y) * 0.03;
+    camera.position.x += (targetX - camera.position.x) * 0.045;
+    camera.position.y += (targetY - camera.position.y) * 0.045;
     camera.lookAt(mouse.x*2, -mouse.y*1.2 + st*0.4, 0);
 
-    group.rotation.y = mouse.x * 0.1 - st*0.5;
+    group.rotation.x = mouse.y * 0.055 + Math.sin(t*0.15)*0.018;
+    group.rotation.y = mouse.x * 0.14 - st*0.5;
     group.position.z = st * 6;
 
     renderer.render(scene, camera);
@@ -986,10 +988,11 @@ if(canHover && !reduceMotion){
 /* ---------- 3D tilt cards ---------- */
 function bindTilt(){
   if(!canHover || reduceMotion) return;
-  $$('.tilt-card').forEach(function(card){
+  /* Reserve physical tilt for the portrait and featured work; smaller rows stay still. */
+  $$('.proj-card, .photo-frame').forEach(function(card){
     if(card.dataset.tiltBound) return;
     card.dataset.tiltBound = '1';
-    var strength = parseFloat(card.dataset.tilt || '7');
+    var strength = parseFloat(card.dataset.tilt || '3') * 0.42;
     card.style.transformPerspective = '900px';
     card.addEventListener('mousemove', function(e){
       var r = card.getBoundingClientRect();
@@ -997,16 +1000,16 @@ function bindTilt(){
       var py = (e.clientY - r.top)/r.height;
       var rx = (py - 0.5) * -strength;
       var ry = (px - 0.5) * strength;
-      card.style.transition = 'transform .12s ease-out';
-      card.style.transform = 'perspective(900px) rotateX(' + rx + 'deg) rotateY(' + ry + 'deg) translateY(-4px)';
-      var s = card.querySelector('.tilt-sheen');
-      if(s) s.style.opacity = 1, s.style.background = 'radial-gradient(circle at ' + (px*100) + '% ' + (py*100) + '%, rgba(255,255,255,.14), transparent 55%)';
+      card.classList.add('is-tilted');
+      card.style.setProperty('--pointer-x', (px*100) + '%');
+      card.style.setProperty('--pointer-y', (py*100) + '%');
+      card.style.transition = 'transform .2s cubic-bezier(.2,.65,.3,1)';
+      card.style.transform = 'perspective(1000px) rotateX(' + rx + 'deg) rotateY(' + ry + 'deg) translateY(-2px)';
     });
     card.addEventListener('mouseleave', function(){
+      card.classList.remove('is-tilted');
       card.style.transition = 'transform .55s cubic-bezier(.16,1,.3,1)';
-      card.style.transform = 'perspective(900px) rotateX(0) rotateY(0) translateY(0)';
-      var s = card.querySelector('.tilt-sheen');
-      if(s) s.style.opacity = 0;
+      card.style.transform = '';
     });
   });
 }
@@ -1470,13 +1473,16 @@ function initFX(data){
   });
 
   /* hero intro */
-  var heroTimeline = gsap.timeline({ delay: 0.1 });
-  heroTimeline
-    .from('.hero-badge', { y: 24, opacity: 0, duration: 0.8, ease: 'power3.out' })
-    .from('.hero-title .line', { yPercent: 110, opacity: 0, duration: 1.1, stagger: 0.12, ease: 'power4.out' }, '-=0.5')
-    .from('.hero-sub', { y: 22, opacity: 0, duration: 0.8, ease: 'power3.out' }, '-=0.6')
-    .from('.hero-ctas', { y: 18, opacity: 0, duration: 0.7, ease: 'power3.out' }, '-=0.5')
-    .from('.hero-meta', { y: 16, opacity: 0, duration: 0.7, ease: 'power3.out' }, '-=0.4');
+  if(!reduceMotion){
+    var heroTimeline = gsap.timeline({ delay: 0.1 });
+    heroTimeline
+      .from('.hero-badge', { y: 18, opacity: 0, duration: 0.75, ease: 'power3.out' })
+      .from('.hero-title .line', { yPercent: 105, opacity: 0, duration: 1, stagger: 0.1, ease: 'power4.out' }, '-=0.42')
+      .from('.hero-sub', { y: 16, opacity: 0, duration: 0.7, ease: 'power3.out' }, '-=0.48')
+      .from('.hero-ctas', { y: 12, opacity: 0, duration: 0.65, ease: 'power3.out' }, '-=0.42')
+      .from('.hero-meta', { y: 10, opacity: 0, duration: 0.65, ease: 'power3.out' }, '-=0.35')
+      .from('.hero-specimen', { x: 14, opacity: 0, duration: 0.85, ease: 'power3.out' }, '-=0.55');
+  }
 
   /* hero scroll parallax — Apple-style scale on scroll-out */
   if(!reduceMotion){
@@ -1499,6 +1505,33 @@ function initFX(data){
         yPercent: 120, opacity: 0, duration: 0.95, stagger: 0.035, ease: 'power4.out',
         scrollTrigger: { trigger: el, start: 'top 78%', once: true }
       });
+    });
+
+    /* Field-study transitions: shallow perspective on work, softer rise on supporting rows. */
+    gsap.from('.proj-card', {
+      y: 26, rotateX: 2.4, opacity: 0, transformOrigin: '50% 0%',
+      duration: 0.82, stagger: 0.11, ease: 'power3.out', clearProps: 'transform,opacity',
+      scrollTrigger: { trigger: '#projects', start: 'top 76%', once: true }
+    });
+    gsap.from('.skill-card', {
+      y: 16, opacity: 0, duration: 0.65, stagger: 0.055, ease: 'power2.out', clearProps: 'transform,opacity',
+      scrollTrigger: { trigger: '#skills', start: 'top 78%', once: true }
+    });
+    gsap.from('.xp-entry', {
+      x: -18, opacity: 0, duration: 0.75, stagger: 0.16, ease: 'power3.out', clearProps: 'transform,opacity',
+      scrollTrigger: { trigger: '#experience', start: 'top 76%', once: true }
+    });
+    gsap.from('.lab-card', {
+      y: 14, opacity: 0, duration: 0.65, stagger: 0.07, ease: 'power2.out', clearProps: 'transform,opacity',
+      scrollTrigger: { trigger: '#ai-lab', start: 'top 78%', once: true }
+    });
+    gsap.from('.cred-row', {
+      y: 12, opacity: 0, duration: 0.58, stagger: 0.08, ease: 'power2.out', clearProps: 'transform,opacity',
+      scrollTrigger: { trigger: '#credentials', start: 'top 82%', once: true }
+    });
+    gsap.from('.note-card', {
+      y: 12, opacity: 0, duration: 0.58, stagger: 0.08, ease: 'power2.out', clearProps: 'transform,opacity',
+      scrollTrigger: { trigger: '#notes', start: 'top 82%', once: true }
     });
   } else {
     $$('.split-ready').forEach(function(el){ el.querySelectorAll('.word-in').forEach(function(w){ w.style.transform = 'none'; w.style.opacity = 1; }); });
