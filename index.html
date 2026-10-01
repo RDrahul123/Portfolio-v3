@@ -814,11 +814,17 @@ var tt = $('themeToggle'); if(tt) tt.addEventListener('click', onToggle);
   group.add(coreGlow);
 
 
-  var mouse = { x: 0, y: 0 };
-  window.addEventListener('mousemove', function(e){
-    mouse.x = (e.clientX / window.innerWidth) - 0.5;
-    mouse.y = (e.clientY / window.innerHeight) - 0.5;
-  }, {passive: true});
+  var mouse = { x: 0, y: 0 }, easedMouse = { x: 0, y: 0 };
+  var heroEl = $('hero');
+  if(heroEl){
+    heroEl.addEventListener('pointermove', function(e){
+      if(e.pointerType === 'touch') return;
+      var r = heroEl.getBoundingClientRect();
+      mouse.x = Math.max(-0.5, Math.min(0.5, (e.clientX-r.left)/r.width-0.5));
+      mouse.y = Math.max(-0.5, Math.min(0.5, (e.clientY-r.top)/r.height-0.5));
+    }, {passive:true});
+    heroEl.addEventListener('pointerleave', function(){ mouse.x = 0; mouse.y = 0; }, {passive:true});
+  }
 
   function onResize(){
     camera.aspect = window.innerWidth/window.innerHeight;
@@ -835,43 +841,52 @@ var tt = $('themeToggle'); if(tt) tt.addEventListener('click', onToggle);
   onResize();
 
   var clock = new THREE.Clock();
+  var simulationTime = 0;
   var scrollY = 0;
   window.addEventListener('scroll', function(){ scrollY = window.pageYOffset; }, {passive:true});
 
   var running = false;
   function anim(){
     if(!running) return;
-    var t = clock.getElapsedTime();
+    /* Integrate at a 60Hz reference rate, but remain stable on 90/120/144Hz
+       displays and clamp resumed frames after a tab has been backgrounded. */
+    var dt = Math.min(clock.getDelta(), 0.05);
+    var frame = dt * 60;
+    simulationTime += dt;
+    var t = simulationTime;
+    var follow = 1 - Math.exp(-7 * dt);
+    easedMouse.x += (mouse.x-easedMouse.x) * follow;
+    easedMouse.y += (mouse.y-easedMouse.y) * follow;
     var st = Math.min(scrollY/window.innerHeight, 1);
 
-    knot.rotation.y += 0.0022;
+    knot.rotation.y += 0.0022 * frame;
     knot.rotation.x = 0.6 + Math.sin(t*0.2)*0.12;
-    coreInner.rotation.x += 0.0025;
-    coreInner.rotation.y += 0.003;
+    coreInner.rotation.x += 0.0025 * frame;
+    coreInner.rotation.y += 0.003 * frame;
 
     pulses.forEach(function(p){
       var ud = p.userData;
-      ud.t += 0.006 * ud.spd;
+      ud.t += 0.006 * ud.spd * frame;
       if(ud.t > 1) ud.t -= 1;
       p.position.lerpVectors(ud.a.position, ud.b.position, ud.t);
       p.scale.setScalar(0.88 + Math.sin(t*2.2 + ud.t*6.28)*0.12);
     });
 
     shells.forEach(function(sl, i){
-      sl.mesh.rotation.x += sl.rx;
-      sl.mesh.rotation.y += sl.ry;
+      sl.mesh.rotation.x += sl.rx * frame;
+      sl.mesh.rotation.y += sl.ry * frame;
     });
 
     sats.forEach(function(s){
-      s.userData.ang += s.userData.spd;
+      s.userData.ang += s.userData.spd * frame;
       s.position.x = Math.cos(s.userData.ang)*s.userData.rad;
       s.position.z = Math.sin(s.userData.ang)*s.userData.rad;
-      s.rotation.x += 0.006; s.rotation.y += 0.008;
+      s.rotation.x += 0.006 * frame; s.rotation.y += 0.008 * frame;
     });
 
     var pp = pGeo.attributes.position.array;
     for(var i3=0;i3<pCount;i3++){
-      pp[i3*3+1] += 0.006;
+      pp[i3*3+1] += 0.006 * frame;
       if(pp[i3*3+1] > 30) pp[i3*3+1] = -30;
     }
     pGeo.attributes.position.needsUpdate = true;
@@ -890,8 +905,8 @@ var tt = $('themeToggle'); if(tt) tt.addEventListener('click', onToggle);
       var db = dustBands[di];
       var dp = db.geo.attributes.position.array;
       for(var dj=0; dj<db.n; dj++){
-        dp[dj*3+1] += db.rise;
-        dp[dj*3]   += db.drift;
+        dp[dj*3+1] += db.rise * frame;
+        dp[dj*3]   += db.drift * frame;
         if(dp[dj*3+1] > 55) dp[dj*3+1] = -55;
         if(dp[dj*3] >  70) dp[dj*3]   = -70;
         if(dp[dj*3] < -70) dp[dj*3]   =  70;
@@ -905,14 +920,14 @@ var tt = $('themeToggle'); if(tt) tt.addEventListener('click', onToggle);
     var gs = 1 + Math.sin(t*0.4)*0.04;
     coreGlow.scale.setScalar(gs);
 
-    var targetX = mouse.x * 2.4 + st*2;
-    var targetY = -mouse.y * 1.6 - st*0.8;
-    camera.position.x += (targetX - camera.position.x) * 0.045;
-    camera.position.y += (targetY - camera.position.y) * 0.045;
-    camera.lookAt(mouse.x*2, -mouse.y*1.2 + st*0.4, 0);
+    var targetX = easedMouse.x * 2.4 + st*2;
+    var targetY = -easedMouse.y * 1.6 - st*0.8;
+    camera.position.x += (targetX - camera.position.x) * follow;
+    camera.position.y += (targetY - camera.position.y) * follow;
+    camera.lookAt(easedMouse.x*2, -easedMouse.y*1.2 + st*0.4, 0);
 
-    group.rotation.x = mouse.y * 0.055 + Math.sin(t*0.15)*0.018;
-    group.rotation.y = mouse.x * 0.14 - st*0.5;
+    group.rotation.x = easedMouse.y * 0.055 + Math.sin(t*0.15)*0.018;
+    group.rotation.y = easedMouse.x * 0.14 - st*0.5;
     group.position.z = st * 6;
 
     renderer.render(scene, camera);
@@ -993,22 +1008,30 @@ function bindTilt(){
     if(card.dataset.tiltBound) return;
     card.dataset.tiltBound = '1';
     var strength = parseFloat(card.dataset.tilt || '3') * 0.42;
+    var bounds = null, pending = null, paintFrame = 0;
     card.style.transformPerspective = '900px';
-    card.addEventListener('mousemove', function(e){
-      var r = card.getBoundingClientRect();
-      var px = (e.clientX - r.left)/r.width;
-      var py = (e.clientY - r.top)/r.height;
+    function paintTilt(){
+      paintFrame = 0;
+      if(!pending || !bounds) return;
+      var px = Math.max(0, Math.min(1, (pending.x-bounds.left)/bounds.width));
+      var py = Math.max(0, Math.min(1, (pending.y-bounds.top)/bounds.height));
       var rx = (py - 0.5) * -strength;
       var ry = (px - 0.5) * strength;
       card.classList.add('is-tilted');
       card.style.setProperty('--pointer-x', (px*100) + '%');
       card.style.setProperty('--pointer-y', (py*100) + '%');
-      card.style.transition = 'transform .2s cubic-bezier(.2,.65,.3,1)';
       card.style.transform = 'perspective(1000px) rotateX(' + rx + 'deg) rotateY(' + ry + 'deg) translateY(-2px)';
-    });
-    card.addEventListener('mouseleave', function(){
+    }
+    card.addEventListener('pointerenter', function(){ bounds = card.getBoundingClientRect(); });
+    card.addEventListener('pointermove', function(e){
+      if(!bounds) bounds = card.getBoundingClientRect();
+      pending = { x: e.clientX, y: e.clientY };
+      if(!paintFrame) paintFrame = requestAnimationFrame(paintTilt);
+    }, {passive:true});
+    card.addEventListener('pointerleave', function(){
+      if(paintFrame) cancelAnimationFrame(paintFrame);
+      paintFrame = 0; pending = null; bounds = null;
       card.classList.remove('is-tilted');
-      card.style.transition = 'transform .55s cubic-bezier(.16,1,.3,1)';
       card.style.transform = '';
     });
   });
