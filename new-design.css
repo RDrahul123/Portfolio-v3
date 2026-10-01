@@ -1617,7 +1617,7 @@ body.menu-open .mobile-menu{overflow-y:auto;overscroll-behavior:contain;}
 /* Navigation finish: a compact instrument panel on desktop and a floating control rail on phones. */
 #nav{padding:10px clamp(18px,4vw,52px) 0;}
 .nav-island{
-  border:1px solid var(--line-2);border-radius:6px;padding:7px 9px 7px 12px;
+  max-width:1160px;border:1px solid var(--line-2);border-radius:6px;padding:7px 9px 7px 12px;
   background:color-mix(in srgb,var(--bg) 94%,transparent);
   box-shadow:0 14px 36px -28px rgba(0,0,0,.52);
 }
@@ -1647,4 +1647,23 @@ body.menu-open .mobile-menu{overflow-y:auto;overscroll-behavior:contain;}
   .burger span:nth-child(1){top:13px;}
   .burger span:nth-child(2){top:21px;}
   .burger.active span:nth-child(1),.burger.active span:nth-child(2){top:17.3px;}
+}
+
+/* The phone menu is an index, not a long poster of oversized links. */
+.mm-inner{
+  width:min(100%,720px);height:auto;min-height:100dvh;margin-inline:auto;
+  justify-content:flex-start;gap:20px;padding:calc(88px + env(safe-area-inset-top)) clamp(24px,6vw,48px) calc(24px + env(safe-area-inset-bottom));
+}
+.mm-heading{display:flex;justify-content:space-between;align-items:center;gap:16px;padding-bottom:11px;border-bottom:1px solid var(--line-2);font-family:var(--font-m);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--acc);}
+.mm-links{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 24px;border-top:1px solid var(--line-2);}
+.mm-links a{display:flex;align-items:center;justify-content:space-between;gap:8px;min-width:0;min-height:54px;padding:11px 3px;border-bottom:1px solid var(--line);font-size:clamp(16px,2.4vw,21px);line-height:1.12;font-weight:600;}
+.mm-links a::after{content:'↗';flex:none;font-family:var(--font-m);font-size:11px;font-weight:400;color:var(--ink-faint);transition:transform .2s ease,color .2s ease;}
+.mm-links a:hover,.mm-links a:focus-visible{color:var(--acc);}
+.mm-links a:hover::after,.mm-links a:focus-visible::after{color:var(--acc);transform:translate(2px,-2px);}
+.mm-soc{display:flex;flex-wrap:wrap;gap:7px 16px;margin:0;padding:15px 0 0;border-top:1px solid var(--line);}
+.mm-soc a{font-family:var(--font-m);font-size:10px;color:var(--ink-faint);padding:5px 0;border-bottom:1px solid var(--line);}
+@media(max-width:360px){
+  .mm-inner{padding-inline:20px;}
+  .mm-links{column-gap:14px;}
+  .mm-links a{font-size:15px;}
 }

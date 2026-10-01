@@ -1906,6 +1906,7 @@ function renderMobile(open){
   var rows = navLinks.map(function(l){ return '<a href="' + l[1] + '">' + l[0] + '</a>'; }).join('');
   var soc = (hero.socials||[]).map(function(s){ var ic = splitEmoji(s.label); return '<a href="' + esc(s.url) + '" target="_blank" rel="noopener"><span class="soc-ic">' + esc(ic[0]) + '</span>' + esc(ic[1].trim() || s.label) + '</a>'; }).join('');
   mm.innerHTML = '<div class="mm-inner">' +
+    '<div class="mm-heading"><span>Section index</span><span>' + String(navLinks.length).padStart(2,'0') + ' destinations</span></div>' +
     '<div class="mm-links">' + rows + '</div>' +
     (soc ? '<div class="mm-soc">' + soc + '</div>' : '') +
     '</div>';
