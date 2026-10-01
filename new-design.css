@@ -1613,3 +1613,38 @@ body.menu-open .mobile-menu{overflow-y:auto;overscroll-behavior:contain;}
   .contact-inner{gap:32px;}
   .contact-form-wrap{margin-top:48px;}
 }
+
+/* Navigation finish: a compact instrument panel on desktop and a floating control rail on phones. */
+#nav{padding:10px clamp(18px,4vw,52px) 0;}
+.nav-island{
+  border:1px solid var(--line-2);border-radius:6px;padding:7px 9px 7px 12px;
+  background:color-mix(in srgb,var(--bg) 94%,transparent);
+  box-shadow:0 14px 36px -28px rgba(0,0,0,.52);
+}
+#nav.scrolled .nav-island{background:color-mix(in srgb,var(--bg) 96%,transparent);border-color:var(--line-2);box-shadow:0 14px 36px -28px rgba(0,0,0,.52);}
+.nav-links{gap:clamp(3px,.5vw,8px);margin-inline:clamp(8px,1.2vw,18px);}
+.nav-links a{min-height:40px;padding:6px 7px;font-size:12px;border-radius:3px;}
+.nav-links a:hover,.nav-links a:focus-visible{background:color-mix(in srgb,var(--acc) 8%,transparent);outline:none;}
+.nav-links a::after{left:8px;right:8px;bottom:4px;}
+.nav-right{gap:7px;}
+.theme-toggle,.burger{width:40px;height:40px;border:1px solid var(--line-2);border-radius:4px;background:var(--bg-2);}
+.theme-toggle:hover{transform:none;background:var(--glass-2);}
+.burger span{left:10px;right:10px;}
+.burger span:nth-child(1){top:14px;}
+.burger span:nth-child(2){top:22px;}
+.burger.active span:nth-child(1),.burger.active span:nth-child(2){top:18.3px;}
+@media(max-width:600px){
+  #nav{padding:9px 12px 0;}
+  .nav-island{border-radius:11px;padding:7px 8px 7px 10px;gap:7px;}
+  .nav-island::before{display:none;}
+  .nav-island::after{left:18px;right:auto;width:32px;bottom:-1px;height:2px;}
+  .nav-logo{gap:8px;font-size:13px;}
+  .logo-sq{width:34px;height:34px;border-radius:8px;}
+  .nav-right{gap:5px;}
+  .theme-toggle,.burger{width:38px;height:38px;border-radius:7px;}
+  .theme-toggle svg{width:16px;height:16px;}
+  .burger span{left:9px;right:9px;}
+  .burger span:nth-child(1){top:13px;}
+  .burger span:nth-child(2){top:21px;}
+  .burger.active span:nth-child(1),.burger.active span:nth-child(2){top:17.3px;}
+}
