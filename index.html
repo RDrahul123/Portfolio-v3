@@ -138,7 +138,7 @@
 
     <div class="hero-ctas">
       <a href="#projects" class="btn btn-solid magnetic">Explore Work <span class="btn-ico">↗</span></a>
-      <a href="./Rahul_Dodke_Resume__Data.pdf" id="heroResumeBtn" class="btn btn-ghost magnetic" download>Download Resume</a>
+      <a href="./Rahul_Dodke_Resume1.pdf" id="heroResumeBtn" class="btn btn-ghost magnetic" download>Download Resume</a>
     </div>
 
     <div class="hero-meta">
@@ -1351,12 +1351,14 @@ function render(data){
 
   /* resume */
   var res = data.resume;
-  var resumeHref = res.fileUrl || './Rahul_Dodke_Resume__Data.pdf';
+  var resumeHref = res.fileUrl || './Rahul_Dodke_Resume1.pdf';
   var heroResume = $('heroResumeBtn');
   heroResume.href = resumeHref;
   heroResume.setAttribute('download', 'Rahul_Dodke_Resume.pdf');
-  $('resumeBtn').href = resumeHref;
-  $('resumeViewBtn').href = res.fileUrl || './Rahul_Dodke_Resume__Data.pdf';
+  var resumeDownload = $('resumeBtn');
+  resumeDownload.href = resumeHref;
+  resumeDownload.setAttribute('download', 'Rahul_Dodke_Resume.pdf');
+  $('resumeViewBtn').href = resumeHref;
   $('resumeSub').textContent = res.buttonSub || res.description || 'PDF · Updated 2026';
 
   /* contact */
