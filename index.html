@@ -89,15 +89,10 @@
     </a>
     <ul class="nav-links">
       <li><a href="#projects">Projects</a></li>
-      <li><a href="#snapshot">Metrics</a></li>
-      <li><a href="#about">About</a></li>
+      <li><a href="#about">About me</a></li>
       <li><a href="#experience">Experience</a></li>
-      <li><a href="#tech-strip">Stack</a></li>
-      <li><a href="#skills">Toolkit</a></li>
-      <li><a href="#pipeline">Method</a></li>
-      <li><a href="#ai-lab">Learning</a></li>
-      <li><a href="#credentials">Credentials</a></li>
-      <li><a href="#github">Code</a></li>
+      <li><a href="#skills">Technical skills</a></li>
+      <li><a href="#ai-lab">AI lab</a></li>
       <li><a href="#notes">Notes</a></li>
       <li><a href="#resume">Resume</a></li>
       <li><a href="#contact">Contact</a></li>
@@ -1903,9 +1898,8 @@ function renderMobile(open){
   if(!open){ mm.classList.remove('open'); mm.setAttribute('aria-hidden','true'); if(window.__refreshScroll) window.__refreshScroll(); return; }
   var hero = DATA.hero || {};
   var navLinks = [
-    ['Projects','#projects'],['Metrics','#snapshot'],['About','#about'],['Experience','#experience'],
-    ['Stack','#tech-strip'],['Toolkit','#skills'],['Method','#pipeline'],['Learning','#ai-lab'],
-    ['Credentials','#credentials'],['Code','#github'],['Notes','#notes'],['Resume','#resume'],['Contact','#contact']
+    ['Projects','#projects'],['About me','#about'],['Experience','#experience'],
+    ['Technical skills','#skills'],['AI lab','#ai-lab'],['Notes','#notes'],['Resume','#resume'],['Contact','#contact']
   ];
   var rows = navLinks.map(function(l){ return '<a href="' + l[1] + '">' + l[0] + '</a>'; }).join('');
   var soc = (hero.socials||[]).map(function(s){ var ic = splitEmoji(s.label); return '<a href="' + esc(s.url) + '" target="_blank" rel="noopener"><span class="soc-ic">' + esc(ic[0]) + '</span>' + esc(ic[1].trim() || s.label) + '</a>'; }).join('');
