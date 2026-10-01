@@ -1184,8 +1184,8 @@ main#app{display:flex; flex-direction:column;}
 }
 #nav.scrolled .nav-island{background:color-mix(in srgb,var(--bg) 92%,transparent); border-color:var(--line-2); box-shadow:none;}
 .logo-sq{width:30px;height:30px;border-radius:2px;background:var(--acc);color:var(--bg);}
-.nav-links{flex:1;min-width:0;justify-content:center;gap:clamp(8px,1.05vw,16px);margin-inline:16px;}
-.nav-links a{border-radius:2px;padding:7px 3px;font-family:var(--font-m);font-size:11px;letter-spacing:0;white-space:nowrap;color:var(--ink-faint);}
+.nav-links{flex:1;min-width:0;justify-content:center;gap:clamp(6px,.72vw,11px);margin-inline:12px;}
+.nav-links a{display:inline-flex;align-items:center;min-height:44px;border-radius:2px;padding:8px 5px;font-family:var(--font-b);font-size:13px;font-weight:500;letter-spacing:0;white-space:nowrap;color:var(--ink-dim);}
 .nav-links a:hover{background:transparent;color:var(--acc);}
 .nav-right{gap:14px;}
 .theme-toggle{border-radius:2px;background:transparent;}
