@@ -2005,7 +2005,6 @@ function initContactForm(){
     .then(function(txt){
       /* Apps Script returns HTTP 200 even when doPost caught an error,
          so honour the JSON ok flag instead of trusting the status alone. */
-      var receipt = null;
       if(txt){
         try{
           var j = JSON.parse(txt);
@@ -2014,17 +2013,13 @@ function initContactForm(){
             rejected.publicMessage = j.error || 'The spreadsheet rejected this message.';
             throw rejected;
           }
-          if(j && j.ok === true) receipt = j;
         }
         catch(ignore){ if(!(ignore instanceof SyntaxError)) throw ignore; }
       }
       form.reset();
       if(count) count.textContent = '0 / 4000';
       setBusy(false);
-      var confirmation = receipt && receipt.tab && receipt.row
-        ? 'Saved to ' + receipt.tab + ', row ' + receipt.row + '. Thanks — I usually reply within a day or two.'
-        : 'Thanks — your message is in. I usually reply within a day or two.';
-      say(confirmation, 'ok');
+      say('Thanks — your message is in. I usually reply within a day or two.', 'ok');
     })
     .catch(function(err){
       setBusy(false);
