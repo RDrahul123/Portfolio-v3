@@ -1667,3 +1667,34 @@ body.menu-open .mobile-menu{overflow-y:auto;overscroll-behavior:contain;}
   .mm-links{column-gap:14px;}
   .mm-links a{font-size:15px;}
 }
+
+/* A little dimensionality for the things worth exploring. */
+.proj-grid{perspective:1400px;}
+.proj-card>*{transform:translateZ(0);transition:transform .42s cubic-bezier(.2,.7,.2,1);}
+.proj-card.is-tilted .proj-card-top{transform:translateZ(15px);}
+.proj-card.is-tilted .proj-title{transform:translateZ(25px);}
+.proj-card.is-tilted .proj-desc,.proj-card.is-tilted .proj-more{transform:translateZ(15px);}
+.proj-card.is-tilted .proj-metrics,.proj-card.is-tilted .proj-tags{transform:translateZ(9px);}
+.proj-card.is-tilted .proj-links{transform:translateZ(12px);}
+#about .pf-inner{perspective:900px;}
+#about .pf-inner img{transform:translateZ(0) scale(1.01);transition:transform .65s cubic-bezier(.2,.7,.2,1);}
+#snapshot .snap-grid{perspective:1200px;}
+#snapshot .snap-cell{transform-style:preserve-3d;transition:transform .4s cubic-bezier(.2,.7,.2,1),border-color .35s;}
+#snapshot .snap-cell .big{transform:translateZ(0);transition:transform .4s cubic-bezier(.2,.7,.2,1);}
+.skills-masonry{perspective:1200px;}
+.skill-card{transform-style:preserve-3d;transition:transform .4s cubic-bezier(.2,.7,.2,1),border-color .35s;}
+.skill-head,.skill-tag{transform:translateZ(0);transition:transform .35s cubic-bezier(.2,.7,.2,1),color .25s;}
+@media(hover:hover) and (pointer:fine){
+  .proj-card:hover .proj-title{transform:translateZ(10px);}
+  #about .photo-frame:hover img{transform:translateZ(12px) scale(1.035);}
+  #snapshot .snap-cell:hover{position:relative;z-index:2;transform:perspective(1000px) rotateX(-2deg) translateY(-3px);}
+  #snapshot .snap-cell:hover .big{transform:translateZ(14px);}
+  #snapshot .snap-cell:hover .snap-label{transform:translateZ(6px);}
+  .skill-card:hover{transform:perspective(1200px) rotateY(-1.2deg) translateY(-2px);}
+  .skill-card:hover .skill-head{transform:translateZ(9px);}
+  .skill-card:hover .skill-tag:nth-child(3n+1){transform:translateZ(6px);}
+}
+@media(prefers-reduced-motion:reduce){
+  .proj-card>*,#about .pf-inner img,#snapshot .snap-cell,#snapshot .snap-cell .big,.skill-card,.skill-head,.skill-tag{transition:none!important;}
+  .proj-card.is-tilted>*,#snapshot .snap-cell:hover,.skill-card:hover,#about .photo-frame:hover img{transform:none!important;}
+}
