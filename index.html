@@ -1544,11 +1544,24 @@ function initFX(data){
       });
     });
 
+    /* Editorial section titles tip into focus as each new chapter arrives. */
+    $$('.sec-title, .contact-title').forEach(function(title){
+      gsap.from(title, {
+        y: 24, rotateX: -7, opacity: 0, transformPerspective: 1100,
+        transformOrigin: '50% 0%', duration: 0.82, ease: 'power3.out', clearProps: 'transform,opacity',
+        scrollTrigger: { trigger: title, start: 'top 84%', once: true }
+      });
+    });
+    gsap.from('.tech-token', {
+      y: 9, opacity: 0, duration: 0.5, stagger: 0.045, ease: 'power2.out', clearProps: 'transform,opacity',
+      scrollTrigger: { trigger: '#tech-strip', start: 'top 88%', once: true }
+    });
+
     /* Field-study transitions: shallow perspective on work, softer rise on supporting rows. */
     gsap.from('.proj-card', {
-      y: isMobile ? 22 : 34, z: isMobile ? -24 : -48, rotateX: isMobile ? 4 : 7,
+      y: isMobile ? 22 : 38, z: isMobile ? -24 : -56, rotateX: isMobile ? 4 : 8,
       opacity: 0, transformPerspective: 1100, transformOrigin: '50% 0%', force3D: true,
-      duration: 0.95, stagger: 0.13, ease: 'power3.out', clearProps: 'transform,opacity',
+      duration: 1, stagger: 0.15, ease: 'power3.out', clearProps: 'transform,opacity',
       scrollTrigger: { trigger: '#projects', start: 'top 76%', once: true }
     });
     gsap.from('.skill-card', {
