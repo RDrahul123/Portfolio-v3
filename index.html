@@ -1269,7 +1269,7 @@ function render(data){
   (exp.items||[]).forEach(function(it, i){
     xr.insertAdjacentHTML('beforeend',
       '<div class="xp-entry' + (i%2 ? ' alt' : '') + '">' +
-      '<div class="xp-timeline"><span class="xp-dot"></span><span class="xp-rail"></span></div>' +
+      '<div class="xp-timeline"><span class="xp-dot"></span><span class="xp-rail-line"></span></div>' +
       '<div class="xp-card tilt-card" data-tilt="3">' +
       '<span class="xp-period">' + esc(it.period) + '</span>' +
       '<h3>' + esc(it.role) + '</h3>' +
@@ -1565,12 +1565,28 @@ function initFX(data){
       scrollTrigger: { trigger: '#projects', start: 'top 76%', once: true }
     });
     gsap.from('.skill-card', {
-      y: 16, opacity: 0, duration: 0.65, stagger: 0.055, ease: 'power2.out', clearProps: 'transform,opacity',
+      y: 18, z: isMobile ? -10 : -22, rotateY: isMobile ? 0 : 2.2,
+      opacity: 0, transformPerspective: 1000, duration: 0.72, stagger: 0.065,
+      ease: 'power2.out', clearProps: 'transform,opacity',
       scrollTrigger: { trigger: '#skills', start: 'top 78%', once: true }
     });
     gsap.from('.xp-entry', {
       x: -18, opacity: 0, duration: 0.75, stagger: 0.16, ease: 'power3.out', clearProps: 'transform,opacity',
       scrollTrigger: { trigger: '#experience', start: 'top 76%', once: true }
+    });
+    if(!isMobile){
+      $$('.xp-rail-line').forEach(function(rail){
+        gsap.fromTo(rail, { scaleY: 0 }, {
+          scaleY: 1, ease: 'none', transformOrigin: 'top center',
+          scrollTrigger: { trigger: rail.closest('.xp-entry'), start: 'top 70%', end: 'bottom 48%', scrub: 0.65 }
+        });
+      });
+    }
+    gsap.from('.snap-cell', {
+      y: 24, z: -34, rotateX: isMobile ? 3 : 6, opacity: 0,
+      transformPerspective: 1100, transformOrigin: '50% 0%', duration: 0.82,
+      stagger: 0.09, ease: 'power3.out', clearProps: 'transform,opacity',
+      scrollTrigger: { trigger: '#snapshot .snap-grid', start: 'top 82%', once: true }
     });
     gsap.from('.lab-card', {
       y: 14, opacity: 0, duration: 0.65, stagger: 0.07, ease: 'power2.out', clearProps: 'transform,opacity',

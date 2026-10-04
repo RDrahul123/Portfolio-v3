@@ -1380,7 +1380,8 @@ main#app{display:flex; flex-direction:column;}
 .xp-entry .xp-timeline{align-items:flex-start;padding-top:10px;}
 .xp-dot{width:7px;height:7px;border-radius:0;background:var(--acc);box-shadow:none;}
 .xp-entry.alt .xp-dot{background:var(--ember);box-shadow:none;}
-.xp-rail-line{width:1px;margin-left:3px;background:var(--line-2);}
+.xp-rail-line{width:1px;margin-left:3px;background:var(--line-2);transform-origin:top center;}
+.xp-entry:last-child .xp-rail-line{display:none;}
 .xp-card{padding:0 0 36px;margin-bottom:38px;border:0;border-bottom:1px solid var(--line);border-radius:0;background:none;}
 .xp-card:hover{border-color:var(--acc);}
 .xp-period{padding:0;border:0;border-radius:0;font-size:9px;letter-spacing:.08em;color:var(--acc);margin-bottom:11px;}
