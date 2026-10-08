@@ -1392,6 +1392,8 @@ function render(data){
 
   /* kick off animations once DOM is populated */
   initFX(data);
+  window.__portfolioReady = true;
+  window.dispatchEvent(new Event('portfolio:ready'));
 }
 
 /* ================================================================
@@ -1587,18 +1589,6 @@ function initFX(data){
       transformPerspective: 1100, transformOrigin: '50% 0%', duration: 0.82,
       stagger: 0.09, ease: 'power3.out', clearProps: 'transform,opacity',
       scrollTrigger: { trigger: '#snapshot .snap-grid', start: 'top 82%', once: true }
-    });
-    gsap.from('.lab-card', {
-      y: 14, opacity: 0, duration: 0.65, stagger: 0.07, ease: 'power2.out', clearProps: 'transform,opacity',
-      scrollTrigger: { trigger: '#ai-lab', start: 'top 78%', once: true }
-    });
-    gsap.from('.cred-row', {
-      y: 12, opacity: 0, duration: 0.58, stagger: 0.08, ease: 'power2.out', clearProps: 'transform,opacity',
-      scrollTrigger: { trigger: '#credentials', start: 'top 82%', once: true }
-    });
-    gsap.from('.note-card', {
-      y: 12, opacity: 0, duration: 0.58, stagger: 0.08, ease: 'power2.out', clearProps: 'transform,opacity',
-      scrollTrigger: { trigger: '#notes', start: 'top 82%', once: true }
     });
   } else {
     $$('.split-ready').forEach(function(el){ el.querySelectorAll('.word-in').forEach(function(w){ w.style.transform = 'none'; w.style.opacity = 1; }); });
@@ -2123,6 +2113,63 @@ $('toTop').addEventListener('click', function(){
 })();
 
 })(window, document);
+</script>
+<script type="module">
+  async function bootMotionScroll(){
+    if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if(!('IntersectionObserver' in window)) return;
+
+    try{
+      const { animate, hover, inView, scroll, stagger } = await import('https://esm.sh/motion@14.0.0?bundle');
+      const motionSections = [
+        { section:'#ai-lab', selector:'.lab-card', y:24, z:-24, rotateX:4, delay:.075 },
+        { section:'#credentials', selector:'.cred-row', x:-18, z:-18, rotateY:2.5, delay:.09 },
+        { section:'#notes', selector:'.note-card', y:23, z:-22, rotateX:3.5, delay:.085 },
+        { section:'#contact', selector:'.contact-method', x:18, z:-16, rotateY:-2.5, delay:.08 }
+      ];
+
+      motionSections.forEach(function(cfg){
+        var section = document.querySelector(cfg.section);
+        if(!section) return;
+        var played = false;
+        inView(section, function(){
+          if(played) return;
+          played = true;
+          var items = Array.from(section.querySelectorAll(cfg.selector));
+          if(!items.length) return;
+          animate(items, {
+            opacity:[0,1],
+            x:[cfg.x || 0,0], y:[cfg.y || 0,0], z:[cfg.z || 0,0],
+            rotateX:[cfg.rotateX || 0,0], rotateY:[cfg.rotateY || 0,0]
+          }, {
+            duration:.82,
+            delay:stagger(cfg.delay),
+            ease:[.22,1,.36,1]
+          });
+        }, { amount:.12 });
+      });
+
+      /* A slow counter-drift makes the fixed schematic feel like a separate depth plane. */
+      var substrate = document.querySelector('.circuit-substrate');
+      if(substrate){
+        var drift = animate(substrate, { y:[0,-30] }, { duration:1, ease:'linear' });
+        scroll(drift);
+      }
+
+      /* Spring settle on small research rows; cards with full pointer tilt keep their own physics. */
+      hover('.lab-card, .note-card, .contact-method', function(element){
+        animate(element, { y:-2, z:4, rotateX:-.7 }, { type:'spring', stiffness:250, damping:24 });
+        return function(){
+          animate(element, { y:0, z:0, rotateX:0 }, { type:'spring', stiffness:250, damping:24 });
+        };
+      });
+    }catch(err){
+      console.warn('Motion scroll enhancement unavailable; base page animations remain active.', err);
+    }
+  }
+
+  if(window.__portfolioReady) bootMotionScroll();
+  else window.addEventListener('portfolio:ready', bootMotionScroll, { once:true });
 </script>
 </body>
 </html>

@@ -1699,3 +1699,8 @@ body.menu-open .mobile-menu{overflow-y:auto;overscroll-behavior:contain;}
   .proj-card>*,#about .pf-inner img,#snapshot .snap-cell,#snapshot .snap-cell .big,.skill-card,.skill-head,.skill-tag{transition:none!important;}
   .proj-card.is-tilted>*,#snapshot .snap-cell:hover,.skill-card:hover,#about .photo-frame:hover img{transform:none!important;}
 }
+.lab-grid,.cred-rows,.notes-grid,.contact-methods{perspective:1100px;}
+.lab-card,.cred-row,.note-card,.contact-method{transform-style:preserve-3d;backface-visibility:hidden;}
+@media(prefers-reduced-motion:reduce){
+  .lab-card,.cred-row,.note-card,.contact-method{transition:none!important;transform:none!important;}
+}
