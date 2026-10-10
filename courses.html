@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0c1314">
+  <meta name="description" content="Practical courses in data and AI by Rahul Dodke.">
+  <title>Courses | Rahul Dodke</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <script>
+    (function(){
+      try{
+        var theme=localStorage.getItem('theme')||'dark';
+        document.documentElement.setAttribute('data-theme',theme);
+        document.querySelector('meta[name="theme-color"]').content=theme==='light'?'#e9e9df':'#0c1314';
+      }catch(e){}
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="new-design.css">
+  <link rel="stylesheet" href="courses.css">
+</head>
+<body class="course-page">
+  <a class="skip-link" href="#course-main">Skip to courses</a>
+  <div class="circuit-substrate" aria-hidden="true"></div>
+
+  <nav id="nav" aria-label="Course navigation">
+    <div class="nav-island">
+      <a href="./index.html" class="nav-logo">
+        <span class="logo-sq">RD</span><span class="logo-txt"><b>Rahul</b> Dodke</span>
+      </a>
+      <div class="course-nav-right">
+        <a class="course-return" href="./index.html">Portfolio <span aria-hidden="true">↗</span></a>
+        <button class="theme-toggle" id="courseThemeToggle" type="button" aria-label="Toggle light / dark theme" title="Toggle theme">
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l-1.41-1.41"/></svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="course-main" id="course-main">
+    <header class="course-hero">
+      <p class="course-kicker">RAHUL DODKE <span>/</span> LEARNING SERIES</p>
+      <h1>Courses for<br><span>curious builders.</span></h1>
+      <p class="course-intro">Practical learning in data and AI. Start with large language models; more courses will join the library as they launch.</p>
+    </header>
+
+    <section class="course-catalog" aria-labelledby="courseCatalogTitle">
+      <div class="course-catalog-head">
+        <h2 id="courseCatalogTitle">Available now</h2>
+        <span>01 COURSE</span>
+      </div>
+
+      <article class="course-entry">
+        <div class="course-number" aria-hidden="true">01</div>
+        <div class="course-copy">
+          <p class="course-topic">ARTIFICIAL INTELLIGENCE <span>/</span> LANGUAGE MODELS</p>
+          <h3>Large Language Models</h3>
+          <p>Explore the LLM course and follow the lessons on its course site.</p>
+        </div>
+        <a class="course-open" href="https://rdrahul123.github.io/LLMs/" target="_blank" rel="noopener noreferrer" aria-label="Open the Large Language Models course in a new tab">
+          <span>Open course</span><span aria-hidden="true">↗</span>
+        </a>
+      </article>
+    </section>
+
+    <footer class="course-footer">
+      <span>MORE COURSES WILL APPEAR HERE AS THEY LAUNCH</span>
+      <a href="./index.html#contact">Suggest a topic <span aria-hidden="true">↗</span></a>
+    </footer>
+  </main>
+
+  <script>
+    (function(){
+      var button=document.getElementById('courseThemeToggle');
+      if(!button) return;
+      button.addEventListener('click',function(){
+        var next=document.documentElement.getAttribute('data-theme')==='light'?'dark':'light';
+        document.documentElement.setAttribute('data-theme',next);
+        document.querySelector('meta[name="theme-color"]').content=next==='light'?'#e9e9df':'#0c1314';
+        try{localStorage.setItem('theme',next);}catch(e){}
+      });
+    })();
+  </script>
+</body>
+</html>
