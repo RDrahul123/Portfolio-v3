@@ -93,6 +93,7 @@
       <li><a href="#experience">Experience</a></li>
       <li><a href="#skills">Technical skills</a></li>
       <li><a href="#ai-lab">AI lab</a></li>
+      <li><a href="https://rdrahul123.github.io/LLMs/" class="nav-external" aria-label="Courses: LLM course (opens in a new tab)" target="_blank" rel="noopener noreferrer">Courses <span aria-hidden="true">↗</span></a></li>
       <li><a href="#notes">Notes</a></li>
       <li><a href="#resume">Resume</a></li>
       <li><a href="#contact">Contact</a></li>
@@ -1921,9 +1922,13 @@ function renderMobile(open){
   var hero = DATA.hero || {};
   var navLinks = [
     ['Projects','#projects'],['About me','#about'],['Experience','#experience'],
-    ['Technical skills','#skills'],['AI lab','#ai-lab'],['Notes','#notes'],['Resume','#resume'],['Contact','#contact']
+    ['Technical skills','#skills'],['AI lab','#ai-lab'],['Courses','https://rdrahul123.github.io/LLMs/','external'],
+    ['Notes','#notes'],['Resume','#resume'],['Contact','#contact']
   ];
-  var rows = navLinks.map(function(l){ return '<a href="' + l[1] + '">' + l[0] + '</a>'; }).join('');
+  var rows = navLinks.map(function(l){
+    var external = l[2] === 'external';
+    return '<a href="' + l[1] + '"' + (external ? ' target="_blank" rel="noopener noreferrer" aria-label="Courses: LLM course (opens in a new tab)"' : '') + '>' + l[0] + '</a>';
+  }).join('');
   var soc = (hero.socials||[]).map(function(s){ var ic = splitEmoji(s.label); return '<a href="' + esc(s.url) + '" target="_blank" rel="noopener"><span class="soc-ic">' + esc(ic[0]) + '</span>' + esc(ic[1].trim() || s.label) + '</a>'; }).join('');
   mm.innerHTML = '<div class="mm-inner">' +
     '<div class="mm-heading"><span>Section index</span><span>' + String(navLinks.length).padStart(2,'0') + ' destinations</span></div>' +
@@ -1932,6 +1937,7 @@ function renderMobile(open){
     '</div>';
   mm.setAttribute('aria-hidden','false');
   mm.classList.add('open');
+  mm.querySelectorAll('a[target="_blank"]').forEach(function(a){ a.addEventListener('click', closeMobile); });
   if(window.__refreshScroll) window.__refreshScroll();
 }
 function closeMobile(){
