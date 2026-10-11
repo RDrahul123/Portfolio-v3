@@ -658,7 +658,7 @@
     "eyebrow": "AI Lab",
     "titleNormal": "Currently In The ",
     "titleHighlight": "Lab",
-    "description": "I'm not going to pretend I've shipped production LLM systems — I haven't yet. This is what I'm actually building toward, in progress, right now.",
+    "description": "Learning and prototyping with LLMs.",
     "entries": [
       {
         "status": "IN PROGRESS",
