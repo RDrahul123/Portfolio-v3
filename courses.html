@@ -45,15 +45,16 @@
     <header class="course-hero">
       <p class="course-kicker">RAHUL DODKE <span>/</span> LEARNING SERIES</p>
       <h1>Courses for<br><span>curious builders.</span></h1>
-      <p class="course-intro">Practical courses for software and AI builders. Start with large language models or system design.</p>
+      <p class="course-intro" id="courseIntro">Practical courses for software and AI builders. Start with large language models or system design.</p>
     </header>
 
     <section class="course-catalog" aria-labelledby="courseCatalogTitle">
       <div class="course-catalog-head">
         <h2 id="courseCatalogTitle">Available now</h2>
-        <span>03 COURSES</span>
+        <span id="courseCount">03 COURSES</span>
       </div>
 
+      <div id="courseList">
       <article class="course-entry">
         <div class="course-number" aria-hidden="true">01</div>
         <div class="course-copy">
@@ -77,7 +78,6 @@
           <span>Open course</span><span aria-hidden="true">↗</span>
         </a>
       </article>
-
       <article class="course-entry">
         <div class="course-number" aria-hidden="true">03</div>
         <div class="course-copy">
@@ -89,6 +89,7 @@
           <span>Open course</span><span aria-hidden="true">↗</span>
         </a>
       </article>
+      </div>
     </section>
 
     <footer class="course-footer">
@@ -97,6 +98,41 @@
     </footer>
   </main>
 
+  <script>
+    (async function(){
+      try{
+        const response=await fetch('./content.json',{cache:'no-store'});
+        if(!response.ok) return;
+        const data=await response.json();
+        const courses=data.courses||{};
+        const items=Array.isArray(courses.items)?courses.items:[];
+        if(!items.length) return;
+        const list=document.getElementById('courseList');
+        list.replaceChildren();
+        document.getElementById('courseCount').textContent=String(items.length).padStart(2,'0')+' COURSES';
+        document.getElementById('courseIntro').textContent=courses.description||'Practical courses for software and AI builders.';
+        items.forEach(function(course,index){
+          const article=document.createElement('article');
+          article.className='course-entry';
+          const number=document.createElement('div');
+          number.className='course-number'; number.setAttribute('aria-hidden','true');
+          number.textContent=String(index+1).padStart(2,'0');
+          const copy=document.createElement('div'); copy.className='course-copy';
+          const topic=document.createElement('p'); topic.className='course-topic'; topic.textContent=course.topic||'COURSE';
+          const title=document.createElement('h3'); title.textContent=course.title||'Untitled course';
+          const description=document.createElement('p'); description.textContent=course.description||'';
+          copy.append(topic,title,description);
+          const link=document.createElement('a'); link.className='course-open';
+          link.href=course.url||'#'; link.target='_blank'; link.rel='noopener noreferrer';
+          link.setAttribute('aria-label','Open '+(course.title||'course')+' in a new tab');
+          const linkText=document.createElement('span'); linkText.textContent='Open course';
+          const arrow=document.createElement('span'); arrow.textContent='↗'; arrow.setAttribute('aria-hidden','true');
+          link.append(linkText,arrow);
+          article.append(number,copy,link); list.appendChild(article);
+        });
+      }catch(error){console.warn('Course catalog data unavailable; showing cached course list.',error);}
+    })();
+  </script>
   <script>
     (function(){
       var button=document.getElementById('courseThemeToggle');
