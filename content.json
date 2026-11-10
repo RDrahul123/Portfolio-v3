@@ -130,7 +130,7 @@
       {
         "period": "September 2024 — Present",
         "role": "Data Science Analyst",
-        "company": "Samatrix Consulting Private Limited · Indore, Madhya Pradesh",
+        "company": "Samatrix Consulting Private Limited",
         "color": "cyan",
         "bullets": [
           "Performed exploratory data analysis using Python, Pandas, and SQL to identify business trends and improve data-driven decision-making by 15%.",
@@ -143,7 +143,7 @@
       {
         "period": "October 2022 — April 2024",
         "role": "Software Development Engineer",
-        "company": "Antardrishti Foundation · Indore, Madhya Pradesh",
+        "company": "Antardrishti Foundation",
         "color": "purple",
         "bullets": [
           "Directed a team of three developers building responsive websites, increasing user engagement by 20%.",
@@ -154,7 +154,7 @@
       {
         "period": "June 2022 — September 2022",
         "role": "Software Development Intern",
-        "company": "TCS iON · Indore, Madhya Pradesh",
+        "company": "TCS iON",
         "color": "ember",
         "bullets": [
           "Developed distributed-ledger application components using Python and Solidity, improving code efficiency by 30%.",
@@ -294,8 +294,8 @@
       {
         "icon": "📍",
         "label": "Location",
-        "value": "Indore, Madhya Pradesh",
-        "url": "https://www.google.com/maps/search/Indore,+Madhya+Pradesh"
+        "value": "India",
+        "url": "https://www.google.com/maps/search/India"
       },
       {
         "icon": "💼",
